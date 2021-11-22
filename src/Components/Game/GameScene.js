@@ -5,7 +5,7 @@ const STAR_KEY = "star";
 const BOMB_KEY = "bomb";
 import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
-import skyAsset from "../../assets/sky.png";
+import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
@@ -23,7 +23,7 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("sky", skyAsset);
+    this.load.image("background", backgroundAsset);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image(STAR_KEY, starAsset );
     this.load.image(BOMB_KEY, bombAsset);
@@ -35,7 +35,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(400, 300, "sky");
+    this.add.image(400, 300, "background");
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
     this.stars = this.createStars();
