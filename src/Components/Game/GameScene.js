@@ -9,7 +9,7 @@ import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
-import dudeAsset from "../../assets/dude.png";
+import dudeAsset from "../../assets/cyborg_v5.png";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -30,13 +30,14 @@ class GameScene extends Phaser.Scene {
     this.load.image(BOMB_KEY, bombAsset);
 
     this.load.spritesheet(DUDE_KEY, dudeAsset , {
-      frameWidth: 32,
-      frameHeight: 48,
+      frameWidth: 184, //La hit box est surement horrible
+      frameHeight: 129,
     });
   }
 
   create() {
     this.backgrounds = this.createBackGround();
+    this.backgrounds2 = this.createBackGround2();
     //this.add.image(400, 300, "background");
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
@@ -75,13 +76,24 @@ class GameScene extends Phaser.Scene {
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(0);
       this.player.anims.play("left", true);
-      this.backgrounds.x += 5;
+      
+      this.backgrounds.x += 10;
+      this.backgrounds2.x += 10;
       
       
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(0);
       this.player.anims.play("right", true);
-      this.backgrounds.x -= 5;
+      this.backgrounds.x -= 10;
+      this.backgrounds2.x -= 10;
+      //Terrain infini
+      //TODO
+      if(this.backgrounds.x == -1066) {
+        this.backgrounds.x = 1066;
+      }
+      else if(this.backgrounds2.x == -1066) {
+        this.backgrounds2.x = 1066;
+      }
     } else {
       this.player.setVelocityX(0);
       this.player.anims.play("turn");
@@ -93,8 +105,13 @@ class GameScene extends Phaser.Scene {
     
   }
   createBackGround() {
-    const background = this.add.image(400, 300, "background");
-    //const background = this.create(400, 300, "background");
+    const background = this.add.image(400, 275, "background");
+
+    return background
+  }
+
+  createBackGround2() {
+    const background = this.add.image(1466, 275, "background");
 
     return background
   }
@@ -111,32 +128,34 @@ class GameScene extends Phaser.Scene {
   }
 
   createPlayer() {
-    const player = this.physics.add.sprite(100, 450, DUDE_KEY);
-    player.setBounce(0.2);
+    const player = this.physics.add.sprite(100, 400, DUDE_KEY); //Positon où le personnage apparait
+    player.setBounce(0);
     player.setCollideWorldBounds(true);
-    /* The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
+    /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
     The 'repeat -1' value tells the animation to loop.
     */
+    
     this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 0, end: 5 }),
       frameRate: 10,
       repeat: -1,
     });
-
+    
     this.anims.create({
       key: "turn",
-      frames: [{ key: DUDE_KEY, frame: 4 }],
-      frameRate: 20,
+      frames: [{ key: DUDE_KEY, frame: 6 }],
+      frameRate: 1,
     });
-
+    
+    
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 5, end: 8 }),
+      frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 7, end: 12 }),
       frameRate: 10,
       repeat: -1,
     });
-
+    
     return player;
   }
 
