@@ -19,6 +19,7 @@ class GameScene extends Phaser.Scene {
     this.scoreLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
+    this.backgrounds = undefined;
     this.gameOver = false;
   }
 
@@ -35,7 +36,8 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(400, 300, "background");
+    this.backgrounds = this.createBackGround();
+    //this.add.image(400, 300, "background");
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
     this.stars = this.createStars();
@@ -71,11 +73,15 @@ class GameScene extends Phaser.Scene {
     }
 
     if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-160);
+      this.player.setVelocityX(0);
       this.player.anims.play("left", true);
+      this.backgrounds.x += 5;
+      
+      
     } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(160);
+      this.player.setVelocityX(0);
       this.player.anims.play("right", true);
+      this.backgrounds.x -= 5;
     } else {
       this.player.setVelocityX(0);
       this.player.anims.play("turn");
@@ -84,6 +90,13 @@ class GameScene extends Phaser.Scene {
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
     }
+    
+  }
+  createBackGround() {
+    const background = this.add.image(400, 300, "background");
+    //const background = this.create(400, 300, "background");
+
+    return background
   }
 
   createPlatforms() {
