@@ -40,20 +40,22 @@ class GameScene extends Phaser.Scene {
 
   create() {
     this.backgrounds = this.createBackGround();
-
-    //backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
-
     this.backgrounds2 = this.createBackGround2();
-    this.add.image(400, 300, "background");
+     //backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
+
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
+
     this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(16, 16, 0);
+
+    /*
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
+    */
     this.physics.add.collider(this.stars, platforms);
     this.physics.add.collider(this.player, platforms);
-    this.physics.add.collider(bombsGroup, platforms);
+    /*this.physics.add.collider(bombsGroup, platforms);
     this.physics.add.collider(
       this.player,
       bombsGroup,
@@ -61,6 +63,7 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
+    */
     this.physics.add.overlap(
       this.player,
       this.stars,
@@ -68,6 +71,7 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
+  
     this.cursors = this.input.keyboard.createCursorKeys();
 
     /*The Collider takes two objects and tests for collision and performs separation against them.
@@ -92,18 +96,16 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("right", true);
       this.backgrounds.x -= 10;
       this.backgrounds2.x -= 10;
-      //Terrain infini
-      //TODO
+      
       let limite = -666;
       let next = 1466;
       if(this.backgrounds.x <= limite) {
         this.backgrounds.x = next;
-        console.log("Back1");
       }
       if(this.backgrounds2.x <= limite) {
         this.backgrounds2.x = next;
-        console.log("Back2");
       }
+      
       
     } else {
       this.player.setVelocityX(0);
@@ -132,9 +134,9 @@ class GameScene extends Phaser.Scene {
 
     platforms.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
 
-    platforms.create(600, 400, GROUND_KEY);
-    platforms.create(50, 250, GROUND_KEY);
-    platforms.create(750, 220, GROUND_KEY);
+    //platforms.create(600, 400, GROUND_KEY);
+    //platforms.create(50, 250, GROUND_KEY);
+    //platforms.create(750, 220, GROUND_KEY);
     return platforms;
   }
 
@@ -170,6 +172,7 @@ class GameScene extends Phaser.Scene {
     return player;
   }
 
+  
   createStars() {
     const stars = this.physics.add.group({
       key: STAR_KEY,
@@ -194,8 +197,9 @@ class GameScene extends Phaser.Scene {
       });
     }
 
-    this.bombSpawner.spawn(player.x);
+    //this.bombSpawner.spawn(player.x);
   }
+  
 
   createScoreLabel(x, y, score) {
     const style = { fontSize: "32px", fill: "#000" };
