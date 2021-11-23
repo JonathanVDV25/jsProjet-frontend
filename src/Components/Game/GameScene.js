@@ -6,7 +6,6 @@ const BOMB_KEY = "bomb";
 import ScoreLabel from "./ScoreLabel.js";
 // import BombSpawner from "./BombSpawner.js";
 import backgroundAsset from "../../assets/background.png";
-//import backgroundAsset2 from "../../assets/background2.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
@@ -15,22 +14,20 @@ import dudeAsset from "../../assets/cyborg_v5.png";
 class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
-    this.player = undefined;
+    //this.player = undefined;
     this.cursors = undefined;
     this.scoreLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.backgrounds = undefined;
-    this.backgrounds2 = undefined;
     this.gameOver = false;
-
     this.text = undefined;
     this.countdown = undefined;
+    this.ground = undefined;
   }
 
   preload() {
     this.load.image("background", backgroundAsset);
-    this.load.image("background2", backgroundAsset);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image(STAR_KEY, starAsset );
     this.load.image(BOMB_KEY, bombAsset);
@@ -42,11 +39,11 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.backgrounds = this.createBackGround();
-    this.backgrounds2 = this.createBackGround2();
-     //backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
+    this.backgrounds = this.add.tileSprite(0, 0, 2000, 1200, "background");
+    this.backgrounds.setScrollFactor(0);
 
-    const platforms = this.createPlatforms();
+    this.ground = this.createGround();
+    const ground = this.ground;
     this.player = this.createPlayer();
 
     this.stars = this.createStars();
@@ -56,8 +53,8 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
     */
-    this.physics.add.collider(this.stars, platforms);
-    this.physics.add.collider(this.player, platforms);
+    this.physics.add.collider(this.stars, ground);
+    this.physics.add.collider(this.player, ground);
     /*this.physics.add.collider(bombsGroup, platforms);
     this.physics.add.collider(
       this.player,
@@ -77,10 +74,16 @@ class GameScene extends Phaser.Scene {
   
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    this.myCam = this.cameras.main;
+    this.myCam.setBounds(0, 0, 800 * 3, 600);
+
+    // making the camera follow the player
+    this.myCam.startFollow(this.player);
+
     /*The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision...*/
 
-    this.intialTime = 10;
+    this.intialTime = 100;
     this.text = this.add.text(16, 42, 'Timer: ' + this.intialTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({delay: 1000, callback: this.countdownFinished, callbackScope: this, loop: true});
   }
@@ -90,31 +93,20 @@ class GameScene extends Phaser.Scene {
       return;
     }
 
-    if (this.cursors.left.isDown) {
-      this.player.setVelocityX(0);
+    if (this.cursors.left.isDown && this.player.x > 0) {
+      //this.player.setVelocityX(0);
       this.player.anims.play("left", true);
-      
-      this.backgrounds.x += 10;
-      this.backgrounds2.x += 10;
-      
-    } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(0);
+      this.player.x -= 10;
+      this.player.scaleX = 1;
+
+    } else if (this.cursors.right.isDown && this.player.x < 800 * 3) {
+      //this.player.setVelocityX(0);
       this.player.anims.play("right", true);
-      this.backgrounds.x -= 10;
-      this.backgrounds2.x -= 10;
-      
-      let limite = -666;
-      let next = 1466;
-      if(this.backgrounds.x <= limite) {
-        this.backgrounds.x = next;
-      }
-      if(this.backgrounds2.x <= limite) {
-        this.backgrounds2.x = next;
-      }
-      
-      
+      this.player.x += 10;
+      this.player.scaleX = 1;
+
     } else {
-      this.player.setVelocityX(0);
+      //this.player.setVelocityX(0);
       this.player.anims.play("turn");
     }
 
@@ -122,7 +114,10 @@ class GameScene extends Phaser.Scene {
       this.player.setVelocityY(-330);
       
     }
-    
+
+    // scroll the texture of the tilesprites proportionally to the camera scroll
+    this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
+    this.ground.tilePositionX = this.myCam.scrollX * 10;
   }
 
   createBackGround() {
@@ -131,10 +126,10 @@ class GameScene extends Phaser.Scene {
     return background
   }
 
-  createBackGround2() {
-    const background = this.add.image(1466, 275, "background2");
-
-    return background
+  createGround() {
+    const ground = this.physics.add.staticGroup();
+    ground.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
+    return ground;
   }
 
   createPlatforms() {
@@ -149,9 +144,9 @@ class GameScene extends Phaser.Scene {
   }
 
   createPlayer() {
-    const player = this.physics.add.sprite(100, 400, DUDE_KEY); //Positon où le personnage apparait
-    player.setBounce(0);
-    player.setCollideWorldBounds(true);
+    const player = this.add.sprite(200, 475, DUDE_KEY); //Positon où le personnage apparait
+    //player.setBounce(0);
+    //player.setCollideWorldBounds(true);
     /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
     The 'repeat -1' value tells the animation to loop.
     */
@@ -233,7 +228,7 @@ class GameScene extends Phaser.Scene {
     if(this.intialTime == 0) {
       this.gameOver = true;
       this.player.active = false;
-      this.player.setVelocity(0, 0);
+      //this.player.setVelocity(0, 0);
     } else {
       this.intialTime -= 1;
       this.text.setText('Timer: ' + this.intialTime);
