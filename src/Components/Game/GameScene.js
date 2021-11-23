@@ -5,7 +5,7 @@ const STAR_KEY = "star";
 const BOMB_KEY = "bomb";
 import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
-import backgroundAsset from "../../assets/background.png";
+import backgroundAsset from "../../assets/background_test_v1.png";
 //import backgroundAsset2 from "../../assets/background2.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
@@ -21,13 +21,13 @@ class GameScene extends Phaser.Scene {
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.backgrounds = undefined;
-    this.backgrounds2 = undefined;
+    //this.backgrounds2 = undefined;
     this.gameOver = false;
   }
 
   preload() {
     this.load.image("background", backgroundAsset);
-    this.load.image("background2", backgroundAsset);
+    //this.load.image("background2", backgroundAsset);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image(STAR_KEY, starAsset );
     this.load.image(BOMB_KEY, bombAsset);
@@ -39,9 +39,11 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.backgrounds = this.createBackGround();
-    this.backgrounds2 = this.createBackGround2();
+    //this.backgrounds = this.createBackGround();
+    //this.backgrounds2 = this.createBackGround2();
      //backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
+    let backgroundTile = this.add.tileSprite(0, 0, 1900, 2475, "background");
+    backgroundTile.fixedToCamera = true;
 
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
@@ -84,19 +86,22 @@ class GameScene extends Phaser.Scene {
     }
 
     if (this.cursors.left.isDown) {
-      this.player.setVelocityX(0);
+      this.player.setVelocityX(5);
       this.player.anims.play("left", true);
+      backgroundTile.tilePosition.x += 10;
+      //this.backgrounds.x += 10;
+      //this.backgrounds2.x += 10;
       
-      this.backgrounds.x += 10;
-      this.backgrounds2.x += 10;
       
       
     } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(0);
+      this.player.setVelocityX(5);
       this.player.anims.play("right", true);
-      this.backgrounds.x -= 10;
-      this.backgrounds2.x -= 10;
+      //this.backgrounds.x -= 10;
+      //this.backgrounds2.x -= 10;
+      backgroundTile.tilePosition.x = this.camera.x * -0.2;
       
+      /*
       let limite = -666;
       let next = 1466;
       if(this.backgrounds.x <= limite) {
@@ -105,6 +110,7 @@ class GameScene extends Phaser.Scene {
       if(this.backgrounds2.x <= limite) {
         this.backgrounds2.x = next;
       }
+      */
       
       
     } else {
