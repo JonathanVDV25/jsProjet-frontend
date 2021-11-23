@@ -91,14 +91,17 @@ class GameScene extends Phaser.Scene {
       this.backgrounds2.x -= 10;
       //Terrain infini
       //TODO
-      if(this.backgrounds2.x == -500) {
-        this.backgrounds2.x = 500;
+      let limite = -666;
+      let next = 1466;
+      if(this.backgrounds.x <= limite) {
+        this.backgrounds.x = next;
+        console.log("Back1");
+      }
+      if(this.backgrounds2.x <= limite) {
+        this.backgrounds2.x = next;
         console.log("Back2");
       }
-      if(this.backgrounds.x == -500) {
-        this.backgrounds.x = 1000;
-        console.log(-400);
-      }
+      
     } else {
       this.player.setVelocityX(0);
       this.player.anims.play("turn");
