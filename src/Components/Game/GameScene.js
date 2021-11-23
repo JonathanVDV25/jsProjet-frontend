@@ -11,7 +11,7 @@ import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
-import CountdownController from "./CountdownController.js";
+// import CountdownController from "./CountdownController.js";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -25,8 +25,8 @@ class GameScene extends Phaser.Scene {
     this.backgrounds2 = undefined;
     this.gameOver = false;
 
-    /** @type {CountdownController} */
-    countdown
+    // /** @type {CountdownController} */
+    // countdown
   }
 
   preload() {
@@ -81,9 +81,9 @@ class GameScene extends Phaser.Scene {
     /*The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision...*/
 
-    const timerLabel = this.add.text(width * 0.5, 50, '60', { fontSize: 48}).setOrigin(0.5);
-    this.countdown = new CountdownController(this, timerLabel);
-    this.countdown.start(this.handleCountdownFinished.bind(this));
+    // const timerLabel = this.add.text(width * 0.5, 50, '60', { fontSize: 48}).setOrigin(0.5);
+    // this.countdown = new CountdownController(this, timerLabel);
+    // this.countdown.start(this.handleCountdownFinished.bind(this));
   }
 
   update() {
@@ -125,7 +125,7 @@ class GameScene extends Phaser.Scene {
       
     }
 
-    this.countdown.update();
+    // this.countdown.update();
     
   }
   createBackGround() {
@@ -232,12 +232,12 @@ class GameScene extends Phaser.Scene {
     this.gameOver = true;
   }
 
-  handleCountdownFinished() {
-    this.player.active = false;
-    this.player.setVelocity(0, 0);
-    const {width, height} = this.scale;
-    this.add.text(width * 0.5, height * 0.5, 'Game over', {fontSize: 48}).setOrigin(0.5);
-  }
+  // handleCountdownFinished() {
+  //   this.player.active = false;
+  //   this.player.setVelocity(0, 0);
+  //   const {width, height} = this.scale;
+  //   this.add.text(width * 0.5, height * 0.5, 'Game over', {fontSize: 48}).setOrigin(0.5);
+  // }
 }
 
 export default GameScene;
