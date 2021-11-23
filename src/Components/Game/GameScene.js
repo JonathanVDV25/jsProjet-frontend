@@ -6,6 +6,7 @@ const BOMB_KEY = "bomb";
 import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
 import backgroundAsset from "../../assets/background.png";
+import backgroundAsset2 from "../../assets/background2.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
@@ -25,6 +26,7 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.image("background", backgroundAsset);
+    this.load.image("background2", backgroundAsset2);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image(STAR_KEY, starAsset );
     this.load.image(BOMB_KEY, bombAsset);
@@ -88,11 +90,13 @@ class GameScene extends Phaser.Scene {
       this.backgrounds2.x -= 10;
       //Terrain infini
       //TODO
-      if(this.backgrounds.x == -1066) {
-        this.backgrounds.x = 1066;
+      if(this.backgrounds.x == -500) {
+        this.backgrounds.x = 1000;
+        console.log(-400);
       }
-      else if(this.backgrounds2.x == -1066) {
-        this.backgrounds2.x = 1066;
+      else if(this.backgrounds2.x == -500) {
+        this.backgrounds2.x = 1000;
+        console.log(Back2);
       }
     } else {
       this.player.setVelocityX(0);
@@ -111,7 +115,7 @@ class GameScene extends Phaser.Scene {
   }
 
   createBackGround2() {
-    const background = this.add.image(1466, 275, "background");
+    const background = this.add.image(1466, 275, "background2");
 
     return background
   }
