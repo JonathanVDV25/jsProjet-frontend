@@ -90,7 +90,6 @@ class GameScene extends Phaser.Scene {
       this.backgrounds.x += 10;
       this.backgrounds2.x += 10;
       
-      
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(0);
       this.player.anims.play("right", true);
@@ -136,7 +135,7 @@ class GameScene extends Phaser.Scene {
 
     //platforms.create(600, 400, GROUND_KEY);
     //platforms.create(50, 250, GROUND_KEY);
-    //platforms.create(750, 220, GROUND_KEY);
+    platforms.create(750, 220, GROUND_KEY);
     return platforms;
   }
 
