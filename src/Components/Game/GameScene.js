@@ -21,6 +21,7 @@ class GameScene extends Phaser.Scene {
     this.stars = undefined;
     this.bombSpawner = undefined;
     this.backgrounds = undefined;
+    this.backgrounds2 = undefined;
     this.gameOver = false;
   }
 
@@ -90,13 +91,13 @@ class GameScene extends Phaser.Scene {
       this.backgrounds2.x -= 10;
       //Terrain infini
       //TODO
+      if(this.backgrounds2.x == -500) {
+        this.backgrounds2.x = 500;
+        console.log("Back2");
+      }
       if(this.backgrounds.x == -500) {
         this.backgrounds.x = 1000;
         console.log(-400);
-      }
-      else if(this.backgrounds2.x == -500) {
-        this.backgrounds2.x = 1000;
-        console.log(Back2);
       }
     } else {
       this.player.setVelocityX(0);
