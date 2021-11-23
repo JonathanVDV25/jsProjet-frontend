@@ -4,14 +4,13 @@ const DUDE_KEY = "dude";
 const STAR_KEY = "star";
 const BOMB_KEY = "bomb";
 import ScoreLabel from "./ScoreLabel.js";
-import BombSpawner from "./BombSpawner.js";
+// import BombSpawner from "./BombSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 //import backgroundAsset2 from "../../assets/background2.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
-// import CountdownController from "./CountdownController.js";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -25,8 +24,8 @@ class GameScene extends Phaser.Scene {
     this.backgrounds2 = undefined;
     this.gameOver = false;
 
-    // /** @type {CountdownController} */
-    // countdown
+    this.text = undefined;
+    this.countdown = undefined;
   }
 
   preload() {
@@ -81,9 +80,9 @@ class GameScene extends Phaser.Scene {
     /*The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision...*/
 
-    // const timerLabel = this.add.text(width * 0.5, 50, '60', { fontSize: 48}).setOrigin(0.5);
-    // this.countdown = new CountdownController(this, timerLabel);
-    // this.countdown.start(this.handleCountdownFinished.bind(this));
+    this.intialTime = 10;
+    this.text = this.add.text(16, 42, 'Timer: ' + this.intialTime, {fontSize: 32, color: 'black'});
+    this.countdown = this.time.addEvent({delay: 1000, callback: this.countdownFinished, callbackScope: this, loop: true});
   }
 
   update() {
@@ -97,7 +96,6 @@ class GameScene extends Phaser.Scene {
       
       this.backgrounds.x += 10;
       this.backgrounds2.x += 10;
-      
       
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(0);
@@ -124,10 +122,9 @@ class GameScene extends Phaser.Scene {
       this.player.setVelocityY(-330);
       
     }
-
-    // this.countdown.update();
     
   }
+
   createBackGround() {
     const background = this.add.image(400, 275, "background");
 
@@ -147,7 +144,7 @@ class GameScene extends Phaser.Scene {
 
     //platforms.create(600, 400, GROUND_KEY);
     //platforms.create(50, 250, GROUND_KEY);
-    //platforms.create(750, 220, GROUND_KEY);
+    platforms.create(750, 220, GROUND_KEY);
     return platforms;
   }
 
@@ -232,12 +229,16 @@ class GameScene extends Phaser.Scene {
     this.gameOver = true;
   }
 
-  // handleCountdownFinished() {
-  //   this.player.active = false;
-  //   this.player.setVelocity(0, 0);
-  //   const {width, height} = this.scale;
-  //   this.add.text(width * 0.5, height * 0.5, 'Game over', {fontSize: 48}).setOrigin(0.5);
-  // }
+  countdownFinished() {
+    if(this.intialTime == 0) {
+      this.gameOver = true;
+      this.player.active = false;
+      this.player.setVelocity(0, 0);
+    } else {
+      this.intialTime -= 1;
+      this.text.setText('Timer: ' + this.intialTime);
+    }
+  }
 }
 
 export default GameScene;
