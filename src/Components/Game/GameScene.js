@@ -6,7 +6,7 @@ const BOMB_KEY = "bomb";
 import ScoreLabel from "./ScoreLabel.js";
 // import BombSpawner from "./BombSpawner.js";
 import backgroundAsset from "../../assets/background.png";
-//import backgroundAsset2 from "../../assets/background2.png";
+// import backgroundAsset2 from "../../assets/background2.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
@@ -24,8 +24,13 @@ class GameScene extends Phaser.Scene {
     this.backgrounds2 = undefined;
     this.gameOver = false;
 
-    this.text = undefined;
+    // timer
+    this.textTime = undefined;
     this.countdown = undefined;
+
+    // distance parcourue
+    this.textDistance = undefined;
+    this.distance = undefined;
   }
 
   preload() {
@@ -36,7 +41,7 @@ class GameScene extends Phaser.Scene {
     this.load.image(BOMB_KEY, bombAsset);
 
     this.load.spritesheet(DUDE_KEY, dudeAsset , {
-      frameWidth: 184, //La hit box est surement horrible
+      frameWidth: 184, // la hit box est surement horrible
       frameHeight: 129,
     });
   }
@@ -44,7 +49,7 @@ class GameScene extends Phaser.Scene {
   create() {
     this.backgrounds = this.createBackGround();
     this.backgrounds2 = this.createBackGround2();
-     //backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
+     // backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
 
     const platforms = this.createPlatforms();
     this.player = this.createPlayer();
@@ -80,9 +85,15 @@ class GameScene extends Phaser.Scene {
     /*The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision...*/
 
-    this.intialTime = 10;
-    this.text = this.add.text(16, 42, 'Timer: ' + this.intialTime, {fontSize: 32, color: 'black'});
-    this.countdown = this.time.addEvent({delay: 1000, callback: this.countdownFinished, callbackScope: this, loop: true});
+    // timer
+    this.initTime = 10;
+    this.textTime = this.add.text(16, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
+    this.countdown = this.time.addEvent({delay: 1000, callback: this.countdownLabel, callbackScope: this, loop: true});
+
+    // distance parcourue
+    this.initDistance = 0;
+    this.textDistance = this.add.text(16, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
+    this.distance = this.time.addEvent({delay : 100, callback: this.distanceLabel, callbackScope: this, loop: true});
   }
 
   update() {
@@ -142,14 +153,14 @@ class GameScene extends Phaser.Scene {
 
     platforms.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
 
-    //platforms.create(600, 400, GROUND_KEY);
-    //platforms.create(50, 250, GROUND_KEY);
+    // platforms.create(600, 400, GROUND_KEY);
+    // platforms.create(50, 250, GROUND_KEY);
     platforms.create(750, 220, GROUND_KEY);
     return platforms;
   }
 
   createPlayer() {
-    const player = this.physics.add.sprite(100, 400, DUDE_KEY); //Positon où le personnage apparait
+    const player = this.physics.add.sprite(100, 400, DUDE_KEY); // positon où le personnage apparait
     player.setBounce(0);
     player.setCollideWorldBounds(true);
     /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
@@ -205,7 +216,7 @@ class GameScene extends Phaser.Scene {
       });
     }
 
-    //this.bombSpawner.spawn(player.x);
+    // this.bombSpawner.spawn(player.x);
   }
   
 
@@ -229,14 +240,23 @@ class GameScene extends Phaser.Scene {
     this.gameOver = true;
   }
 
-  countdownFinished() {
-    if(this.intialTime == 0) {
+  // timer
+  countdownLabel() {
+    if(this.initTime == 0) {
       this.gameOver = true;
       this.player.active = false;
       this.player.setVelocity(0, 0);
     } else {
-      this.intialTime -= 1;
-      this.text.setText('Timer: ' + this.intialTime);
+      this.initTime -= 1;
+      this.textTime.setText('Timer: ' + this.initTime);
+    }
+  }
+
+  // distance parcourue
+  distanceLabel() {
+    if(!this.gameOver) {
+      this.initDistance += 10;
+      this.textDistance.setText('Distance: ' + this.initDistance)
     }
   }
 }
