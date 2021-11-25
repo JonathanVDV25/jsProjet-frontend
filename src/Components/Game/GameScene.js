@@ -14,7 +14,7 @@ import dudeAsset from "../../assets/cyborg_v5.png";
 class GameScene extends Phaser.Scene {
   constructor() {
     super("game-scene");
-    //this.player = undefined;
+    this.player = undefined;
     this.cursors = undefined;
     this.scoreLabel = undefined;
     this.stars = undefined;
@@ -52,6 +52,7 @@ class GameScene extends Phaser.Scene {
 
     this.ground = this.createGround();
     const ground = this.ground;
+    
     this.player = this.createPlayer();
 
     this.stars = this.createStars();
@@ -102,9 +103,8 @@ class GameScene extends Phaser.Scene {
     }
 
     if (this.cursors.left.isDown && this.player.x > 0) {
-      //this.player.setVelocityX(0);
       this.player.anims.play("left", true);
-      this.player.x -= 10;
+      this.player.x -= 10;  
       this.player.scaleX = 1;
 
 
@@ -119,7 +119,7 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("turn");
     }
 
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
+    if (this.cursors.up.isDown ) {
       this.player.setVelocityY(-330);
       
     }
@@ -158,9 +158,9 @@ class GameScene extends Phaser.Scene {
   }
 
   createPlayer() {
-    const player = this.add.sprite(200, 475, DUDE_KEY); //Positon où le personnage apparait
-    //player.setBounce(0);
-    //player.setCollideWorldBounds(true);
+    const player = this.physics.add.sprite(100, 400, DUDE_KEY); // positon où le personnage apparait
+    player.setBounce(0);
+    player.setCollideWorldBounds(true);
     /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
     The 'repeat -1' value tells the animation to loop.
     */
