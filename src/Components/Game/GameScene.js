@@ -29,6 +29,14 @@ class GameScene extends Phaser.Scene {
   preload() {
     this.load.image("background", backgroundAsset);
     this.load.image(GROUND_KEY, platformAsset);
+
+    /*
+    this.load.spritesheet(DUDE_KEY, platformAsset, {
+      frameWidth: 400,
+      frameHeight: 32,
+    });
+    */
+
     this.load.image(STAR_KEY, starAsset );
     this.load.image(BOMB_KEY, bombAsset);
 
@@ -75,7 +83,7 @@ class GameScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.myCam = this.cameras.main;
-    this.myCam.setBounds(0, 0, 800 * 3, 600);
+    this.myCam.setBounds(0, 0, 800 * 100000000, 600);
 
     // making the camera follow the player
     this.myCam.startFollow(this.player);
@@ -99,7 +107,8 @@ class GameScene extends Phaser.Scene {
       this.player.x -= 10;
       this.player.scaleX = 1;
 
-    } else if (this.cursors.right.isDown && this.player.x < 800 * 3) {
+
+    } else if (this.cursors.right.isDown) {
       //this.player.setVelocityX(0);
       this.player.anims.play("right", true);
       this.player.x += 10;
@@ -127,9 +136,14 @@ class GameScene extends Phaser.Scene {
   }
 
   createGround() {
-    const ground = this.physics.add.staticGroup();
-    ground.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
+
+    const ground = this.add.tileSprite(0, 600, 2000, 125, GROUND_KEY);
+    ground.setScrollFactor(0);
+
+    //const ground = this.physics.add.staticGroup();
+    //ground.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
     return ground;
+
   }
 
   createPlatforms() {
@@ -182,7 +196,7 @@ class GameScene extends Phaser.Scene {
       repeat: 11,
       setXY: { x: 12, y: 0, stepX: 70 },
     });
-
+    
     stars.children.iterate((child) => {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
     });
