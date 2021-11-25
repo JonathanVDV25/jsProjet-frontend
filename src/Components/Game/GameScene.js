@@ -106,16 +106,25 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("left", true);
       this.player.x -= 10;  
       this.player.scaleX = 1;
+      this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
+      this.ground.tilePositionX = this.myCam.scrollX * 10;
 
 
     } else if (this.cursors.right.isDown) {
-      //this.player.setVelocityX(0);
-      this.player.anims.play("right", true);
-      this.player.x += 10;
-      this.player.scaleX = 1;
-
+      console.log(this.player.x);
+      if(this.player.x == 400) {
+        this.player.anims.play("right", true);
+        this.backgrounds.tilePositionX += 10;
+        this.ground.tilePositionX += 10;
+      }
+      else {
+        this.player.anims.play("right", true);
+        this.player.x += 10;
+        this.player.scaleX = 1;
+        this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
+        this.ground.tilePositionX = this.myCam.scrollX * 10;
+      }
     } else {
-      //this.player.setVelocityX(0);
       this.player.anims.play("turn");
     }
 
@@ -125,8 +134,6 @@ class GameScene extends Phaser.Scene {
     }
 
     // scroll the texture of the tilesprites proportionally to the camera scroll
-    this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
-    this.ground.tilePositionX = this.myCam.scrollX * 10;
   }
 
   createBackGround() {
