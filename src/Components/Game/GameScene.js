@@ -59,7 +59,6 @@ class GameScene extends Phaser.Scene {
     this.backgrounds.setScrollFactor(0);
 
     this.ground = this.createGround();
-    const ground = this.ground;
     
     this.player = this.createPlayer();
 
@@ -70,8 +69,8 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
     */
-    this.physics.add.collider(this.stars, ground);
-    this.physics.add.collider(this.player, ground);
+    this.physics.add.collider(this.stars, this.ground);
+    this.physics.add.collider(this.player, this.ground);
     /*this.physics.add.collider(bombsGroup, platforms);
     this.physics.add.collider(
       this.player,
@@ -115,7 +114,7 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
-    console.log(this.player.x);
+    console.log(this.backgrounds.tilePositionX);
     if (this.cursors.left.isDown ) {
       if(this.player.x <= 100) {
         this.player.anims.play("left", true);  
@@ -123,8 +122,8 @@ class GameScene extends Phaser.Scene {
       else {
         this.player.anims.play("left", true);
         this.player.x -= 10;  
-        this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
-        this.ground.tilePositionX = this.myCam.scrollX * 10;
+        this.backgrounds.tilePositionX -=10;
+        this.ground.tilePositionX  -= 10;
       }
 
 
@@ -137,8 +136,8 @@ class GameScene extends Phaser.Scene {
       else {
         this.player.anims.play("right", true);
         this.player.x += 10;
-        this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
-        this.ground.tilePositionX = this.myCam.scrollX * 10;
+        this.backgrounds.tilePositionX += 10;
+        this.ground.tilePositionX +=10;
       }
     } else {
       this.player.anims.play("turn");
