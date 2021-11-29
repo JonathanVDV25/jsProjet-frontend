@@ -57,8 +57,6 @@ class GameScene extends Phaser.Scene {
   create() {
     this.backgrounds = this.add.tileSprite(0, 0, 2000, 1200, "background");
     this.backgrounds.setScrollFactor(0);
-    this.backgrounds = this.createBackGround();
-     // backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
 
     this.ground = this.createGround();
     const ground = this.ground;
@@ -103,7 +101,7 @@ class GameScene extends Phaser.Scene {
     Note that we could call a callback in case of collision...*/
 
     // timer
-    this.initTime = 10;
+    this.initTime = 100;
     this.textTime = this.add.text(16, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({delay: 1000, callback: this.countdownLabel, callbackScope: this, loop: true});
 
@@ -127,7 +125,6 @@ class GameScene extends Phaser.Scene {
 
 
     } else if (this.cursors.right.isDown) {
-      console.log(this.player.x);
       if(this.player.x == 400) {
         this.player.anims.play("right", true);
         this.backgrounds.tilePositionX += 10;
@@ -148,14 +145,6 @@ class GameScene extends Phaser.Scene {
       this.player.setVelocityY(-330);
       
     }
-
-    // scroll the texture of the tilesprites proportionally to the camera scroll
-  }
-
-  createBackGround() {
-    const background = this.add.image(400, 275, "background");
-
-    return background
   }
 
   createGround() {
