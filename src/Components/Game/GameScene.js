@@ -114,38 +114,25 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
-    console.log(this.backgrounds.tilePositionX);
     if (this.cursors.left.isDown ) {
-      if(this.player.x <= 100) {
-        this.player.anims.play("left", true);  
-      }
-      else {
-        this.player.anims.play("left", true);
+      if(this.player.x > 100) {
         this.player.x -= 10;  
         this.backgrounds.tilePositionX -=10;
         this.ground.tilePositionX  -= 10;
       }
-
-
+      this.player.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
-      if(this.player.x == 400) {
-        this.player.anims.play("right", true);
-        this.backgrounds.tilePositionX += 10;
-        this.ground.tilePositionX += 10;
-      }
-      else {
-        this.player.anims.play("right", true);
+      if(this.player.x != 400) {
         this.player.x += 10;
-        this.backgrounds.tilePositionX += 10;
-        this.ground.tilePositionX +=10;
       }
+      this.player.anims.play("right", true);
+      this.backgrounds.tilePositionX += 10;
+      this.ground.tilePositionX += 10;
     } else {
       this.player.anims.play("turn");
     }
-
     if (this.cursors.up.isDown ) {
       this.player.setVelocityY(-330);
-      
     }
   }
 
