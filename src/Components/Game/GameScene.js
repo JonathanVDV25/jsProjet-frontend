@@ -115,13 +115,17 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
-
-    if (this.cursors.left.isDown && this.player.x > 0) {
-      this.player.anims.play("left", true);
-      this.player.x -= 10;  
-      this.player.scaleX = 1;
-      this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
-      this.ground.tilePositionX = this.myCam.scrollX * 10;
+    console.log(this.player.x);
+    if (this.cursors.left.isDown ) {
+      if(this.player.x <= 100) {
+        this.player.anims.play("left", true);  
+      }
+      else {
+        this.player.anims.play("left", true);
+        this.player.x -= 10;  
+        this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
+        this.ground.tilePositionX = this.myCam.scrollX * 10;
+      }
 
 
     } else if (this.cursors.right.isDown) {
@@ -133,7 +137,6 @@ class GameScene extends Phaser.Scene {
       else {
         this.player.anims.play("right", true);
         this.player.x += 10;
-        this.player.scaleX = 1;
         this.backgrounds.tilePositionX = this.myCam.scrollX * .3;
         this.ground.tilePositionX = this.myCam.scrollX * 10;
       }
