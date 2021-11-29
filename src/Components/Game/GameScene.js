@@ -6,10 +6,6 @@ const BOMB_KEY = "bomb";
 import ScoreLabel from "./ScoreLabel.js";
 // import BombSpawner from "./BombSpawner.js";
 import backgroundAsset from "../../assets/background.png";
-<<<<<<< HEAD
-=======
-// import backgroundAsset2 from "../../assets/background2.png";
->>>>>>> f9589f9712210c50bac6c2b08a11845fe3d56d81
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
@@ -25,11 +21,9 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner = undefined;
     this.backgrounds = undefined;
     this.gameOver = false;
-<<<<<<< HEAD
     this.text = undefined;
     this.countdown = undefined;
     this.ground = undefined;
-=======
 
     // timer
     this.textTime = undefined;
@@ -38,7 +32,6 @@ class GameScene extends Phaser.Scene {
     // distance parcourue
     this.textDistance = undefined;
     this.distance = undefined;
->>>>>>> f9589f9712210c50bac6c2b08a11845fe3d56d81
   }
 
   preload() {
@@ -62,14 +55,10 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-<<<<<<< HEAD
     this.backgrounds = this.add.tileSprite(0, 0, 2000, 1200, "background");
     this.backgrounds.setScrollFactor(0);
-=======
     this.backgrounds = this.createBackGround();
-    this.backgrounds2 = this.createBackGround2();
      // backGroundTile = game.add.tilesprite(0, 0, 800, 600, 'background');
->>>>>>> f9589f9712210c50bac6c2b08a11845fe3d56d81
 
     this.ground = this.createGround();
     const ground = this.ground;
@@ -113,11 +102,6 @@ class GameScene extends Phaser.Scene {
     /*The Collider takes two objects and tests for collision and performs separation against them.
     Note that we could call a callback in case of collision...*/
 
-<<<<<<< HEAD
-    this.intialTime = 100;
-    this.text = this.add.text(16, 42, 'Timer: ' + this.intialTime, {fontSize: 32, color: 'black'});
-    this.countdown = this.time.addEvent({delay: 1000, callback: this.countdownFinished, callbackScope: this, loop: true});
-=======
     // timer
     this.initTime = 10;
     this.textTime = this.add.text(16, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
@@ -127,7 +111,6 @@ class GameScene extends Phaser.Scene {
     this.initDistance = 0;
     this.textDistance = this.add.text(16, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
     this.distance = this.time.addEvent({delay : 100, callback: this.distanceLabel, callbackScope: this, loop: true});
->>>>>>> f9589f9712210c50bac6c2b08a11845fe3d56d81
   }
 
   update() {
