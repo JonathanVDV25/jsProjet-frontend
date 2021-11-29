@@ -119,11 +119,18 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
+    console.log(this.backgrounds.tilePositionX);
     if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
-        this.player.x -= 10;  
+        this.player.x -= 10;
         this.backgrounds.tilePositionX -=10;
         this.ground.tilePositionX  -= 10;
+      }
+      else {
+        if(this.backgrounds.tilePositionX > 0) {
+          this.backgrounds.tilePositionX -=10;
+          this.ground.tilePositionX  -= 10;
+        }
       }
       this.player.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
