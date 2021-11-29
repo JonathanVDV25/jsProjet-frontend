@@ -52,8 +52,7 @@ function LoginPage() {
         },
       };
 
-      const response = await fetch("/api/auths/login", options); // fetch return a promise => we wait for the response
-
+      const response = await fetch("/api/users/login", options); // fetch return a promise => we wait for the response
       if (!response.ok) {
         throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
@@ -68,7 +67,7 @@ function LoginPage() {
       Navbar({ isAuthenticated: true });
 
       // call the HomePage via the Router
-      Redirect("/");
+      Redirect("/game");
     } catch (error) {
       console.error("LoginPage::error: ", error);
     }
