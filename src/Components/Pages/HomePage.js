@@ -4,7 +4,7 @@
 
 const HomePage = () => { 
   const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = "here is the login";
+  pageDiv.innerHTML = "Deal with the content of your HomePage";
 };
 
 export default HomePage;
