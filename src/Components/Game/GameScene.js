@@ -69,8 +69,13 @@ class GameScene extends Phaser.Scene {
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
     */
+
+   /*
+   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     this.physics.add.collider(this.stars, this.ground);
     this.physics.add.collider(this.player, this.ground);
+    */
+
     /*this.physics.add.collider(bombsGroup, platforms);
     this.physics.add.collider(
       this.player,
@@ -117,7 +122,9 @@ class GameScene extends Phaser.Scene {
     console.log(this.backgrounds.tilePositionX);
     if (this.cursors.left.isDown ) {
       if(this.player.x <= 100) {
-        this.player.anims.play("left", true);  
+        this.player.anims.play("left", true);
+        this.backgrounds.tilePositionX -=10;
+        this.ground.tilePositionX  -= 10;
       }
       else {
         this.player.anims.play("left", true);
