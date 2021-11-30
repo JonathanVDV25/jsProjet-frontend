@@ -52,7 +52,7 @@ function RegisterPage() {
         },
       };
 
-      const response = await fetch("/api/auths/register", options); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/users/register", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
         throw new Error(

@@ -15,7 +15,7 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
   const navbarWrapper = document.querySelector("#navbarWrapper");
   let navbar;
   let user = getSessionObject("user");
-  if (!user) {
+  //if (!user) {
   navbar = `  
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -25,39 +25,54 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#" data-uri="/new">New Page</a>
-        </li> 
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-uri="/login">Login</a>
-        </li>    
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-uri="/register">Register</a>
-        </li>                     
+        </li>`;
+        if(!user){
+          console.log("here1");
+          navbar += 
+          `<li class="nav-item">
+            <a class="nav-link" href="#" data-uri="/login">Login</a>
+           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-uri="/register">Register</a>
+          </li>`;
+        } else {
+          console.log("here2");
+          navbar +=
+          `<li class="nav-item">
+              <a class="nav-link" href="#" data-uri="/game">Game</a>
+           </li>
+           <li class="nav-item">
+              <a class="nav-link" href="#" data-uri="/logout">Logout</a>
+           </li>`;
+        }
+        navbar+=
+        `
       </ul>          
     </div>
   </nav>
   `;
-  } else {
-  navbar = `
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#" data-uri="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-uri="/game">Game</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-uri="/new">New Page</a>
-        </li> 
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-uri="/logout">Logout</a>
-        </li>                     
-      </ul>          
-    </div>
-  </nav>
-  `;
-  }
+  // } else {
+  // navbar = `
+  // <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  //   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  //     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  //       <li class="nav-item">
+  //         <a class="nav-link" aria-current="page" href="#" data-uri="/">Home</a>
+  //       </li>
+  //       <li class="nav-item">
+  //         <a class="nav-link" href="#" data-uri="/game">Game</a>
+  //       </li>
+  //       <li class="nav-item">
+  //         <a class="nav-link" href="#" data-uri="/new">New Page</a>
+  //       </li> 
+  //       <li class="nav-item">
+  //         <a class="nav-link" href="#" data-uri="/logout">Logout</a>
+  //       </li>                     
+  //     </ul>          
+  //   </div>
+  // </nav>
+  // `;
+  // }
   navbarWrapper.innerHTML = navbar;
 };
 
