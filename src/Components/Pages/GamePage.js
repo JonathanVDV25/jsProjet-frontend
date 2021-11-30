@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import GameScene from "../Game/GameScene.js";
 
+
 var game;
 
 const GamePage = () => {
@@ -32,5 +33,7 @@ const GamePage = () => {
   if (game) game.destroy(true);
   game = new Phaser.Game(config);
 };
+
+
 
 export default GamePage;
