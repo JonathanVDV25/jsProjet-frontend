@@ -144,7 +144,7 @@ class GameScene extends Phaser.Scene {
     } else {
       this.player.anims.play("turn");
     }
-    if (this.cursors.up.isDown ) {
+    if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
     }
   }
