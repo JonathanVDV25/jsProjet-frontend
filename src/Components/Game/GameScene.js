@@ -10,6 +10,7 @@ import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
+import invisibleGroundAsset from "../../assets/invisible_ground.png";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -37,6 +38,7 @@ class GameScene extends Phaser.Scene {
   preload() {
     this.load.image("background", backgroundAsset);
     this.load.image(GROUND_KEY, platformAsset);
+    this.load.image("invisible_ground", invisibleGroundAsset);
 
     /*
     this.load.spritesheet(DUDE_KEY, platformAsset, {
@@ -55,11 +57,13 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
+    //Decor
     this.backgrounds = this.add.tileSprite(0, 0, 2000, 1200, "background");
     this.backgrounds.setScrollFactor(0);
-
     this.ground = this.createGround();
+    const fakeGround = this.createFakeGround();
     
+    //Joueur
     this.player = this.createPlayer();
 
     this.stars = this.createStars();
@@ -85,13 +89,11 @@ class GameScene extends Phaser.Scene {
       this
     );
     */
-    this.physics.add.overlap(
-      this.player,
-      this.stars,
-      this.collectStar,
-      null,
-      this
-    );
+
+    //Physique
+    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    this.physics.add.collider(this.stars, fakeGround);
+    this.physics.add.collider(this.player, fakeGround);
   
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -119,7 +121,6 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
-    console.log(this.backgrounds.tilePositionX);
     if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
         this.player.x -= 10;
@@ -157,6 +158,12 @@ class GameScene extends Phaser.Scene {
     //ground.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
     return ground;
 
+  }
+
+  createFakeGround() {
+    const fakeGround = this.physics.add.staticGroup();
+    fakeGround.create(400, 568, "invisible_ground").setScale(2).refreshBody();
+    return fakeGround;
   }
 
   createPlatforms() {
