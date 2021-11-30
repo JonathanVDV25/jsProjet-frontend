@@ -2,6 +2,7 @@ import HomePage from "../Pages/HomePage";
 import NewPage from "../Pages/NewPage";
 import GamePage from "../Pages/GamePage";
 import LoginPage from "../Pages/loginPage";
+import RegisterPage from "../Pages/RegisterPage";
 
 // Configure your routes here
 const routes = {
@@ -9,6 +10,7 @@ const routes = {
   "/game": GamePage,
   "/new": NewPage,
   "/login": LoginPage,
+  "/register": RegisterPage,
 };
 
 /**
