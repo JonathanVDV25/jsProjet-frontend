@@ -1,10 +1,14 @@
 import Phaser from "phaser";
 import GameScene from "../Game/GameScene.js";
-
+import { getSessionObject } from "../../utils/session.js";
+import { Redirect } from "../Router/Router.js";
 
 var game;
 
 const GamePage = () => {
+  let user = getSessionObject("user");
+  if (!user) return Redirect("/login");
+
   let phaserGame = `
 <div id="gameDiv" class="d-flex justify-content-center my-3">
 </div>`;
