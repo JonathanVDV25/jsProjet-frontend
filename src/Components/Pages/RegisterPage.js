@@ -10,6 +10,10 @@ function RegisterPage() {
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = "";
   // create a login form
+
+  // <div class="alert alert-danger" role="alert">
+  //   alert en cas d'échec
+  // </div>
   const form = document.createElement("form");
   form.className = "p-5";
   const username = document.createElement("input");
