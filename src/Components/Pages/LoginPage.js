@@ -6,6 +6,7 @@ import { setSessionObject } from "../../utils/session";
  * render a login page into the #page div (formerly login function)
  */
 function LoginPage() {
+
   // reset #page div
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = "";
@@ -72,6 +73,7 @@ function LoginPage() {
       console.error("LoginPage::error: ", error);
     }
   }
+
 }
 
 export default LoginPage;

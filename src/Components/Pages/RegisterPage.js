@@ -6,6 +6,7 @@ import { setSessionObject } from "../../utils/session";
  * render a register page into the #page div (formerly render function)
  */
 function RegisterPage() {
+
   // reset #page div
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = "";
