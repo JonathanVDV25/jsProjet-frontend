@@ -108,8 +108,8 @@ class GameScene extends Phaser.Scene {
     );
 
 
-    //Physique
-    // this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    // Physics
+    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.physics.add.collider(this.stars, fakeGround);
     this.physics.add.collider(this.player, fakeGround);
 
@@ -144,6 +144,7 @@ class GameScene extends Phaser.Scene {
     // stopwatches + bombs
     setTimeout(this.bombSpawner.spawn(this.player.x),10000);
     setTimeout(this.stopwatchSpawner.spawn(this.player.x),10000);
+  
   }
 
   update() {
