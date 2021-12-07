@@ -82,12 +82,6 @@ class GameScene extends Phaser.Scene {
     const stopwatchesGroup = this.stopwatchSpawner.group;
     
 
-   /*
-   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this.physics.add.collider(this.stars, this.ground);
-    this.physics.add.collider(this.player, this.ground);
-    */
-
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
@@ -109,7 +103,7 @@ class GameScene extends Phaser.Scene {
 
 
     //Physique
-    // this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.physics.add.collider(this.stars, fakeGround);
     this.physics.add.collider(this.player, fakeGround);
 
@@ -175,8 +169,12 @@ class GameScene extends Phaser.Scene {
       this.ground.tilePositionX += 10;
       // increment distance
       this.distance = this.incDistance();
+      this.stars.setVelocityX(-200);
+      
     } else {
       this.player.anims.play("turn");
+      this.stars.setVelocityX(0);
+
     }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);

@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import GameScene from "../Game/GameScene.js";
+import HomeScene from "../Game/HomeScene.js";
 import { getSessionObject } from "../../utils/session.js";
 import { Redirect } from "../Router/Router.js";
 
@@ -27,7 +28,7 @@ const GamePage = () => {
         debug: false,
       },
     },
-    scene: [GameScene],
+    scene: [HomeScene, GameScene],
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: "gameDiv",
   };
