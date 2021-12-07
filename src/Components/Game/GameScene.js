@@ -14,6 +14,8 @@ import bombAsset from "../../assets/bomb.png";
 import stopwatchAsset from "../../assets/stopwatch.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
+import bonusSoundAsset from "../../assets/bonus.mp3";
+import explosionSoundAsset from "../../assets/explosion.mp3";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -60,16 +62,24 @@ class GameScene extends Phaser.Scene {
       frameWidth: 184, // la hit box est surement horrible
       frameHeight: 129,
     });
+
+    // sound preloading
+    this.load.audio("bonusSound", bonusSoundAsset);
+    this.load.audio("explosionSound", explosionSoundAsset);
   }
 
   create() {
-    //Decor
+    // decor
     this.backgrounds = this.add.tileSprite(0, 0, 2000, 1200, "background");
     this.backgrounds.setScrollFactor(0);
     this.ground = this.createGround();
     const fakeGround = this.createFakeGround();
+
+    // sound
+    this.bonusSound = this.sound.add('bonusSound');
+    this.explosionSound = this.sound.add('explosionSound');
     
-    //Joueur
+    // joueur
     this.player = this.createPlayer();
 
     this.stars = this.createStars();
@@ -102,7 +112,7 @@ class GameScene extends Phaser.Scene {
     );
 
 
-    //Physique
+    // physics
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.physics.add.collider(this.stars, fakeGround);
     this.physics.add.collider(this.player, fakeGround);
@@ -131,7 +141,7 @@ class GameScene extends Phaser.Scene {
       loop: true
     });
 
-    // distance parcourue
+    // distance parcoured
     this.initDistance = 0;
     this.textDistance = this.add.text(16, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
 
@@ -295,12 +305,14 @@ class GameScene extends Phaser.Scene {
     this.initTime -= 10;
     this.textTime.setText('Timer: ' + this.initTime);
     bomb.disableBody(true,true);
+    this.explosionSound.play();
   }
 
   hitStopwatch(player, stopwatch) {
     this.initTime += 10;
     this.textTime.setText('Timer: ' + this.initTime);
     stopwatch.disableBody(true,true);
+    this.bonusSound.play();
   }
 
   // timer

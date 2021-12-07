@@ -31,6 +31,9 @@ const GamePage = () => {
     scene: [HomeScene, GameScene],
     //  parent DOM element into which the canvas created by the renderer will be injected.
     parent: "gameDiv",
+    audio: {
+      disableWebAudio: true,
+    },
   };
 
   // there could be issues when a game was quit (events no longer working)
@@ -38,7 +41,5 @@ const GamePage = () => {
   if (game) game.destroy(true);
   game = new Phaser.Game(config);
 };
-
-
 
 export default GamePage;

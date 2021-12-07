@@ -16,7 +16,7 @@ class HomeScene extends Phaser.Scene {
         this.load.image("playButton", playButtonAsset);
         this.load.audio("musicHome", musicHomeAsset);
         
-        //LoadBar
+        // LoadBar
         let loadingBar = this.add.graphics({
             fillStyle: {
                 color: 0xffffff
