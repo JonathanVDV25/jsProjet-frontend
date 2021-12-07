@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 
-export default class BombSpawner {
+export default class StopwatchSpawner {
   /**
    * @param {Phaser.Scene} scene
    */
-  constructor(scene, bombKey = "bomb") {
+  constructor(scene, stopwatchKey = "stopwatch") {
     this.scene = scene;
-    this.key = bombKey;
+    this.key = stopwatchKey;
 
     this._group = this.scene.physics.add.group();
   }
@@ -21,11 +21,11 @@ export default class BombSpawner {
         ? Phaser.Math.Between(400, 800)
         : Phaser.Math.Between(0, 400);
 
-    const bomb = this.group.create(x, 16, this.key);
-    bomb.setBounce(1);
-    bomb.setCollideWorldBounds(false);
-    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    const stopwatch = this.group.create(x, 16, this.key);
+    stopwatch.setBounce(1);
+    stopwatch.setCollideWorldBounds(false);
+    stopwatch.setVelocity(Phaser.Math.Between(-200, 200), 20);
 
-    return bomb;
+    return stopwatch;
   }
 }

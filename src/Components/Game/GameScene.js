@@ -3,12 +3,15 @@ const GROUND_KEY = "ground";
 const DUDE_KEY = "dude";
 const STAR_KEY = "star";
 const BOMB_KEY = "bomb";
+const STOPWATCH_KEY = "stopwatch";
 import ScoreLabel from "./ScoreLabel.js";
-// import BombSpawner from "./BombSpawner.js";
+import BombSpawner from "./BombSpawner.js";
+import StopwatchSpawner from "./StopwatchSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
 import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
+import stopwatchAsset from "../../assets/stopwatch.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
 
@@ -25,6 +28,8 @@ class GameScene extends Phaser.Scene {
     this.text = undefined;
     this.countdown = undefined;
     this.ground = undefined;
+
+    this.stopwatchSpawner = undefined;
 
     // timer
     this.textTime = undefined;
@@ -49,6 +54,7 @@ class GameScene extends Phaser.Scene {
 
     this.load.image(STAR_KEY, starAsset );
     this.load.image(BOMB_KEY, bombAsset);
+    this.load.image(STOPWATCH_KEY, stopwatchAsset);
 
     this.load.spritesheet(DUDE_KEY, dudeAsset , {
       frameWidth: 184, // la hit box est surement horrible
@@ -69,10 +75,12 @@ class GameScene extends Phaser.Scene {
     this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(16, 16, 0);
 
-    /*
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-    */
+
+    this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
+    const stopwatchesGroup = this.stopwatchSpawner.group;
+    
 
    /*
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -80,7 +88,9 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.ground);
     */
 
-    /*this.physics.add.collider(bombsGroup, platforms);
+    this.physics.add.collider(bombsGroup, fakeGround);
+    this.physics.add.collider(stopwatchesGroup, fakeGround);
+
     this.physics.add.collider(
       this.player,
       bombsGroup,
@@ -88,12 +98,23 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
-    */
+
+    this.physics.add.collider(
+      this.player,
+      stopwatchesGroup,
+      this.hitStopwatch,
+      null,
+      this
+    );
+
 
     //Physique
-    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+    // this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.physics.add.collider(this.stars, fakeGround);
     this.physics.add.collider(this.player, fakeGround);
+
+    // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
+    // this.physics.add.collider(this.stopwatches, fakeGround);
   
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -109,23 +130,34 @@ class GameScene extends Phaser.Scene {
     // timer
     this.initTime = 100;
     this.textTime = this.add.text(16, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
-    this.countdown = this.time.addEvent({delay: 1000, callback: this.countdownLabel, callbackScope: this, loop: true});
+    this.countdown = this.time.addEvent({
+      delay: 1000, 
+      callback: this.countdownLabel, 
+      callbackScope: this, 
+      loop: true
+    });
 
     // distance parcourue
     this.initDistance = 0;
     this.textDistance = this.add.text(16, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
-    this.distance = this.time.addEvent({delay : 100, callback: this.distanceLabel, callbackScope: this, loop: true});
+
+    // stopwatches + bombs
+    setTimeout(this.bombSpawner.spawn(this.player.x),10000);
+    setTimeout(this.stopwatchSpawner.spawn(this.player.x),10000);
   }
 
   update() {
     if (this.gameOver) {
       return;
     }
+    console.log(this.player.x);
     if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
         this.player.x -= 10;
         this.backgrounds.tilePositionX -=10;
         this.ground.tilePositionX  -= 10;
+        // decrease distance
+        this.distance = this.decDistance();
       }
       else {
         if(this.backgrounds.tilePositionX > 0) {
@@ -141,11 +173,27 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("right", true);
       this.backgrounds.tilePositionX += 10;
       this.ground.tilePositionX += 10;
+      // increment distance
+      this.distance = this.incDistance();
     } else {
       this.player.anims.play("turn");
     }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
+    }
+  }
+
+  incDistance() {
+    if(!this.gameOver) {
+      this.initDistance += 1;
+      this.textDistance.setText('Distance: ' + this.initDistance);
+    }
+  }
+
+  decDistance() {
+    if(!this.gameOver) {
+      this.initDistance -= 1;
+      this.textDistance.setText('Distance: ' + this.initDistance);
     }
   }
 
@@ -233,10 +281,7 @@ class GameScene extends Phaser.Scene {
         child.enableBody(true, child.x, 0, true, true);
       });
     }
-
-    // this.bombSpawner.spawn(player.x);
   }
-  
 
   createScoreLabel(x, y, score) {
     const style = { fontSize: "32px", fill: "#000" };
@@ -248,14 +293,15 @@ class GameScene extends Phaser.Scene {
   }
 
   hitBomb(player, bomb) {
-    this.scoreLabel.setText("GAME OVER : ( \nYour Score = " + this.scoreLabel.score);
-    this.physics.pause();
+    this.initTime -= 10;
+    this.textTime.setText('Timer: ' + this.initTime);
+    bomb.disableBody(true,true);
+  }
 
-    player.setTint(0xff0000);
-
-    player.anims.play("turn");
-
-    this.gameOver = true;
+  hitStopwatch(player, stopwatch) {
+    this.initTime += 10;
+    this.textTime.setText('Timer: ' + this.initTime);
+    stopwatch.disableBody(true,true);
   }
 
   // timer
@@ -263,18 +309,10 @@ class GameScene extends Phaser.Scene {
     if(this.initTime == 0) {
       this.gameOver = true;
       this.player.active = false;
-      //this.player.setVelocity(0, 0);
+      // this.player.setVelocity(0, 0);
     } else {
       this.initTime -= 1;
       this.textTime.setText('Timer: ' + this.initTime);
-    }
-  }
-
-  // distance parcourue
-  distanceLabel() {
-    if(!this.gameOver) {
-      this.initDistance += 10;
-      this.textDistance.setText('Distance: ' + this.initDistance)
     }
   }
 }
