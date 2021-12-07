@@ -138,6 +138,7 @@ class GameScene extends Phaser.Scene {
     // stopwatches + bombs
     setTimeout(this.bombSpawner.spawn(this.player.x),10000);
     setTimeout(this.stopwatchSpawner.spawn(this.player.x),10000);
+  
   }
 
   update() {

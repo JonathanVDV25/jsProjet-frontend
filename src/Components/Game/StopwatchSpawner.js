@@ -16,15 +16,12 @@ export default class StopwatchSpawner {
   }
 
   spawn(playerX = 0) {
-    const x =
-      playerX < 400
-        ? Phaser.Math.Between(400, 800)
-        : Phaser.Math.Between(0, 400);
+    const y = Phaser.Math.Between(200, 500);
 
-    const stopwatch = this.group.create(x, 16, this.key);
+    const stopwatch = this.group.create(800, y, this.key);
     stopwatch.setBounce(1);
     stopwatch.setCollideWorldBounds(false);
-    stopwatch.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    stopwatch.setVelocity(-100);
 
     return stopwatch;
   }
