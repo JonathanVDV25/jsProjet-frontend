@@ -6,6 +6,7 @@ const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
 import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
+import PlateformSpawner from "./PlateformSpawner.js";
 import StopwatchSpawner from "./StopwatchSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
@@ -23,6 +24,7 @@ class GameScene extends Phaser.Scene {
     this.scoreLabel = undefined;
     this.stars = undefined;
     this.bombSpawner = undefined;
+    this.plateformSpawner = undefined;
     this.backgrounds = undefined;
     this.gameOver = false;
     this.text = undefined;
@@ -68,16 +70,23 @@ class GameScene extends Phaser.Scene {
     this.backgrounds.setScrollFactor(0);
     this.ground = this.createGround();
     const fakeGround = this.createFakeGround();
+    this.plateformSpawner = new PlateformSpawner(this, GROUND_KEY);
+    const plateformGroup = this.plateformSpawner.group;
+    
     
     //Joueur
     this.player = this.createPlayer();
+    //this.player.body.setGravityY(5000);
+    console.log("Player : " + this.player.body);
+    console.log("Plateform : "+ this.plateformSpawner.child);
 
     this.stars = this.createStars();
+
     this.scoreLabel = this.createScoreLabel(16, 16, 0);
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-
+    
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
     
@@ -106,6 +115,8 @@ class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
     this.physics.add.collider(this.stars, fakeGround);
     this.physics.add.collider(this.player, fakeGround);
+    this.physics.add.collider(plateformGroup, fakeGround);
+    this.physics.add.collider(this.player, plateformGroup);
 
     // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
     // this.physics.add.collider(this.stopwatches, fakeGround);
@@ -153,11 +164,13 @@ class GameScene extends Phaser.Scene {
         this.ground.tilePositionX  -= 10;
         // decrease distance
         this.distance = this.decDistance();
+        this.plateformSpawner.group.setVelocityX(200);
       }
       else {
         if(this.backgrounds.tilePositionX > 0) {
           this.backgrounds.tilePositionX -=10;
           this.ground.tilePositionX  -= 10;
+          this.plateformSpawner.group.setVelocityX(200);
         }
       }
       this.player.anims.play("left", true);
@@ -171,10 +184,16 @@ class GameScene extends Phaser.Scene {
       // increment distance
       this.distance = this.incDistance();
       this.stars.setVelocityX(-200);
+      if(this.backgrounds.tilePositionX % 1000 == 0) {
+        this.plateformSpawner.spawn();
+      }
+      this.plateformSpawner.group.setVelocityX(-300);
       
+
     } else {
       this.player.anims.play("turn");
       this.stars.setVelocityX(0);
+      
 
     }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
