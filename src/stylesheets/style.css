@@ -1,1 +1,18 @@
+* {
+    color: white;
+}
+body {
+    background-color: #363940;
+    color: white;
+  }
+
+#navbar {
+    background-image: url("../img/platform.png");
+    background-size: 750px;
+}
+
+#gameDiv {
+    vertical-align: 10000px;
+}
+
 
