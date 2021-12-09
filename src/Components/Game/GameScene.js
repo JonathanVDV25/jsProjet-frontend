@@ -76,9 +76,9 @@ class GameScene extends Phaser.Scene {
     
     //Joueur
     this.player = this.createPlayer();
+    
     //this.player.body.setGravityY(5000);
-    console.log("Player : " + this.player.body);
-    console.log("Plateform : "+ this.plateformSpawner.child);
+
 
     this.stars = this.createStars();
 
@@ -94,7 +94,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
-    this.physics.add.collider(
+    this.physics.add.overlap(
       this.player,
       bombsGroup,
       this.hitBomb,
@@ -102,7 +102,7 @@ class GameScene extends Phaser.Scene {
       this
     );
 
-    this.physics.add.collider(
+    this.physics.add.overlap(
       this.player,
       stopwatchesGroup,
       this.hitStopwatch,
@@ -164,13 +164,13 @@ class GameScene extends Phaser.Scene {
         this.ground.tilePositionX  -= 10;
         // decrease distance
         this.distance = this.decDistance();
-        this.plateformSpawner.group.setVelocityX(200);
+        this.plateformSpawner.group.setVelocityX(500);
       }
       else {
         if(this.backgrounds.tilePositionX > 0) {
           this.backgrounds.tilePositionX -=10;
           this.ground.tilePositionX  -= 10;
-          this.plateformSpawner.group.setVelocityX(200);
+          this.plateformSpawner.group.setVelocityX(500);
         }
       }
       this.player.anims.play("left", true);
@@ -178,6 +178,7 @@ class GameScene extends Phaser.Scene {
       if(this.player.x != 400) {
         this.player.x += 10;
       }
+      
       this.player.anims.play("right", true);
       this.backgrounds.tilePositionX += 10;
       this.ground.tilePositionX += 10;
@@ -187,14 +188,20 @@ class GameScene extends Phaser.Scene {
       if(this.backgrounds.tilePositionX % 1000 == 0) {
         this.plateformSpawner.spawn();
       }
-      this.plateformSpawner.group.setVelocityX(-300);
+      this.plateformSpawner.group.setVelocityX(-500);
       
 
     } else {
       this.player.anims.play("turn");
       this.stars.setVelocityX(0);
-      
+      this.plateformSpawner.group.setVelocityX(0);
 
+    }
+    if (this.cursors.down.isDown) {
+      this.player.anims.play("turn");
+      this.player.setVelocityY(400);
+      this.stars.setVelocityX(0);
+      this.plateformSpawner.group.setVelocityX(0);
     }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
@@ -304,7 +311,6 @@ class GameScene extends Phaser.Scene {
   createScoreLabel(x, y, score) {
     const style = { fontSize: "32px", fill: "#000" };
     const label = new ScoreLabel(this, x, y, score, style);
-    console.log("score:", label);
     this.add.existing(label);
 
     return label;

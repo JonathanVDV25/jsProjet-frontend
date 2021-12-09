@@ -14,10 +14,17 @@ export default class PlateformSpawner {
   get group() {
     return this._group;
   }
-
+  create() {
+    
+  }
   spawn() {
 
-    const plateform = this.group.create(800, Phaser.Math.Between(200, 500), this.key);
+    const plateform = this.group.create(1000, Phaser.Math.Between(250, 375), this.key);
+    
+    plateform.body.setAllowGravity(false);
+    plateform.setGravity(0);
+    plateform.setImmovable(true);
+    plateform.setVelocity(0);
     
     return plateform;
   }
