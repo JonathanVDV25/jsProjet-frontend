@@ -95,7 +95,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
-    this.physics.add.collider(
+    this.physics.add.overlap(
       this.player,
       bombsGroup,
       this.hitBomb,
@@ -103,7 +103,7 @@ class GameScene extends Phaser.Scene {
       this
     );
 
-    this.physics.add.collider(
+    this.physics.add.overlap(
       this.player,
       stopwatchesGroup,
       this.hitStopwatch,
