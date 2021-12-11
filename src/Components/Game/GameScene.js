@@ -6,9 +6,11 @@ const STOPWATCH_KEY = "stopwatch";
 import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
 import PlateformSpawner from "./PlateformSpawner.js";
+import PlateformBoostSpawner from "./PlateformBoostSpawner.js";
 import StopwatchSpawner from "./StopwatchSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
+import plateformBoostAsset from "../../assets/plateform_boost.jpg";
 import bombAsset from "../../assets/bomb.png";
 import stopwatchAsset from "../../assets/chrono_game.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
@@ -24,6 +26,7 @@ class GameScene extends Phaser.Scene {
     this.scoreLabel = undefined;
     this.bombSpawner = undefined;
     this.plateformSpawner = undefined;
+    this.plateformBoostSpawner = undefined;
     this.backgrounds = undefined;
     this.gameOver = false;
     this.text = undefined;
@@ -45,6 +48,7 @@ class GameScene extends Phaser.Scene {
     this.load.image("background", backgroundAsset);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image("invisible_ground", invisibleGroundAsset);
+    this.load.image("plateformBoost", plateformBoostAsset);
 
     /*
     this.load.spritesheet(DUDE_KEY, platformAsset, {
@@ -74,6 +78,8 @@ class GameScene extends Phaser.Scene {
     const fakeGround = this.createFakeGround();
     this.plateformSpawner = new PlateformSpawner(this, GROUND_KEY);
     const plateformGroup = this.plateformSpawner.group;
+    this.plateformBoostSpawner = new PlateformBoostSpawner(this,"plateformBoost");
+    const plateformBoostGroup = this.plateformBoostSpawner.group;
 
     // sound
     this.bonusSound = this.sound.add('bonusSound');
@@ -113,11 +119,14 @@ class GameScene extends Phaser.Scene {
       this
     );
 
+    this.physics.add.collider(this.player, plateformBoostGroup, this.augmenterVitesseJoueur, null, this.player.body.touching.down);
+
 
     // physics
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(plateformGroup, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
+    this.physics.add.collider(this.player, plateformBoostGroup);
 
     // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
     // this.physics.add.collider(this.stopwatches, fakeGround);
@@ -157,11 +166,11 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
-    console.log(this.player.x);
     if(this.cursors.down.isDown && (this.cursors.right.isDown || this.cursors.left.isDown)) {
       this.player.anims.play("turn");
       this.player.setVelocityY(400);
       this.plateformSpawner.group.setVelocityX(0);
+      this.plateformBoostSpawner.group.setVelocityX(0);
     }
     else if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
@@ -171,12 +180,14 @@ class GameScene extends Phaser.Scene {
         // decrease distance
         this.distance = this.decDistance();
         this.plateformSpawner.group.setVelocityX(500);
+        this.plateformBoostSpawner.group.setVelocityX(500);
       }
       else {
         if(this.backgrounds.tilePositionX > 0) {
           this.backgrounds.tilePositionX -=10;
           this.ground.tilePositionX  -= 10;
           this.plateformSpawner.group.setVelocityX(500);
+          this.plateformBoostSpawner.group.setVelocityX(500);
         }
       }
       this.player.anims.play("left", true);
@@ -190,19 +201,29 @@ class GameScene extends Phaser.Scene {
         // increment distance
         this.distance = this.incDistance();
         if(this.backgrounds.tilePositionX % 1000 == 0) {
-          this.plateformSpawner.spawn();
+          var random = Phaser.Math.Between(1, 2);
+          if(random == 1) {
+            this.plateformSpawner.spawn();
+          }
+          else {
+            this.plateformBoostSpawner.spawn();
+          }
+          
         }
         this.plateformSpawner.group.setVelocityX(-500);
+        this.plateformBoostSpawner.group.setVelocityX(-500);
       
     
     } else if (this.cursors.down.isDown) {
       this.player.anims.play("turn");
       this.player.setVelocityY(400);
       this.plateformSpawner.group.setVelocityX(0);
+      this.plateformBoostSpawner.group.setVelocityX(0);
     }
     else {
       this.player.anims.play("turn");
       this.plateformSpawner.group.setVelocityX(0);
+      this.plateformBoostSpawner.group.setVelocityX(0);
 
     }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
@@ -316,6 +337,24 @@ class GameScene extends Phaser.Scene {
       this.initTime -= 1;
       this.textTime.setText('Timer: ' + this.initTime);
     }
+  }
+
+  augmenterVitesseJoueur(player, plateformBoost) {
+    console.log("YES !");
+    
+    let timer = this.time.addEvent( {
+      delay: 1,
+      repeat: 10000,
+      callback: effetVitesse(player),
+      callbackScope: this
+    });
+    
+    
+
+  }
+
+  effetVitesse(player){
+    player.x += 50;
   }
 }
 

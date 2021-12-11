@@ -37,9 +37,11 @@ class HomeScene extends Phaser.Scene {
         this.add.image(0,0, "backgroundHome").setOrigin(0, 0).setDepth(0);
         let playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "playButton").setDepth(1);
         
-        this.sound.play("musicHome", {
+        //A REACTIVER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        /*this.sound.play("musicHome", {
             loop: true
         });
+        */
 
 
         playButton.setInteractive();
