@@ -341,21 +341,30 @@ class GameScene extends Phaser.Scene {
 
   augmenterVitesseJoueur(player, plateformBoost) {
     console.log("YES !");
-    
+    /*
     let timer = this.time.addEvent( {
       delay: 1,
       repeat: 10000,
       callback: effetVitesse(player),
       callbackScope: this
     });
+    */
+   
+   for (let index = 0; index < 100; index++) {
+    setInterval(()=> { player.setVelocityX(5000) },100);
+   }
+   player.setVelocityX(0);
+
     
     
 
   }
 
   effetVitesse(player){
-    player.x += 50;
+    player.x += 1;
   }
+  
+  
 }
 
 export default GameScene;
