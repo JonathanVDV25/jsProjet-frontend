@@ -1,17 +1,16 @@
 import Phaser from "phaser";
 const GROUND_KEY = "ground";
 const DUDE_KEY = "dude";
-const STAR_KEY = "star";
 const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
 import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
+import PlateformSpawner from "./PlateformSpawner.js";
 import StopwatchSpawner from "./StopwatchSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
-import starAsset from "../../assets/star.png";
 import bombAsset from "../../assets/bomb.png";
-import stopwatchAsset from "../../assets/stopwatch.png";
+import stopwatchAsset from "../../assets/chrono_game.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
 import bonusSoundAsset from "../../assets/bonus.mp3";
@@ -23,8 +22,8 @@ class GameScene extends Phaser.Scene {
     this.player = undefined;
     this.cursors = undefined;
     this.scoreLabel = undefined;
-    this.stars = undefined;
     this.bombSpawner = undefined;
+    this.plateformSpawner = undefined;
     this.backgrounds = undefined;
     this.gameOver = false;
     this.text = undefined;
@@ -54,7 +53,6 @@ class GameScene extends Phaser.Scene {
     });
     */
 
-    this.load.image(STAR_KEY, starAsset );
     this.load.image(BOMB_KEY, bombAsset);
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
 
@@ -74,20 +72,24 @@ class GameScene extends Phaser.Scene {
     this.backgrounds.setScrollFactor(0);
     this.ground = this.createGround();
     const fakeGround = this.createFakeGround();
+    this.plateformSpawner = new PlateformSpawner(this, GROUND_KEY);
+    const plateformGroup = this.plateformSpawner.group;
 
     // sound
     this.bonusSound = this.sound.add('bonusSound');
     this.explosionSound = this.sound.add('explosionSound');
     
+    
     // joueur
     this.player = this.createPlayer();
+    
+    //this.player.body.setGravityY(5000);
 
-    this.stars = this.createStars();
     this.scoreLabel = this.createScoreLabel(16, 16, 0);
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-
+    
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
     
@@ -113,9 +115,9 @@ class GameScene extends Phaser.Scene {
 
 
     // physics
-    this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
-    this.physics.add.collider(this.stars, fakeGround);
     this.physics.add.collider(this.player, fakeGround);
+    this.physics.add.collider(plateformGroup, fakeGround);
+    this.physics.add.collider(this.player, plateformGroup);
 
     // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
     // this.physics.add.collider(this.stopwatches, fakeGround);
@@ -146,8 +148,8 @@ class GameScene extends Phaser.Scene {
     this.textDistance = this.add.text(16, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
 
     // stopwatches + bombs
-    setTimeout(this.bombSpawner.spawn(this.player.x),10000);
-    setTimeout(this.stopwatchSpawner.spawn(this.player.x),10000);
+    //setTimeout(this.bombSpawner.spawn(this.player.x),10000);
+    setInterval(()=> this.stopwatchSpawner.spawn(),10000);
   
   }
 
@@ -163,11 +165,13 @@ class GameScene extends Phaser.Scene {
         this.ground.tilePositionX  -= 10;
         // decrease distance
         this.distance = this.decDistance();
+        this.plateformSpawner.group.setVelocityX(500);
       }
       else {
         if(this.backgrounds.tilePositionX > 0) {
           this.backgrounds.tilePositionX -=10;
           this.ground.tilePositionX  -= 10;
+          this.plateformSpawner.group.setVelocityX(500);
         }
       }
       this.player.anims.play("left", true);
@@ -175,17 +179,27 @@ class GameScene extends Phaser.Scene {
       if(this.player.x != 400) {
         this.player.x += 10;
       }
+      
       this.player.anims.play("right", true);
       this.backgrounds.tilePositionX += 10;
       this.ground.tilePositionX += 10;
       // increment distance
       this.distance = this.incDistance();
-      this.stars.setVelocityX(-200);
+      if(this.backgrounds.tilePositionX % 1000 == 0) {
+        this.plateformSpawner.spawn();
+      }
+      this.plateformSpawner.group.setVelocityX(-500);
       
+
     } else {
       this.player.anims.play("turn");
-      this.stars.setVelocityX(0);
+      this.plateformSpawner.group.setVelocityX(0);
 
+    }
+    if (this.cursors.down.isDown) {
+      this.player.anims.play("turn");
+      this.player.setVelocityY(400);
+      this.plateformSpawner.group.setVelocityX(0);
     }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
@@ -266,36 +280,9 @@ class GameScene extends Phaser.Scene {
     return player;
   }
 
-  
-  createStars() {
-    const stars = this.physics.add.group({
-      key: STAR_KEY,
-      repeat: 11,
-      setXY: { x: 12, y: 0, stepX: 70 },
-    });
-    
-    stars.children.iterate((child) => {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    });
-
-    return stars;
-  }
-
-  collectStar(player, star) {
-    star.disableBody(true, true);
-    this.scoreLabel.add(10);
-    if (this.stars.countActive(true) === 0) {
-      //  A new batch of stars to collect
-      this.stars.children.iterate((child) => {
-        child.enableBody(true, child.x, 0, true, true);
-      });
-    }
-  }
-
   createScoreLabel(x, y, score) {
     const style = { fontSize: "32px", fill: "#000" };
     const label = new ScoreLabel(this, x, y, score, style);
-    console.log("score:", label);
     this.add.existing(label);
 
     return label;

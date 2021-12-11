@@ -15,7 +15,7 @@ export default class StopwatchSpawner {
     return this._group;
   }
 
-  spawn(playerX = 0) {
+  spawn() {
     const y = Phaser.Math.Between(200, 500);
 
     const stopwatch = this.group.create(800, y, this.key);
