@@ -148,8 +148,8 @@ class GameScene extends Phaser.Scene {
     this.textDistance = this.add.text(16, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
 
     // stopwatches + bombs
-    //setTimeout(this.bombSpawner.spawn(this.player.x),10000);
-    setInterval(()=> this.stopwatchSpawner.spawn(),10000);
+    setInterval(() => this.bombSpawner.spawn(),10000);
+    setInterval(() => this.stopwatchSpawner.spawn(),10000);
   
   }
 
