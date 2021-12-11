@@ -158,7 +158,12 @@ class GameScene extends Phaser.Scene {
       return;
     }
     console.log(this.player.x);
-    if (this.cursors.left.isDown ) {
+    if(this.cursors.down.isDown && (this.cursors.right.isDown || this.cursors.left.isDown)) {
+      this.player.anims.play("turn");
+      this.player.setVelocityY(400);
+      this.plateformSpawner.group.setVelocityX(0);
+    }
+    else if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
         this.player.x -= 10;
         this.backgrounds.tilePositionX -=10;
@@ -179,30 +184,29 @@ class GameScene extends Phaser.Scene {
       if(this.player.x != 400) {
         this.player.x += 10;
       }
+        this.player.anims.play("right", true);
+        this.backgrounds.tilePositionX += 10;
+        this.ground.tilePositionX += 10;
+        // increment distance
+        this.distance = this.incDistance();
+        if(this.backgrounds.tilePositionX % 1000 == 0) {
+          this.plateformSpawner.spawn();
+        }
+        this.plateformSpawner.group.setVelocityX(-500);
       
-      this.player.anims.play("right", true);
-      this.backgrounds.tilePositionX += 10;
-      this.ground.tilePositionX += 10;
-      // increment distance
-      this.distance = this.incDistance();
-      if(this.backgrounds.tilePositionX % 1000 == 0) {
-        this.plateformSpawner.spawn();
-      }
-      this.plateformSpawner.group.setVelocityX(-500);
-      
-
-    } else {
-      this.player.anims.play("turn");
-      this.plateformSpawner.group.setVelocityX(0);
-
-    }
-    if (this.cursors.down.isDown) {
+    
+    } else if (this.cursors.down.isDown) {
       this.player.anims.play("turn");
       this.player.setVelocityY(400);
       this.plateformSpawner.group.setVelocityX(0);
     }
+    else {
+      this.player.anims.play("turn");
+      this.plateformSpawner.group.setVelocityX(0);
+
+    }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-330);
+      this.player.setVelocityY(-375);
     }
   }
 
