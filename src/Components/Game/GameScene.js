@@ -36,6 +36,7 @@ class GameScene extends Phaser.Scene {
     this.countdown = undefined;
     this.ground = undefined;
     this.vitesse = 0;
+    this.ensembleCoPlateform = new Set([]);
 
     this.stopwatchSpawner = undefined;
 
@@ -285,17 +286,24 @@ class GameScene extends Phaser.Scene {
       this.distance = this.incDistance();
 
       //Générer les plateformes
+      console.log(this.backgrounds.tilePositionX);
       if(this.backgrounds.tilePositionX % 1000 == 0) {
-        var random = Phaser.Math.Between(1, 5);
-        if(random == 1 || random == 2 || random == 3) {
-          this.plateformSpawner.spawn();
+
+        if(!this.ensembleCoPlateform.has(this.backgrounds.tilePositionX)) {
+
+          this.ensembleCoPlateform.add(this.backgrounds.tilePositionX);
+
+          var random = Phaser.Math.Between(1, 5);
+          if(random == 1 || random == 2 || random == 3) {
+            this.plateformSpawner.spawn();
+          }
+          else if(random == 4) {
+            this.plateformSlowSpawner.spawn();
+          }
+          else {
+            this.plateformBoostSpawner.spawn();
+          }    
         }
-        else if(random == 4) {
-          this.plateformSlowSpawner.spawn();
-        }
-        else {
-          this.plateformBoostSpawner.spawn();
-        }    
       }
     }
     
