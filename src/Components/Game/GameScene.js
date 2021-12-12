@@ -32,6 +32,7 @@ class GameScene extends Phaser.Scene {
     this.text = undefined;
     this.countdown = undefined;
     this.ground = undefined;
+    this.vitesse = 0;
 
     this.stopwatchSpawner = undefined;
 
@@ -120,7 +121,7 @@ class GameScene extends Phaser.Scene {
       this
     );
 
-    this.physics.add.collider(this.player, plateformBoostGroup, this.augmenterVitesseJoueur, null, this.player.body.touching.down);
+    this.physics.add.collider(this.player, plateformBoostGroup, this.augmenterVitesseJoueur, null, this);
 
 
     // physics
@@ -176,6 +177,12 @@ class GameScene extends Phaser.Scene {
     }
     else if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
+        if(this.vitesse == 1) {
+          this.player.setVelocityX(0);
+        }
+        else {
+          this.player.setVelocityX(-500);
+        }
         this.player.setVelocityX(-500);
         this.backgrounds.tilePositionX -=10;
         this.ground.tilePositionX  -= 10;
@@ -196,27 +203,35 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
       if(this.player.x != 400) {
-        this.player.setVelocityX(500);
-      }
-        this.player.anims.play("right", true);
-        //this.player.setVelocityX(0);
-        this.backgrounds.tilePositionX += 10;
-        this.ground.tilePositionX += 10;
-        // increment distance
-        this.distance = this.incDistance();
-        if(this.backgrounds.tilePositionX % 1000 == 0) {
-          var random = Phaser.Math.Between(1, 2);
-          if(random == 1) {
-            this.plateformSpawner.spawn();
-          }
-          else {
-            this.plateformBoostSpawner.spawn();
-          }
-          
+        
+        if(this.vitesse == 1) {
+          this.player.setVelocityX(1000);
+          this.backgrounds.tilePositionX += 20;
+          this.ground.tilePositionX += 20;
+          this.plateformSpawner.group.setVelocityX(-1000);
+        this.plateformBoostSpawner.group.setVelocityX(-1000);
         }
-        this.plateformSpawner.group.setVelocityX(-500);
+        else {
+          this.player.setVelocityX(500);
+          this.backgrounds.tilePositionX += 10;
+          this.ground.tilePositionX += 10;
+          this.plateformSpawner.group.setVelocityX(-500);
         this.plateformBoostSpawner.group.setVelocityX(-500);
-      
+        }
+        
+      }
+      this.player.anims.play("right", true);
+      this.distance = this.incDistance();
+
+      if(this.backgrounds.tilePositionX % 1000 == 0) {
+        var random = Phaser.Math.Between(1, 2);
+        if(random == 1) {
+          this.plateformSpawner.spawn();
+        }
+        else {
+          this.plateformBoostSpawner.spawn();
+        }    
+      }
     
     } else if (this.cursors.down.isDown) {
       this.player.anims.play("turn");
@@ -344,9 +359,10 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  augmenterVitesseJoueur(player, plateformBoost) {
+  augmenterVitesseJoueur() {
     console.log("YES !");
-    player.setVelocityX(1000);
+    
+    this.vitesse = 1;
 
   }
   
