@@ -443,10 +443,13 @@ class GameScene extends Phaser.Scene {
   augmenterVitesseJoueur() {
     //Add Timer
     this.vitesse = 1;
+    setTimeout(() => { this.vitesse = 0}, 5000);
   }
   diminuerVitesseJoueur() {
     this.vitesse = -1;
+    setTimeout(() => { this.vitesse = 0}, 5000);
   }
+
 }
 
 export default GameScene;
