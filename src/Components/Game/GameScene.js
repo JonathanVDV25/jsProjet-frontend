@@ -88,6 +88,7 @@ class GameScene extends Phaser.Scene {
     
     // joueur
     this.player = this.createPlayer();
+    this.player.setPushable(true);
     
     //this.player.body.setGravityY(5000);
 
@@ -166,6 +167,7 @@ class GameScene extends Phaser.Scene {
     if (this.gameOver) {
       return;
     }
+    
     if(this.cursors.down.isDown && (this.cursors.right.isDown || this.cursors.left.isDown)) {
       this.player.anims.play("turn");
       this.player.setVelocityY(400);
@@ -174,7 +176,7 @@ class GameScene extends Phaser.Scene {
     }
     else if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
-        this.player.x -= 10;
+        this.player.setVelocityX(-500);
         this.backgrounds.tilePositionX -=10;
         this.ground.tilePositionX  -= 10;
         // decrease distance
@@ -184,6 +186,7 @@ class GameScene extends Phaser.Scene {
       }
       else {
         if(this.backgrounds.tilePositionX > 0) {
+          //this.player.setVelocityX(0);
           this.backgrounds.tilePositionX -=10;
           this.ground.tilePositionX  -= 10;
           this.plateformSpawner.group.setVelocityX(500);
@@ -193,9 +196,10 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
       if(this.player.x != 400) {
-        this.player.x += 10;
+        this.player.setVelocityX(500);
       }
         this.player.anims.play("right", true);
+        //this.player.setVelocityX(0);
         this.backgrounds.tilePositionX += 10;
         this.ground.tilePositionX += 10;
         // increment distance
@@ -224,6 +228,7 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("turn");
       this.plateformSpawner.group.setVelocityX(0);
       this.plateformBoostSpawner.group.setVelocityX(0);
+      this.player.setVelocityX(0);
 
     }
     if (this.cursors.up.isDown && this.player.body.touching.down) {
@@ -341,29 +346,9 @@ class GameScene extends Phaser.Scene {
 
   augmenterVitesseJoueur(player, plateformBoost) {
     console.log("YES !");
-    /*
-    let timer = this.time.addEvent( {
-      delay: 1,
-      repeat: 10000,
-      callback: effetVitesse(player),
-      callbackScope: this
-    });
-    */
-   
-   for (let index = 0; index < 100; index++) {
-    setInterval(()=> { player.setVelocityX(5000) },100);
-   }
-   player.setVelocityX(0);
-
-    
-    
+    player.setVelocityX(1000);
 
   }
-
-  effetVitesse(player){
-    player.x += 1;
-  }
-  
   
 }
 

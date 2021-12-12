@@ -23,7 +23,8 @@ export default class PlateformSpawner {
     
     plateform.body.setAllowGravity(false);
     plateform.setGravity(0);
-    plateform.setImmovable(true);
+    //plateform.setImmovable(true);
+    plateform.setPushable(false);
     plateform.setVelocity(0);
     
     return plateform;
