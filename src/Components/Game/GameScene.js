@@ -70,6 +70,9 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
+    //Empèche de générer deux plateformes en même temps
+    this.ensembleCoPlateform.add(0);
+
     // decor
     this.backgrounds = this.add.tileSprite(0, 0, 2000, 1200, "background");
     this.backgrounds.setScrollFactor(0);
@@ -95,6 +98,7 @@ class GameScene extends Phaser.Scene {
     //this.player.body.setGravityY(5000);
 
     this.scoreLabel = this.createScoreLabel(16, 16, 0);
+    
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
@@ -151,7 +155,7 @@ class GameScene extends Phaser.Scene {
 
     // timer
     this.initTime = 100;
-    this.textTime = this.add.text(16, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
+    this.textTime = this.add.text(320, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({
       delay: 1000, 
       callback: this.countdownLabel, 
@@ -161,7 +165,7 @@ class GameScene extends Phaser.Scene {
 
     // distance parcoured
     this.initDistance = 0;
-    this.textDistance = this.add.text(16, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
+    this.textDistance = this.add.text(320, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
 
     // stopwatches + bombs
     //setTimeout(this.bombSpawner.spawn(this.player.x),10000);
@@ -251,7 +255,7 @@ class GameScene extends Phaser.Scene {
     
     // Joueur va à droite
     else if (this.cursors.right.isDown) {
-
+      
       if(this.player.x != 400) {
         
         //Plateforme Boost
@@ -280,18 +284,21 @@ class GameScene extends Phaser.Scene {
           this.plateformSpawner.group.setVelocityX(-500);
           this.plateformBoostSpawner.group.setVelocityX(-500);
           this.plateformSlowSpawner.group.setVelocityX(-500);
+          if(this.scoreLabel.x < 320 && this.player.x > 420) {
+              this.scoreLabel.x += 10;
+          }
         }
       }
       this.player.anims.play("right", true);
       this.distance = this.incDistance();
 
       //Générer les plateformes
-      console.log(this.backgrounds.tilePositionX);
-      if(this.backgrounds.tilePositionX % 1000 == 0) {
-
-        if(!this.ensembleCoPlateform.has(this.backgrounds.tilePositionX)) {
-
-          this.ensembleCoPlateform.add(this.backgrounds.tilePositionX);
+      if(this.backgrounds.tilePositionX % 1000 >= 0 || this.backgrounds.tilePositionX % 1000 <= 5) {
+        var position = Math.round(this.backgrounds.tilePositionX / 1000);
+        
+        if(!this.ensembleCoPlateform.has(position)) {
+          console.log(position);
+          this.ensembleCoPlateform.add(position);
 
           var random = Phaser.Math.Between(1, 5);
           if(random == 1 || random == 2 || random == 3) {
@@ -328,20 +335,20 @@ class GameScene extends Phaser.Scene {
 
     //Joueur saute
     if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-375);
+      this.player.setVelocityY(-600);
     }
   }
 
   incDistance() {
     if(!this.gameOver) {
-      this.initDistance += 1;
+      this.initDistance = Math.round(this.backgrounds.tilePositionX / 10);
       this.textDistance.setText('Distance: ' + this.initDistance);
     }
   }
 
   decDistance() {
     if(!this.gameOver) {
-      this.initDistance -= 1;
+      this.initDistance = this.backgrounds.tilePositionX / 10;
       this.textDistance.setText('Distance: ' + this.initDistance);
     }
   }
@@ -441,14 +448,15 @@ class GameScene extends Phaser.Scene {
   }
 
   augmenterVitesseJoueur() {
-    //Add Timer
     this.vitesse = 1;
-    setTimeout(() => { this.vitesse = 0}, 5000);
+    setTimeout(() => { this.vitesse = 0} , 5000);
   }
   diminuerVitesseJoueur() {
     this.vitesse = -1;
-    setTimeout(() => { this.vitesse = 0}, 5000);
+    setTimeout(() => { this.vitesse = 0}, 4000);
+    
   }
+
 
 }
 

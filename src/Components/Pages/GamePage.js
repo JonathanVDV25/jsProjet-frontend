@@ -24,7 +24,7 @@ const GamePage = () => {
     physics: {
       default: "arcade",
       arcade: {
-        gravity: { y: 250 },
+        gravity: { y: 500 },
         debug: false,
       },
     },
