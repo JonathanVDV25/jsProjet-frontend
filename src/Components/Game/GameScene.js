@@ -97,7 +97,7 @@ class GameScene extends Phaser.Scene {
     
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
-
+    
     // physics
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
@@ -122,6 +122,9 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
+
+    // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
+    // this.physics.add.collider(this.stopwatches, fakeGround);
   
     this.cursors = this.input.keyboard.createCursorKeys();
 
