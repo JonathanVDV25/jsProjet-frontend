@@ -30,20 +30,15 @@ class GameScene extends Phaser.Scene {
     this.plateformSlowSpawner = undefined;
     this.backgrounds = undefined;
     this.gameOver = false;
-    this.countdown = undefined;
     this.ground = undefined;
     this.speed = 0;
     this.ensembleCoPlateform = new Set([]);
 
     this.stopwatchSpawner = undefined;
 
-    // timer
-    this.textTime = undefined;
-    this.countdown = undefined;
-
-    // distance parcourue
-    this.textDistance = undefined;
-    this.distance = undefined;
+    this.text = undefined;
+    this.initDistance = 0;
+    this.initTime = 50;
   }
 
   preload() {
@@ -56,7 +51,7 @@ class GameScene extends Phaser.Scene {
     this.load.image(BOMB_KEY, bombAsset);
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
 
-    this.load.spritesheet(DUDE_KEY, dudeAsset , {
+    this.load.spritesheet(DUDE_KEY, dudeAsset, {
       frameWidth: 184, // la hit box est surement horrible
       frameHeight: 129,
     });
@@ -77,30 +72,41 @@ class GameScene extends Phaser.Scene {
     const fakeGround = this.createFakeGround();
     this.plateformSpawner = new PlateformSpawner(this, GROUND_KEY);
     const plateformGroup = this.plateformSpawner.group;
-    this.plateformBoostSpawner = new PlateformBoostSpawner(this,"plateformBoost");
+    this.plateformBoostSpawner = new PlateformBoostSpawner(
+      this,
+      "plateformBoost"
+    );
     const plateformBoostGroup = this.plateformBoostSpawner.group;
     this.plateformSlowSpawner = new PlateformSlowSpawner(this, "plateformSlow");
     const plateformSlowGroup = this.plateformSlowSpawner.group;
 
-
     // sound
-    this.bonusSound = this.sound.add('bonusSound');
-    this.explosionSound = this.sound.add('explosionSound');
-    
-    
+    this.bonusSound = this.sound.add("bonusSound");
+    this.explosionSound = this.sound.add("explosionSound");
+
     // joueur
     this.player = this.createPlayer();
     this.player.setPushable(true);
+<<<<<<< HEAD
+=======
+
+    //this.player.body.setGravityY(5000);
+>>>>>>> testText
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
-    
+
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> testText
     // physics
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
+<<<<<<< HEAD
     this.physics.add.collider(this.player, plateformBoostGroup, this.increaseSpeedPlayer, null, this);
     this.physics.add.collider(this.player, plateformSlowGroup, this.decreaseSpeedPlayer, null, this);
 
@@ -108,12 +114,26 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
     this.physics.add.overlap(
+=======
+    this.physics.add.collider(
+>>>>>>> testText
       this.player,
-      bombsGroup,
-      this.hitBomb,
+      plateformBoostGroup,
+      this.increaseSpeedPlayer,
       null,
       this
     );
+    this.physics.add.collider(
+      this.player,
+      plateformSlowGroup,
+      this.decreaseSpeedPlayer,
+      null,
+      this
+    );
+    this.physics.add.collider(bombsGroup, fakeGround);
+    this.physics.add.collider(stopwatchesGroup, fakeGround);
+
+    this.physics.add.overlap(this.player, bombsGroup, this.hitBomb, null, this);
 
     this.physics.add.overlap(
       this.player,
@@ -125,7 +145,7 @@ class GameScene extends Phaser.Scene {
 
     // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
     // this.physics.add.collider(this.stopwatches, fakeGround);
-  
+
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.myCam = this.cameras.main;
@@ -134,36 +154,41 @@ class GameScene extends Phaser.Scene {
     // making the camera follow the player
     this.myCam.startFollow(this.player);
 
-    /*The Collider takes two objects and tests for collision and performs separation against them.
-    Note that we could call a callback in case of collision...*/
+    // text for timer and distance
+    this.text = this.add.text(16, 16, "", { fontSize: 32, color: "black" });
+    this.text.setScrollFactor(0);
 
-    // timer
-    this.initTime = 10;
-    this.textTime = this.add.text(16, 16, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
-    this.countdown = this.time.addEvent({
-      delay: 1000, 
-      callback: this.countdownLabel, 
-      callbackScope: this, 
-      loop: true
-    });
+    this.player.setDataEnabled();
 
-    // distance parcoured
-    this.initDistance = 0;
-    this.textDistance = this.add.text(320, 68, 'Distance: ' + this.initDistance, {fontSize: 32, color: 'black'});
+    this.player.data.set("time", this.initTime);
+    this.player.data.set("distance", this.initDistance);
+
+    this.text.setText([
+      "Time: " + this.player.data.get("time"),
+      "Distance: " + this.player.data.get("distance"),
+    ]);
+
+    // this.text.fixedToCamera = true;
+    // this.text.myCam.setFollowOffset(16, 16);
 
     // stopwatches + bombs
-    setInterval(() => this.bombSpawner.spawn(),10000);
-    setInterval(() => this.stopwatchSpawner.spawn(),10000);
-  
+    setInterval(() => this.bombSpawner.spawn(), 10000);
+    setInterval(() => this.stopwatchSpawner.spawn(), 10000);
+
+    // time
+    setInterval(() => this.timeLabel(), 1000);
   }
 
   update() {
     if (this.gameOver) {
       return;
     }
-    
+
     //Evite d'avancer à l'arret
-    if(this.cursors.down.isDown && (this.cursors.right.isDown || this.cursors.left.isDown)) {
+    if (
+      this.cursors.down.isDown &&
+      (this.cursors.right.isDown || this.cursors.left.isDown)
+    ) {
       this.player.anims.play("turn");
       this.player.setVelocityY(400);
       this.plateformSpawner.group.setVelocityX(0);
@@ -172,10 +197,10 @@ class GameScene extends Phaser.Scene {
     }
 
     //Joueur va a gauche
-    else if (this.cursors.left.isDown ) {
-      if(this.player.x > 100) {
+    else if (this.cursors.left.isDown) {
+      if (this.player.x > 100) {
         //Plateforme Boost
-        if(this.speed == 1) {
+        if (this.speed == 1) {
           this.player.setVelocityX(-1000);
           this.backgrounds.tilePositionX -= 20;
           this.ground.tilePositionX -= 20;
@@ -184,7 +209,7 @@ class GameScene extends Phaser.Scene {
           this.plateformSlowSpawner.group.setVelocityX(1000);
         }
         //Plateform Slow
-        else if(this.speed == -1 ) {
+        else if (this.speed == -1) {
           this.player.setVelocityX(-250);
           this.backgrounds.tilePositionX -= 5;
           this.ground.tilePositionX -= 5;
@@ -195,19 +220,18 @@ class GameScene extends Phaser.Scene {
         //Plateform Normal
         else {
           this.player.setVelocityX(-500);
-          this.backgrounds.tilePositionX -=10;
-          this.ground.tilePositionX  -= 10;
+          this.backgrounds.tilePositionX -= 10;
+          this.ground.tilePositionX -= 10;
           this.plateformSpawner.group.setVelocityX(500);
           this.plateformBoostSpawner.group.setVelocityX(500);
           this.plateformSlowSpawner.group.setVelocityX(500);
         }
         // decrease distance
-        this.distance = this.decDistance();
-      }
-      else {
-        if(this.backgrounds.tilePositionX > 0) {
+        this.data.set("distance", this.decDistance());
+      } else {
+        if (this.backgrounds.tilePositionX > 0) {
           //Plateforme Boost
-          if(this.speed == 1) {
+          if (this.speed == 1) {
             this.backgrounds.tilePositionX -= 20;
             this.ground.tilePositionX -= 20;
             this.plateformSpawner.group.setVelocityX(1000);
@@ -215,7 +239,7 @@ class GameScene extends Phaser.Scene {
             this.plateformSlowSpawner.group.setVelocityX(1000);
           }
           //Plateform Slow
-          else if(this.speed == -1 ) {
+          else if (this.speed == -1) {
             this.backgrounds.tilePositionX -= 5;
             this.ground.tilePositionX -= 5;
             this.plateformSpawner.group.setVelocityX(250);
@@ -224,26 +248,24 @@ class GameScene extends Phaser.Scene {
           }
           //Plateform Normal
           else {
-            this.backgrounds.tilePositionX -=10;
-            this.ground.tilePositionX  -= 10;
+            this.backgrounds.tilePositionX -= 10;
+            this.ground.tilePositionX -= 10;
             this.plateformSpawner.group.setVelocityX(500);
             this.plateformBoostSpawner.group.setVelocityX(500);
             this.plateformSlowSpawner.group.setVelocityX(500);
           }
           // decrease distance
-          this.distance = this.decDistance();
+          this.data.set("distance", this.decDistance());
         }
       }
       this.player.anims.play("left", true);
     }
-    
+
     // Joueur va à droite
     else if (this.cursors.right.isDown) {
-      
-      if(this.player.x != 400) {
-        
+      if (this.player.x != 400) {
         //Plateforme Boost
-        if(this.speed == 1) {
+        if (this.speed == 1) {
           this.player.setVelocityX(1000);
           this.backgrounds.tilePositionX += 20;
           this.ground.tilePositionX += 20;
@@ -252,7 +274,7 @@ class GameScene extends Phaser.Scene {
           this.plateformSlowSpawner.group.setVelocityX(-1000);
         }
         //Plateform Slow
-        else if(this.speed == -1 ) {
+        else if (this.speed == -1) {
           this.player.setVelocityX(250);
           this.backgrounds.tilePositionX += 5;
           this.ground.tilePositionX += 5;
@@ -274,30 +296,31 @@ class GameScene extends Phaser.Scene {
         }
       }
       this.player.anims.play("right", true);
-      this.distance = this.incDistance();
+      this.data.set("distance", this.incDistance());
 
       //Générer les plateformes
-      if(this.backgrounds.tilePositionX % 1000 >= 0 || this.backgrounds.tilePositionX % 1000 <= 5) {
+      if (
+        this.backgrounds.tilePositionX % 1000 >= 0 ||
+        this.backgrounds.tilePositionX % 1000 <= 5
+      ) {
         var position = Math.round(this.backgrounds.tilePositionX / 1000);
-        
-        if(!this.ensembleCoPlateform.has(position)) {
+
+        if (!this.ensembleCoPlateform.has(position)) {
           console.log(position);
           this.ensembleCoPlateform.add(position);
 
           var random = Phaser.Math.Between(1, 5);
-          if(random == 1 || random == 2 || random == 3) {
+          if (random == 1 || random == 2 || random == 3) {
             this.plateformSpawner.spawn();
-          }
-          else if(random == 4) {
+          } else if (random == 4) {
             this.plateformSlowSpawner.spawn();
-          }
-          else {
+          } else {
             this.plateformBoostSpawner.spawn();
-          }    
+          }
         }
       }
     }
-    
+
     //Joueur va en bas
     else if (this.cursors.down.isDown) {
       this.player.anims.play("turn");
@@ -314,7 +337,6 @@ class GameScene extends Phaser.Scene {
       this.plateformBoostSpawner.group.setVelocityX(0);
       this.plateformSlowSpawner.group.setVelocityX(0);
       this.player.setVelocityX(0);
-
     }
 
     //Joueur saute
@@ -324,28 +346,26 @@ class GameScene extends Phaser.Scene {
   }
 
   incDistance() {
-    if(!this.gameOver) {
-      this.initDistance = Math.round(this.backgrounds.tilePositionX / 10);
-      this.textDistance.setText('Distance: ' + this.initDistance);
+    if (!this.gameOver) {
+      this.player.data.set("distance", Math.round(this.backgrounds.tilePositionX / 10));
+      this.timeDistanceRender();
     }
   }
 
   decDistance() {
-    if(!this.gameOver) {
-      this.initDistance = this.backgrounds.tilePositionX / 10;
-      this.textDistance.setText('Distance: ' + this.initDistance);
+    if (!this.gameOver) {
+      this.player.data.set("distance", this.backgrounds.tilePositionX / 10);
+      this.timeDistanceRender();
     }
   }
 
   createGround() {
-
     const ground = this.add.tileSprite(0, 600, 2000, 125, GROUND_KEY);
     ground.setScrollFactor(0);
 
     //const ground = this.physics.add.staticGroup();
     //ground.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
     return ground;
-
   }
 
   createFakeGround() {
@@ -372,72 +392,74 @@ class GameScene extends Phaser.Scene {
     /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
     The 'repeat -1' value tells the animation to loop.
     */
-    
+
     this.anims.create({
       key: "left",
       frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 0, end: 5 }),
       frameRate: 10,
       repeat: -1,
     });
-    
+
     this.anims.create({
       key: "turn",
       frames: [{ key: DUDE_KEY, frame: 6 }],
       frameRate: 1,
     });
-    
-    
+
     this.anims.create({
       key: "right",
       frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 7, end: 12 }),
       frameRate: 10,
       repeat: -1,
     });
-    
+
     return player;
   }
 
   hitBomb(player, bomb) {
-      if(this.initTime >= 10) {
-      this.initTime -= 10;
-      this.textTime.setText('Timer: ' + this.initTime);
-      bomb.disableBody(true,true);
-      this.explosionSound.play();
-    } else this.initTime = 0;
+    if (this.player.data.get("time") <= 10) {
+      this.player.data.set("time", 0);
+    } else {
+      this.player.data.set("time", this.player.data.get("time") - 10);
+    }
+    this.timeDistanceRender();
   }
 
   hitStopwatch(player, stopwatch) {
-    if(this.initTime >= 10) {
-      this.initTime += 10;
-      this.textTime.setText('Timer: ' + this.initTime);
-      stopwatch.disableBody(true,true);
-      this.bonusSound.play();
-    } else this.initTime = 0;
+    this.player.data.set("time", this.player.data.get("time") + 10);
+    this.timeDistanceRender();
   }
 
-  // timer
-  countdownLabel() {
-    if(this.initTime <= 0) {
+  // timer + distance 
+  timeLabel() {
+    if (this.player.data.get("time") <= 0) {
       this.gameOver = true;
       this.player.active = false;
-      // this.player.setVelocity(0, 0);
     } else {
-      this.initTime -= 1;
-      this.textTime.setText('Timer: ' + this.initTime);
+      this.player.data.set("time", this.player.data.get("time") - 1);
+      this.timeDistanceRender();
     }
+  }
+
+  timeDistanceRender() {
+    this.text.setText([
+      "Time: " + this.player.data.get("time"),
+      "Distance: " + this.player.data.get("distance"),
+    ]);
   }
 
   increaseSpeedPlayer() {
     this.speed = 1;
-    setTimeout(() => { this.speed = 0} , 5000);
+    setTimeout(() => {
+      this.speed = 0;
+    }, 5000);
   }
   decreaseSpeedPlayer() {
     this.speed = -1;
-    setTimeout(() => { this.speed = 0}, 4000);
-    
+    setTimeout(() => {
+      this.speed = 0;
+    }, 4000);
   }
-
-
 }
 
 export default GameScene;
