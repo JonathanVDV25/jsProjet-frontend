@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-export default class PlateformBoostSpawner {
+export default class PlateformSlowSpawner {
   /**
    * @param {Phaser.Scene} scene
    */
@@ -25,7 +25,7 @@ export default class PlateformBoostSpawner {
     plateform.setGravity(0);
     plateform.setImmovable(true);
     plateform.setVelocity(0);
-    
+    console.log(plateform);
     return plateform;
   }
 }

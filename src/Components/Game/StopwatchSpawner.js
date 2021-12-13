@@ -18,8 +18,8 @@ export default class StopwatchSpawner {
   spawn() {
     const y = Phaser.Math.Between(200, 500);
 
-    const stopwatch = this.group.create(800, y, this.key);
-    stopwatch.setBounce(1);
+    const stopwatch = this.group.create(1000, y, this.key);
+    stopwatch.setBounce(1.1);
     stopwatch.setCollideWorldBounds(false);
     stopwatch.setVelocity(-100);
 
