@@ -5,14 +5,15 @@ import { Redirect } from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import { setSessionObject } from "../../utils/session";
 
-function HomePage() {
+async function HomePage() {
   // reset #page div
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = "";
 
   try {
     // hide data to inform if the leaderboard is already printed
-    const response = fetch("/api/score/scores");
+    const response = await fetch("/api/scores");
+    console.log("response:", response)
 
     if (!response.ok) {
       // status code was not 200, error status code
@@ -20,7 +21,7 @@ function HomePage() {
         "fetch error : " + response.status + " : " + response.statusText
       );
     }
-    const scores = response.json(); // json() returns a promise => we wait for the data
+    const scores = await response.json(); // json() returns a promise => we wait for the data
     // create a wrapper to provide a responsive table
     const tableWrapper = document.createElement("div");
     tableWrapper.className = "table-responsive pt-5";
