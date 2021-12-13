@@ -87,8 +87,6 @@ class GameScene extends Phaser.Scene {
     // joueur
     this.player = this.createPlayer();
     this.player.setPushable(true);
-<<<<<<< HEAD
-=======
 
     //this.player.body.setGravityY(5000);
 >>>>>>> testText
@@ -98,25 +96,17 @@ class GameScene extends Phaser.Scene {
 
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> testText
     // physics
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
-<<<<<<< HEAD
     this.physics.add.collider(this.player, plateformBoostGroup, this.increaseSpeedPlayer, null, this);
     this.physics.add.collider(this.player, plateformSlowGroup, this.decreaseSpeedPlayer, null, this);
 
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
-    this.physics.add.overlap(
-=======
     this.physics.add.collider(
->>>>>>> testText
       this.player,
       plateformBoostGroup,
       this.increaseSpeedPlayer,
