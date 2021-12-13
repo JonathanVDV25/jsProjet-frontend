@@ -3,7 +3,6 @@ const GROUND_KEY = "ground";
 const DUDE_KEY = "dude";
 const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
-import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
 import PlateformSpawner from "./PlateformSpawner.js";
 import PlateformBoostSpawner from "./PlateformBoostSpawner.js";
@@ -25,7 +24,6 @@ class GameScene extends Phaser.Scene {
     super("game-scene");
     this.player = undefined;
     this.cursors = undefined;
-    this.scoreLabel = undefined;
     this.bombSpawner = undefined;
     this.plateformSpawner = undefined;
     this.plateformBoostSpawner = undefined;
@@ -96,9 +94,6 @@ class GameScene extends Phaser.Scene {
     this.player.setPushable(true);
     
     //this.player.body.setGravityY(5000);
-
-    this.scoreLabel = this.createScoreLabel(16, 16, 0);
-    
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
@@ -284,9 +279,9 @@ class GameScene extends Phaser.Scene {
           this.plateformSpawner.group.setVelocityX(-500);
           this.plateformBoostSpawner.group.setVelocityX(-500);
           this.plateformSlowSpawner.group.setVelocityX(-500);
-          if(this.scoreLabel.x < 320 && this.player.x > 420) {
-              this.scoreLabel.x += 10;
-          }
+          // if(this.scoreLabel.x < 320 && this.player.x > 420) {
+          //     this.scoreLabel.x += 10;
+          // }
         }
       }
       this.player.anims.play("right", true);
@@ -411,14 +406,6 @@ class GameScene extends Phaser.Scene {
     });
     
     return player;
-  }
-
-  createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#000" };
-    const label = new ScoreLabel(this, x, y, score, style);
-    this.add.existing(label);
-
-    return label;
   }
 
   hitBomb(player, bomb) {
