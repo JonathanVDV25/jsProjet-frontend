@@ -12,7 +12,7 @@ function HomePage() {
 
   try {
     // hide data to inform if the leaderboard is already printed
-    const response = fetch("/api/score.http"); 
+    const response = fetch("/api/score/scores");
 
     if (!response.ok) {
       // status code was not 200, error status code
