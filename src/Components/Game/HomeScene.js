@@ -56,7 +56,7 @@ class HomeScene extends Phaser.Scene {
 
         playButton.setInteractive();
         playButton.on("pointerup", ()=> {
-            this.scene.start('game-scene')
+            this.scene.start('game-scene', { perso: this.perso})
         });
         optionsButton.setInteractive();
         optionsButton.on("pointerup", ()=> {
