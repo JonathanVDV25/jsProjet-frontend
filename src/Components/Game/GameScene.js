@@ -408,7 +408,7 @@ class GameScene extends Phaser.Scene {
   }
 
   hitBomb(player, bomb) {
-      if(this.initTime < 10) {
+      if(this.initTime >= 10) {
       this.initTime -= 10;
       this.textTime.setText('Timer: ' + this.initTime);
       bomb.disableBody(true,true);
@@ -417,7 +417,7 @@ class GameScene extends Phaser.Scene {
   }
 
   hitStopwatch(player, stopwatch) {
-    if(this.initTime < 10) {
+    if(this.initTime >= 10) {
       this.initTime += 10;
       this.textTime.setText('Timer: ' + this.initTime);
       stopwatch.disableBody(true,true);
