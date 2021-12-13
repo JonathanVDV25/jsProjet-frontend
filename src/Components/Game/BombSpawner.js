@@ -15,7 +15,7 @@ export default class BombSpawner {
     return this._group;
   }
 
-  spawn(playerX = 0) {
+  spawn() {
     const y = Phaser.Math.Between(200, 500);
 
     const bomb = this.group.create(800, y, this.key);
