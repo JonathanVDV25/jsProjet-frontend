@@ -89,7 +89,6 @@ class GameScene extends Phaser.Scene {
     this.player.setPushable(true);
 
     //this.player.body.setGravityY(5000);
->>>>>>> testText
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
@@ -100,11 +99,6 @@ class GameScene extends Phaser.Scene {
     // physics
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
-    this.physics.add.collider(this.player, plateformBoostGroup, this.increaseSpeedPlayer, null, this);
-    this.physics.add.collider(this.player, plateformSlowGroup, this.decreaseSpeedPlayer, null, this);
-
-    this.physics.add.collider(bombsGroup, fakeGround);
-    this.physics.add.collider(stopwatchesGroup, fakeGround);
 
     this.physics.add.collider(
       this.player,
@@ -113,6 +107,7 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
+
     this.physics.add.collider(
       this.player,
       plateformSlowGroup,
@@ -120,10 +115,33 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
+
+    this.physics.add.collider(
+      this.player,
+      plateformBoostGroup,
+      this.increaseSpeedPlayer,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      this.player,
+      plateformSlowGroup,
+      this.decreaseSpeedPlayer,
+      null,
+      this
+    );
+
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
-    this.physics.add.overlap(this.player, bombsGroup, this.hitBomb, null, this);
+    this.physics.add.overlap(
+      this.player, 
+      bombsGroup, 
+      this.hitBomb, 
+      null, 
+      this
+    );
 
     this.physics.add.overlap(
       this.player,
@@ -132,9 +150,6 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
-
-    // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
-    // this.physics.add.collider(this.stopwatches, fakeGround);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -337,7 +352,10 @@ class GameScene extends Phaser.Scene {
 
   incDistance() {
     if (!this.gameOver) {
-      this.player.data.set("distance", Math.round(this.backgrounds.tilePositionX / 10));
+      this.player.data.set(
+        "distance",
+        Math.round(this.backgrounds.tilePositionX / 10)
+      );
       this.timeDistanceRender();
     }
   }
@@ -412,15 +430,17 @@ class GameScene extends Phaser.Scene {
     } else {
       this.player.data.set("time", this.player.data.get("time") - 10);
     }
+    bomb.disableBody(true, true);
     this.timeDistanceRender();
   }
 
   hitStopwatch(player, stopwatch) {
     this.player.data.set("time", this.player.data.get("time") + 10);
+    bomb.disableBody(true, true);
     this.timeDistanceRender();
   }
 
-  // timer + distance 
+  // timer + distance
   timeLabel() {
     if (this.player.data.get("time") <= 0) {
       this.gameOver = true;
