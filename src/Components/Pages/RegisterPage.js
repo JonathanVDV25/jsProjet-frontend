@@ -9,6 +9,10 @@ function RegisterPage() {
   // reset #page div
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = "";
+
+  const errorAlert = document.createElement("div");
+  errorAlert.innerHTML = "";
+  pageDiv.appendChild(errorAlert);
   // create a login form
 
   // <div class="alert alert-danger" role="alert">
@@ -59,6 +63,8 @@ function RegisterPage() {
       const response = await fetch("/api/users/register", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
+        errorAlert.className = "alert alert-danger";
+        errorAlert.innerText = "Registration failed!";
         throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
         );
