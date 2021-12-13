@@ -8,7 +8,7 @@ import { setSessionObject } from "../../utils/session";
 async function HomePage() {
   // reset #page div
   const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = "";
+  pageDiv.innerHTML = "<div id='scoreboard'></div>";
 
   try {
     // hide data to inform if the leaderboard is already printed
@@ -24,21 +24,26 @@ async function HomePage() {
     const scores = await response.json(); // json() returns a promise => we wait for the data
     // create a wrapper to provide a responsive table
     const tableWrapper = document.createElement("div");
-    tableWrapper.className = "table-responsive pt-5";
+    tableWrapper.className = "container";
+  
     // create an HTMLTableElement dynamically, based on the scores data (Array of Objects)
     const table = document.createElement("table");
-    table.className = "table table-danger";
+    table.className = "table table-dark"
     tableWrapper.appendChild(table);
     // deal with header
     const thead = document.createElement("thead");
     const header = document.createElement("tr");
     thead.appendChild(header);
     const header1 = document.createElement("th");
+    
     header1.innerText = "Username";
     const header2 = document.createElement("th");
+    
     header2.innerText = "Best distance";
+    
     header.appendChild(header1);
     header.appendChild(header2);
+    
     table.appendChild(thead);
     // deal with data rows for tbody
     const tbody = document.createElement("tbody");
