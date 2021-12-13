@@ -66,7 +66,7 @@ class GameScene extends Phaser.Scene {
       frameHeight: 129,
     });
     this.load.spritesheet("perso2", dude2Asset, {
-      frameWidth: 184,
+      frameWidth: 132,
       frameHeight: 129,
     });
 
@@ -391,8 +391,12 @@ class GameScene extends Phaser.Scene {
     /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
     The 'repeat -1' value tells the animation to loop.
     */
-   
-    
+    this.anims.create({
+      key: "left",
+      frames: this.anims.generateFrameNumbers(personnage, { start: 0, end: 5 }),
+      frameRate: 10,
+      repeat: -1,
+    });
     this.anims.create({
       key: "turn",
       frames: [{ key: personnage, frame: 6 }],
@@ -400,6 +404,12 @@ class GameScene extends Phaser.Scene {
     });
     
     
+    this.anims.create({
+      key: "right",
+      frames: this.anims.generateFrameNumbers(personnage, { start: 7, end: 12 }),
+      frameRate: 10,
+      repeat: -1,
+    });
     
     return player;
   }
