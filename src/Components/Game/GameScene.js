@@ -119,7 +119,13 @@ class GameScene extends Phaser.Scene {
       this
     );
 
-    this.physics.add.collider(this.player, plateformBoostGroup, this.augmenterVitesseJoueur, null, this.player.body.touching.down);
+    this.physics.add.collider(
+      this.player, 
+      plateformBoostGroup, 
+      this.SpeedBoostPlayer, 
+      null, 
+      this.player.body.touching.down
+    );
 
 
     // physics
@@ -143,7 +149,7 @@ class GameScene extends Phaser.Scene {
     Note that we could call a callback in case of collision...*/
 
     // timer
-    this.initTime = 100;
+    this.initTime = 10;
     this.textTime = this.add.text(16, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({
       delay: 1000, 
@@ -314,22 +320,26 @@ class GameScene extends Phaser.Scene {
   }
 
   hitBomb(player, bomb) {
-    this.initTime -= 10;
-    this.textTime.setText('Timer: ' + this.initTime);
-    bomb.disableBody(true,true);
-    this.explosionSound.play();
+      if(this.initTime < 10) {
+      this.initTime -= 10;
+      this.textTime.setText('Timer: ' + this.initTime);
+      bomb.disableBody(true,true);
+      this.explosionSound.play();
+    } else this.initTime = 0;
   }
 
   hitStopwatch(player, stopwatch) {
-    this.initTime += 10;
-    this.textTime.setText('Timer: ' + this.initTime);
-    stopwatch.disableBody(true,true);
-    this.bonusSound.play();
+    if(this.initTime < 10) {
+      this.initTime += 10;
+      this.textTime.setText('Timer: ' + this.initTime);
+      stopwatch.disableBody(true,true);
+      this.bonusSound.play();
+    } else this.initTime = 0;
   }
 
   // timer
   countdownLabel() {
-    if(this.initTime == 0) {
+    if(this.initTime <= 0) {
       this.gameOver = true;
       this.player.active = false;
       // this.player.setVelocity(0, 0);
@@ -339,29 +349,15 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  augmenterVitesseJoueur(player, plateformBoost) {
+  SpeedBoostPlayer(player, plateformBoost) {
     console.log("YES !");
-    /*
-    let timer = this.time.addEvent( {
-      delay: 1,
-      repeat: 10000,
-      callback: effetVitesse(player),
-      callbackScope: this
-    });
-    */
-   
-   for (let index = 0; index < 100; index++) {
-    setInterval(()=> { player.setVelocityX(5000) },100);
-   }
-   player.setVelocityX(0);
-
-    
-    
-
+    console.log("AVANT :" + player.x);
+    player.setAcceleration(player.x += 10);
+    console.log("APRES :" + player.x);
   }
 
-  effetVitesse(player){
-    player.x += 1;
+  speedBoost(){
+    this.player.x += 1;
   }
   
   
