@@ -91,29 +91,19 @@ class GameScene extends Phaser.Scene {
     // joueur
     this.player = this.createPlayer();
     this.player.setPushable(true);
-    
-    //this.player.body.setGravityY(5000);
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
     
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
-    
-
-    
-
-    
-
-    
-
 
     // physics
     this.physics.add.collider(this.player, fakeGround);
-    this.physics.add.collider(plateformGroup, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
     this.physics.add.collider(this.player, plateformBoostGroup, this.increaseSpeedPlayer, null, this);
     this.physics.add.collider(this.player, plateformSlowGroup, this.decreaseSpeedPlayer, null, this);
+
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
@@ -132,9 +122,6 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
-
-    // this.physics.add.overlap(this.player, this.stopwatches, this.collectStopwatch, null, this);
-    // this.physics.add.collider(this.stopwatches, fakeGround);
   
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -148,7 +135,7 @@ class GameScene extends Phaser.Scene {
     Note that we could call a callback in case of collision...*/
 
     // timer
-    this.initTime = 100;
+    this.initTime = 10;
     this.textTime = this.add.text(16, 16, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({
       delay: 1000, 
