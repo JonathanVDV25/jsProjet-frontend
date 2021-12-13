@@ -3,7 +3,6 @@ const GROUND_KEY = "ground";
 const DUDE_KEY = "dude";
 const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
-import ScoreLabel from "./ScoreLabel.js";
 import BombSpawner from "./BombSpawner.js";
 import PlateformSpawner from "./PlateformSpawner.js";
 import PlateformBoostSpawner from "./PlateformBoostSpawner.js";
@@ -25,17 +24,15 @@ class GameScene extends Phaser.Scene {
     super("game-scene");
     this.player = undefined;
     this.cursors = undefined;
-    this.scoreLabel = undefined;
     this.bombSpawner = undefined;
     this.plateformSpawner = undefined;
     this.plateformBoostSpawner = undefined;
     this.plateformSlowSpawner = undefined;
     this.backgrounds = undefined;
     this.gameOver = false;
-    this.text = undefined;
     this.countdown = undefined;
     this.ground = undefined;
-    this.vitesse = 0;
+    this.speed = 0;
     this.ensembleCoPlateform = new Set([]);
 
     this.stopwatchSpawner = undefined;
@@ -94,11 +91,6 @@ class GameScene extends Phaser.Scene {
     // joueur
     this.player = this.createPlayer();
     this.player.setPushable(true);
-    
-    //this.player.body.setGravityY(5000);
-
-    this.scoreLabel = this.createScoreLabel(16, 16, 0);
-    
 
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
@@ -106,20 +98,12 @@ class GameScene extends Phaser.Scene {
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
     
-
-    
-
-    
-
-    
-
-
     // physics
     this.physics.add.collider(this.player, fakeGround);
-    this.physics.add.collider(plateformGroup, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
-    this.physics.add.collider(this.player, plateformBoostGroup, this.augmenterVitesseJoueur, null, this);
-    this.physics.add.collider(this.player, plateformSlowGroup, this.diminuerVitesseJoueur, null, this);
+    this.physics.add.collider(this.player, plateformBoostGroup, this.increaseSpeedPlayer, null, this);
+    this.physics.add.collider(this.player, plateformSlowGroup, this.decreaseSpeedPlayer, null, this);
+
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
@@ -154,8 +138,8 @@ class GameScene extends Phaser.Scene {
     Note that we could call a callback in case of collision...*/
 
     // timer
-    this.initTime = 100;
-    this.textTime = this.add.text(320, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
+    this.initTime = 10;
+    this.textTime = this.add.text(16, 16, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({
       delay: 1000, 
       callback: this.countdownLabel, 
@@ -191,7 +175,7 @@ class GameScene extends Phaser.Scene {
     else if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
         //Plateforme Boost
-        if(this.vitesse == 1) {
+        if(this.speed == 1) {
           this.player.setVelocityX(-1000);
           this.backgrounds.tilePositionX -= 20;
           this.ground.tilePositionX -= 20;
@@ -200,7 +184,7 @@ class GameScene extends Phaser.Scene {
           this.plateformSlowSpawner.group.setVelocityX(1000);
         }
         //Plateform Slow
-        else if(this.vitesse == -1 ) {
+        else if(this.speed == -1 ) {
           this.player.setVelocityX(-250);
           this.backgrounds.tilePositionX -= 5;
           this.ground.tilePositionX -= 5;
@@ -223,7 +207,7 @@ class GameScene extends Phaser.Scene {
       else {
         if(this.backgrounds.tilePositionX > 0) {
           //Plateforme Boost
-          if(this.vitesse == 1) {
+          if(this.speed == 1) {
             this.backgrounds.tilePositionX -= 20;
             this.ground.tilePositionX -= 20;
             this.plateformSpawner.group.setVelocityX(1000);
@@ -231,7 +215,7 @@ class GameScene extends Phaser.Scene {
             this.plateformSlowSpawner.group.setVelocityX(1000);
           }
           //Plateform Slow
-          else if(this.vitesse == -1 ) {
+          else if(this.speed == -1 ) {
             this.backgrounds.tilePositionX -= 5;
             this.ground.tilePositionX -= 5;
             this.plateformSpawner.group.setVelocityX(250);
@@ -259,7 +243,7 @@ class GameScene extends Phaser.Scene {
       if(this.player.x != 400) {
         
         //Plateforme Boost
-        if(this.vitesse == 1) {
+        if(this.speed == 1) {
           this.player.setVelocityX(1000);
           this.backgrounds.tilePositionX += 20;
           this.ground.tilePositionX += 20;
@@ -268,7 +252,7 @@ class GameScene extends Phaser.Scene {
           this.plateformSlowSpawner.group.setVelocityX(-1000);
         }
         //Plateform Slow
-        else if(this.vitesse == -1 ) {
+        else if(this.speed == -1 ) {
           this.player.setVelocityX(250);
           this.backgrounds.tilePositionX += 5;
           this.ground.tilePositionX += 5;
@@ -284,9 +268,9 @@ class GameScene extends Phaser.Scene {
           this.plateformSpawner.group.setVelocityX(-500);
           this.plateformBoostSpawner.group.setVelocityX(-500);
           this.plateformSlowSpawner.group.setVelocityX(-500);
-          if(this.scoreLabel.x < 320 && this.player.x > 420) {
-              this.scoreLabel.x += 10;
-          }
+          // if(this.scoreLabel.x < 320 && this.player.x > 420) {
+          //     this.scoreLabel.x += 10;
+          // }
         }
       }
       this.player.anims.play("right", true);
@@ -413,31 +397,27 @@ class GameScene extends Phaser.Scene {
     return player;
   }
 
-  createScoreLabel(x, y, score) {
-    const style = { fontSize: "32px", fill: "#000" };
-    const label = new ScoreLabel(this, x, y, score, style);
-    this.add.existing(label);
-
-    return label;
-  }
-
   hitBomb(player, bomb) {
-    this.initTime -= 10;
-    this.textTime.setText('Timer: ' + this.initTime);
-    bomb.disableBody(true,true);
-    this.explosionSound.play();
+      if(this.initTime >= 10) {
+      this.initTime -= 10;
+      this.textTime.setText('Timer: ' + this.initTime);
+      bomb.disableBody(true,true);
+      this.explosionSound.play();
+    } else this.initTime = 0;
   }
 
   hitStopwatch(player, stopwatch) {
-    this.initTime += 10;
-    this.textTime.setText('Timer: ' + this.initTime);
-    stopwatch.disableBody(true,true);
-    this.bonusSound.play();
+    if(this.initTime >= 10) {
+      this.initTime += 10;
+      this.textTime.setText('Timer: ' + this.initTime);
+      stopwatch.disableBody(true,true);
+      this.bonusSound.play();
+    } else this.initTime = 0;
   }
 
   // timer
   countdownLabel() {
-    if(this.initTime == 0) {
+    if(this.initTime <= 0) {
       this.gameOver = true;
       this.player.active = false;
       // this.player.setVelocity(0, 0);
@@ -447,13 +427,13 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  augmenterVitesseJoueur() {
-    this.vitesse = 1;
-    setTimeout(() => { this.vitesse = 0} , 5000);
+  increaseSpeedPlayer() {
+    this.speed = 1;
+    setTimeout(() => { this.speed = 0} , 5000);
   }
-  diminuerVitesseJoueur() {
-    this.vitesse = -1;
-    setTimeout(() => { this.vitesse = 0}, 4000);
+  decreaseSpeedPlayer() {
+    this.speed = -1;
+    setTimeout(() => { this.speed = 0}, 4000);
     
   }
 

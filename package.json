@@ -7,7 +7,7 @@
     "build": "webpack --mode production --config webpack.config.prod.js",
     "start": "webpack serve --mode development --config webpack.config.base.js"
   },
-  "author": "e-baron",
+  "author": "Loic, Nicolas, Laurent, Jonathan",
   "license": "CC-BY-SA-4.0",
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -26,6 +26,8 @@
     "bootstrap": "^5.0.1",
     "clean-webpack-plugin": "^4.0.0",
     "phaser": "^3.55.2",
+    "realtime-leaderboard": "^1.0.0",
+    "redis": "^4.0.0",
     "terser-webpack-plugin": "^5.2.4",
     "webpack-merge": "^5.8.0"
   }
