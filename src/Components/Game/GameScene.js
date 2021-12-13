@@ -30,10 +30,9 @@ class GameScene extends Phaser.Scene {
     this.plateformSlowSpawner = undefined;
     this.backgrounds = undefined;
     this.gameOver = false;
-    this.text = undefined;
     this.countdown = undefined;
     this.ground = undefined;
-    this.vitesse = 0;
+    this.speed = 0;
     this.ensembleCoPlateform = new Set([]);
 
     this.stopwatchSpawner = undefined;
@@ -113,8 +112,8 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(plateformGroup, fakeGround);
     this.physics.add.collider(this.player, plateformGroup);
-    this.physics.add.collider(this.player, plateformBoostGroup, this.augmenterVitesseJoueur, null, this);
-    this.physics.add.collider(this.player, plateformSlowGroup, this.diminuerVitesseJoueur, null, this);
+    this.physics.add.collider(this.player, plateformBoostGroup, this.increaseSpeedPlayer, null, this);
+    this.physics.add.collider(this.player, plateformSlowGroup, this.decreaseSpeedPlayer, null, this);
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
@@ -150,7 +149,7 @@ class GameScene extends Phaser.Scene {
 
     // timer
     this.initTime = 10;
-    this.textTime = this.add.text(16, 42, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
+    this.textTime = this.add.text(16, 16, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({
       delay: 1000, 
       callback: this.countdownLabel, 
@@ -186,7 +185,7 @@ class GameScene extends Phaser.Scene {
     else if (this.cursors.left.isDown ) {
       if(this.player.x > 100) {
         //Plateforme Boost
-        if(this.vitesse == 1) {
+        if(this.speed == 1) {
           this.player.setVelocityX(-1000);
           this.backgrounds.tilePositionX -= 20;
           this.ground.tilePositionX -= 20;
@@ -195,7 +194,7 @@ class GameScene extends Phaser.Scene {
           this.plateformSlowSpawner.group.setVelocityX(1000);
         }
         //Plateform Slow
-        else if(this.vitesse == -1 ) {
+        else if(this.speed == -1 ) {
           this.player.setVelocityX(-250);
           this.backgrounds.tilePositionX -= 5;
           this.ground.tilePositionX -= 5;
@@ -218,7 +217,7 @@ class GameScene extends Phaser.Scene {
       else {
         if(this.backgrounds.tilePositionX > 0) {
           //Plateforme Boost
-          if(this.vitesse == 1) {
+          if(this.speed == 1) {
             this.backgrounds.tilePositionX -= 20;
             this.ground.tilePositionX -= 20;
             this.plateformSpawner.group.setVelocityX(1000);
@@ -226,7 +225,7 @@ class GameScene extends Phaser.Scene {
             this.plateformSlowSpawner.group.setVelocityX(1000);
           }
           //Plateform Slow
-          else if(this.vitesse == -1 ) {
+          else if(this.speed == -1 ) {
             this.backgrounds.tilePositionX -= 5;
             this.ground.tilePositionX -= 5;
             this.plateformSpawner.group.setVelocityX(250);
@@ -254,7 +253,7 @@ class GameScene extends Phaser.Scene {
       if(this.player.x != 400) {
         
         //Plateforme Boost
-        if(this.vitesse == 1) {
+        if(this.speed == 1) {
           this.player.setVelocityX(1000);
           this.backgrounds.tilePositionX += 20;
           this.ground.tilePositionX += 20;
@@ -263,7 +262,7 @@ class GameScene extends Phaser.Scene {
           this.plateformSlowSpawner.group.setVelocityX(-1000);
         }
         //Plateform Slow
-        else if(this.vitesse == -1 ) {
+        else if(this.speed == -1 ) {
           this.player.setVelocityX(250);
           this.backgrounds.tilePositionX += 5;
           this.ground.tilePositionX += 5;
@@ -438,13 +437,13 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  augmenterVitesseJoueur() {
-    this.vitesse = 1;
-    setTimeout(() => { this.vitesse = 0} , 5000);
+  increaseSpeedPlayer() {
+    this.speed = 1;
+    setTimeout(() => { this.speed = 0} , 5000);
   }
-  diminuerVitesseJoueur() {
-    this.vitesse = -1;
-    setTimeout(() => { this.vitesse = 0}, 4000);
+  decreaseSpeedPlayer() {
+    this.speed = -1;
+    setTimeout(() => { this.speed = 0}, 4000);
     
   }
 
