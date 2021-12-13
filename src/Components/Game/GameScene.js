@@ -148,7 +148,7 @@ class GameScene extends Phaser.Scene {
     Note that we could call a callback in case of collision...*/
 
     // timer
-    this.initTime = 10;
+    this.initTime = 100;
     this.textTime = this.add.text(16, 16, 'Timer: ' + this.initTime, {fontSize: 32, color: 'black'});
     this.countdown = this.time.addEvent({
       delay: 1000, 
