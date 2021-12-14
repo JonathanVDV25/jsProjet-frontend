@@ -20,6 +20,9 @@ import invisibleGroundAsset from "../../assets/invisible_ground.png";
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
 import carreBackGroundAsset from "../../assets/carreBackGround.png";
+import titreTimeOutAsset from "../../assets/titreTimeOut.png";
+import homeButtonAsset from "../../assets/homeButton.png";
+import replayButtonAsset from "../../assets/replayButton.png";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -80,6 +83,9 @@ class GameScene extends Phaser.Scene {
 
     // Game Over
     this.load.image("carreGameOver", carreBackGroundAsset);
+    this.load.image("titreTimeOut", titreTimeOutAsset);
+    this.load.image("homeButton", homeButtonAsset);
+    this.load.image("replayButton", replayButtonAsset);
   }
 
   create() {
@@ -180,6 +186,7 @@ class GameScene extends Phaser.Scene {
 
   update() {
     if (this.gameOver) {
+      this.clearIntervals();
       this.launchGameOver();
       return;
     }
@@ -454,10 +461,43 @@ class GameScene extends Phaser.Scene {
     const carreGameOver = this.add.image(400, 300, "carreGameOver");
     const textGameOver = this.add.text(200, 250, "", { fontSize: 32, color: "black" });
     textGameOver.setScrollFactor(0);
+    const titreTimeOut = this.add.image(385, 175, "titreTimeOut");
+    const textGameOver = this.add.text(200, 250, '', { fontSize: 32, color: "white" });
+    
     carreGameOver.setScrollFactor(0);
+    titreTimeOut.setScrollFactor(0);
+    textGameOver.setScrollFactor(0);
+
     carreGameOver.setDataEnabled();
     carreGameOver.data.set("distance", this.player.data.get("distance"));
+
     textGameOver.setText(["Distance: " + carreGameOver.data.get("distance")]);
+
+    // carreGameOver.data.set("record", );
+    textGameOver.setText([
+      "Distance: " + carreGameOver.data.get("distance"),
+      "\nRecord: " + ""
+    ]);
+
+    let home = this.add.image(200, 425, "homeButton");
+    home.setScrollFactor(0);
+    home.setInteractive();
+    home.on("pointerup", ()=> {
+      this.gameOver = false;
+      this.ensembleCoPlatform.clear();
+      this.speed= 0;
+      this.scene.start('HomeScene', { perso: this.perso})
+    });
+
+    let replay = this.add.image(500, 423, "replayButton");
+    replay.setScrollFactor(0);
+    replay.setInteractive();
+    replay.on("pointerup", ()=> {
+      this.gameOver = false;
+      this.ensembleCoPlatform.clear();
+      this.speed= 0;
+      this.scene.start('game-scene', { perso: this.perso})
+    });
   }
 }
 

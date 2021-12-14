@@ -14,7 +14,10 @@ class HomeScene extends Phaser.Scene {
     init(data) {
         this.perso = data.perso;
         if(data.perso == null) {
-            this.perso = 1;
+            this.perso = data.personnage;
+            if(data.personnage == null) {
+                this.perso = 1;
+            }
         }
     }
 
@@ -60,7 +63,7 @@ class HomeScene extends Phaser.Scene {
         });
         optionsButton.setInteractive();
         optionsButton.on("pointerup", ()=> {
-            this.scene.start('SettingScene', "PUTE");
+            this.scene.start('SettingScene');
         });
 
     }
