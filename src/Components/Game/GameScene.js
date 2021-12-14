@@ -19,8 +19,8 @@ import dude2Asset from "../../assets/bike_run_v5.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
-import carreBackGroundAsset from "../../assets/carreBackGround.png";
-import titreTimeOutAsset from "../../assets/titreTimeOut.png";
+import gameOverBackGroundAsset from "../../assets/carreBackGround.png";
+import timeOutTitleAsset from "../../assets/titreTimeOut.png";
 import homeButtonAsset from "../../assets/homeButton.png";
 import replayButtonAsset from "../../assets/replayButton.png";
 
@@ -82,8 +82,8 @@ class GameScene extends Phaser.Scene {
     this.load.audio("explosionSound", explosionSoundAsset);
 
     // Game Over
-    this.load.image("carreGameOver", carreBackGroundAsset);
-    this.load.image("titreTimeOut", titreTimeOutAsset);
+    this.load.image("gameOverRectangle", gameOverBackGroundAsset);
+    this.load.image("timeOutTitle", timeOutTitleAsset);
     this.load.image("homeButton", homeButtonAsset);
     this.load.image("replayButton", replayButtonAsset);
   }
@@ -265,9 +265,6 @@ class GameScene extends Phaser.Scene {
           this.player.setVelocityX(500);
           this.tilePos(10);
           this.platformVelocity(-500);
-          // if(this.scoreLabel.x < 320 && this.player.x > 420) {
-          //     this.scoreLabel.x += 10;
-          // }
         }
       }
       this.player.anims.play("right", true);
@@ -278,7 +275,7 @@ class GameScene extends Phaser.Scene {
         var position = Math.round(this.backgrounds.tilePositionX / 1000);
 
         if (!this.ensembleCoPlatform.has(position)) {
-          console.log(position);
+          // console.log(position);
           this.ensembleCoPlatform.add(position);
 
           var random = Phaser.Math.Between(1, 5);
@@ -424,7 +421,6 @@ class GameScene extends Phaser.Scene {
     if (this.player.data.get("time") <= 0) {
       this.gameOver = true;
       this.player.active = false;
-      this.clearIntervals();
     } else {
       this.player.data.set("time", this.player.data.get("time") - 1);
       this.timeDistanceRender();
@@ -458,24 +454,26 @@ class GameScene extends Phaser.Scene {
   }
 
   launchGameOver() {
-    const carreGameOver = this.add.image(400, 300, "carreGameOver");
-    const textGameOver = this.add.text(200, 250, "", { fontSize: 32, color: "black" });
-    textGameOver.setScrollFactor(0);
-    const titreTimeOut = this.add.image(385, 175, "titreTimeOut");
-    const textGameOver = this.add.text(200, 250, '', { fontSize: 32, color: "white" });
-    
-    carreGameOver.setScrollFactor(0);
-    titreTimeOut.setScrollFactor(0);
+    // game over rectangle
+    const gameOverRectangle = this.add.image(400, 300, "gameOverRectangle");
+    gameOverRectangle.setScrollFactor(0);
+
+    // game over text
+    const textGameOver = this.add.text(200, 250, "", { fontSize: 32, color: "white" });
     textGameOver.setScrollFactor(0);
 
-    carreGameOver.setDataEnabled();
-    carreGameOver.data.set("distance", this.player.data.get("distance"));
+    // time out title
+    const timeOutTitle = this.add.image(385, 175, "timeOutTitle");
+    timeOutTitle.setScrollFactor(0);
 
-    textGameOver.setText(["Distance: " + carreGameOver.data.get("distance")]);
+    gameOverRectangle.setDataEnabled();
+    gameOverRectangle.data.set("distance", this.player.data.get("distance"));
 
-    // carreGameOver.data.set("record", );
+    textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")]);
+
+    // gameOverRectangle.data.set("record", );
     textGameOver.setText([
-      "Distance: " + carreGameOver.data.get("distance"),
+      "Distance: " + gameOverRectangle.data.get("distance"),
       "\nRecord: " + ""
     ]);
 
@@ -485,7 +483,7 @@ class GameScene extends Phaser.Scene {
     home.on("pointerup", ()=> {
       this.gameOver = false;
       this.ensembleCoPlatform.clear();
-      this.speed= 0;
+      this.speed = 0;
       this.scene.start('HomeScene', { perso: this.perso})
     });
 
@@ -495,7 +493,7 @@ class GameScene extends Phaser.Scene {
     replay.on("pointerup", ()=> {
       this.gameOver = false;
       this.ensembleCoPlatform.clear();
-      this.speed= 0;
+      this.speed = 0;
       this.scene.start('game-scene', { perso: this.perso})
     });
   }
