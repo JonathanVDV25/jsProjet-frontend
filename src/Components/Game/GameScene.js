@@ -173,9 +173,6 @@ class GameScene extends Phaser.Scene {
       "Distance: " + this.player.data.get("distance"),
     ]);
 
-    // this.text.fixedToCamera = true;
-    // this.text.myCam.setFollowOffset(16, 16);
-
     // stopwatches + bombs
     setInterval(() => this.bombSpawner.spawn(), 10000);
     setInterval(() => this.stopwatchSpawner.spawn(), 10000);
@@ -196,9 +193,7 @@ class GameScene extends Phaser.Scene {
     ) {
       this.player.anims.play("turn");
       this.player.setVelocityY(400);
-      this.plateformSpawner.group.setVelocityX(0);
-      this.plateformBoostSpawner.group.setVelocityX(0);
-      this.plateformSlowSpawner.group.setVelocityX(0);
+      this.plateformVelocity(0);
     }
 
     //Joueur va a gauche
@@ -207,29 +202,20 @@ class GameScene extends Phaser.Scene {
         //Plateforme Boost
         if (this.speed == 1) {
           this.player.setVelocityX(-1000);
-          this.backgrounds.tilePositionX -= 20;
-          this.ground.tilePositionX -= 20;
-          this.plateformSpawner.group.setVelocityX(1000);
-          this.plateformBoostSpawner.group.setVelocityX(1000);
-          this.plateformSlowSpawner.group.setVelocityX(1000);
+          this.tilePos(-20);
+          this.plateformVelocity(1000);
         }
         //Plateform Slow
         else if (this.speed == -1) {
           this.player.setVelocityX(-250);
-          this.backgrounds.tilePositionX -= 5;
-          this.ground.tilePositionX -= 5;
-          this.plateformSpawner.group.setVelocityX(250);
-          this.plateformBoostSpawner.group.setVelocityX(250);
-          this.plateformSlowSpawner.group.setVelocityX(250);
+          this.tilePos(-5);
+          this.plateformVelocity(250);
         }
         //Plateform Normal
         else {
           this.player.setVelocityX(-500);
-          this.backgrounds.tilePositionX -= 10;
-          this.ground.tilePositionX -= 10;
-          this.plateformSpawner.group.setVelocityX(500);
-          this.plateformBoostSpawner.group.setVelocityX(500);
-          this.plateformSlowSpawner.group.setVelocityX(500);
+          this.tilePos(-10);
+          this.plateformVelocity(500);
         }
         // decrease distance
         this.data.set("distance", this.decDistance());
@@ -237,27 +223,18 @@ class GameScene extends Phaser.Scene {
         if (this.backgrounds.tilePositionX > 0) {
           //Plateforme Boost
           if (this.speed == 1) {
-            this.backgrounds.tilePositionX -= 20;
-            this.ground.tilePositionX -= 20;
-            this.plateformSpawner.group.setVelocityX(1000);
-            this.plateformBoostSpawner.group.setVelocityX(1000);
-            this.plateformSlowSpawner.group.setVelocityX(1000);
+            this.tilePos(-20);
+            this.plateformVelocity(1000);
           }
           //Plateform Slow
           else if (this.speed == -1) {
-            this.backgrounds.tilePositionX -= 5;
-            this.ground.tilePositionX -= 5;
-            this.plateformSpawner.group.setVelocityX(250);
-            this.plateformBoostSpawner.group.setVelocityX(250);
-            this.plateformSlowSpawner.group.setVelocityX(250);
+            this.tilePos(-5);
+            this.plateformVelocity(250);
           }
           //Plateform Normal
           else {
-            this.backgrounds.tilePositionX -= 10;
-            this.ground.tilePositionX -= 10;
-            this.plateformSpawner.group.setVelocityX(500);
-            this.plateformBoostSpawner.group.setVelocityX(500);
-            this.plateformSlowSpawner.group.setVelocityX(500);
+            this.tilePos(-10);
+            this.plateformVelocity(500);
           }
           // decrease distance
           this.data.set("distance", this.decDistance());
@@ -272,29 +249,20 @@ class GameScene extends Phaser.Scene {
         //Plateforme Boost
         if (this.speed == 1) {
           this.player.setVelocityX(1000);
-          this.backgrounds.tilePositionX += 20;
-          this.ground.tilePositionX += 20;
-          this.plateformSpawner.group.setVelocityX(-1000);
-          this.plateformBoostSpawner.group.setVelocityX(-1000);
-          this.plateformSlowSpawner.group.setVelocityX(-1000);
+          this.tilePos(20);
+          this.plateformVelocity(-1000);
         }
         //Plateform Slow
         else if (this.speed == -1) {
           this.player.setVelocityX(250);
-          this.backgrounds.tilePositionX += 5;
-          this.ground.tilePositionX += 5;
-          this.plateformSpawner.group.setVelocityX(-250);
-          this.plateformBoostSpawner.group.setVelocityX(-250);
-          this.plateformSlowSpawner.group.setVelocityX(-250);
+          this.tilePos(5);
+          this.plateformVelocity(-250);
         }
         //Plateform Normal
         else {
           this.player.setVelocityX(500);
-          this.backgrounds.tilePositionX += 10;
-          this.ground.tilePositionX += 10;
-          this.plateformSpawner.group.setVelocityX(-500);
-          this.plateformBoostSpawner.group.setVelocityX(-500);
-          this.plateformSlowSpawner.group.setVelocityX(-500);
+          this.tilePos(10);
+          this.plateformVelocity(-500);
           // if(this.scoreLabel.x < 320 && this.player.x > 420) {
           //     this.scoreLabel.x += 10;
           // }
@@ -329,18 +297,14 @@ class GameScene extends Phaser.Scene {
     //Joueur va en bas
     else if (this.cursors.down.isDown) {
       this.player.anims.play("turn");
+      this.plateformVelocity(0);
       this.player.setVelocityY(400);
-      this.plateformSpawner.group.setVelocityX(0);
-      this.plateformBoostSpawner.group.setVelocityX(0);
-      this.plateformSlowSpawner.group.setVelocityX(0);
     }
 
     //Joueur à l'arret (Auncun bouton pressé)
     else {
       this.player.anims.play("turn");
-      this.plateformSpawner.group.setVelocityX(0);
-      this.plateformBoostSpawner.group.setVelocityX(0);
-      this.plateformSlowSpawner.group.setVelocityX(0);
+      this.plateformVelocity(0);
       this.player.setVelocityX(0);
     }
 
@@ -348,6 +312,17 @@ class GameScene extends Phaser.Scene {
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-600);
     }
+  }
+
+  plateformVelocity(value) {
+    this.plateformSpawner.group.setVelocityX(value);
+    this.plateformBoostSpawner.group.setVelocityX(value);
+    this.plateformSlowSpawner.group.setVelocityX(value);
+  }
+
+  tilePos(value) {
+    this.backgrounds.tilePositionX += value;
+    this.ground.tilePositionX += value;
   }
 
   incDistance() {
