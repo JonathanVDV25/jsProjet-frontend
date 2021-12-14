@@ -119,7 +119,7 @@ class GameScene extends Phaser.Scene {
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
 
-    // physics
+    // physics for players
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, platformGroup);
 
@@ -139,16 +139,23 @@ class GameScene extends Phaser.Scene {
       this
     );
 
+    // physics for bombs and stopwatches
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
-    this.physics.add.overlap(this.player, bombsGroup, this.hitBomb, null, this);
+    this.physics.add.overlap(
+      this.player, 
+      bombsGroup, 
+      this.hitBomb, 
+      null, 
+      this
+    );
 
     this.physics.add.overlap(
-      this.player,
-      stopwatchesGroup,
-      this.hitStopwatch,
-      null,
+      this.player, 
+      stopwatchesGroup, 
+      this.hitStopwatch, 
+      null, 
       this
     );
 
