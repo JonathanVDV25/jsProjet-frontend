@@ -16,6 +16,7 @@ import bombAsset from "../../assets/bomb.png";
 import stopwatchAsset from "../../assets/chrono_game.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
 import dude2Asset from "../../assets/bike_run_v5.png";
+import dude3Asset from "../../assets/punk_run_v6.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
@@ -46,7 +47,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 50;
+    this.initTime = 15;
 
     // intervals
     this.bombInterval = undefined;
@@ -75,6 +76,10 @@ class GameScene extends Phaser.Scene {
     this.load.spritesheet("personnage2", dude2Asset, {
       frameWidth: 132,
       frameHeight: 129,
+    });
+    this.load.spritesheet("personnage3", dude3Asset, {
+      frameWidth: 101,
+      frameHeight: 120,
     });
 
     // sound preloading
