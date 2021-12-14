@@ -27,6 +27,7 @@ export default class PlateformSpawner {
     plateform.setPushable(false);
     plateform.setVelocity(0);
     
+    
     return plateform;
   }
 }

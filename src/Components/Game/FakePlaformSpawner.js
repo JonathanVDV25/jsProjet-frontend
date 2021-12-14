@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-export default class PlateformSlowSpawner {
+export default class FakePlateformSpawner {
   /**
    * @param {Phaser.Scene} scene
    */
@@ -17,11 +17,10 @@ export default class PlateformSlowSpawner {
   create() {
     
   }
-  spawn() {
+  spawn(y) {
 
-    const plateform = this.group.create(1500, Phaser.Math.Between(250, 375), this.key);
+    const plateform = this.group.create(1500, y, this.key);
     
-    plateform.body.setSize(300, 10, 0, 0);
     plateform.body.setAllowGravity(false);
     plateform.setGravity(0);
     plateform.setImmovable(true);

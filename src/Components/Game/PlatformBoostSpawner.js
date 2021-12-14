@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import Phaser, { Physics } from "phaser";
 
 export default class PlateformBoostSpawner {
   /**
@@ -21,11 +21,14 @@ export default class PlateformBoostSpawner {
 
     const plateform = this.group.create(1500, Phaser.Math.Between(250, 375), this.key);
     
+    plateform.body.setSize(300, 10, 0, 0);
     plateform.body.setAllowGravity(false);
     plateform.setGravity(0);
     plateform.setImmovable(true);
     plateform.setVelocity(0);
     
+    
+
     return plateform;
   }
 }

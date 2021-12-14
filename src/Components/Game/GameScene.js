@@ -7,6 +7,7 @@ import BombSpawner from "./BombSpawner.js";
 import PlatformSpawner from "./PlatformSpawner.js";
 import PlatformBoostSpawner from "./PlatformBoostSpawner.js";
 import PlatformSlowSpawner from "./PlatformSlowSpawner.js";
+import FakePlateformSpawner from "./FakePlaformSpawner.js";
 import StopwatchSpawner from "./StopwatchSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
@@ -24,6 +25,7 @@ import gameOverBackGroundAsset from "../../assets/carreBackGround.png";
 import timeOutTitleAsset from "../../assets/titreTimeOut.png";
 import homeButtonAsset from "../../assets/homeButton.png";
 import replayButtonAsset from "../../assets/replayButton.png";
+import fakePlateformAsset from "../../assets/fakePlatform.png";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -36,6 +38,7 @@ class GameScene extends Phaser.Scene {
     this.speed = 0;
     this.ensembleCoPlatform = new Set([]);
     this.perso = undefined;
+    
 
     // spawners
     this.stopwatchSpawner = undefined;
@@ -43,11 +46,12 @@ class GameScene extends Phaser.Scene {
     this.platformSpawner = undefined;
     this.platformBoostSpawner = undefined;
     this.platformSlowSpawner = undefined;
+    this.fakePlatformSpawner = undefined;
 
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 15;
+    this.initTime = 105;
 
     // intervals
     this.bombInterval = undefined;
@@ -65,6 +69,7 @@ class GameScene extends Phaser.Scene {
     this.load.image("invisible_ground", invisibleGroundAsset);
     this.load.image("platformBoost", platformBoostAsset);
     this.load.image("platformSlow", platformSlowAsset);
+    this.load.image("fakePlatform", fakePlateformAsset);
 
     this.load.image(BOMB_KEY, bombAsset);
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
@@ -91,6 +96,7 @@ class GameScene extends Phaser.Scene {
     this.load.image("timeOutTitle", timeOutTitleAsset);
     this.load.image("homeButton", homeButtonAsset);
     this.load.image("replayButton", replayButtonAsset);
+
   }
 
   create() {
@@ -108,7 +114,8 @@ class GameScene extends Phaser.Scene {
     const platformBoostGroup = this.platformBoostSpawner.group;
     this.platformSlowSpawner = new PlatformSlowSpawner(this, "platformSlow");
     const platformSlowGroup = this.platformSlowSpawner.group;
-
+    this.fakePlatformSpawner = new FakePlateformSpawner(this, "fakePlatform");
+    const fakePlatformGroup = this.fakePlatformSpawner.group;
     // sound
     this.bonusSound = this.sound.add("bonusSound");
     this.explosionSound = this.sound.add("explosionSound");
@@ -127,6 +134,7 @@ class GameScene extends Phaser.Scene {
     // physics
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, platformGroup);
+    this.physics.add.collider(this.player, fakePlatformGroup);
 
     this.physics.add.collider(
       this.player,
@@ -135,6 +143,7 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
+    
 
     this.physics.add.collider(
       this.player,
@@ -287,9 +296,11 @@ class GameScene extends Phaser.Scene {
           if (random == 1 || random == 2 || random == 3) {
             this.platformSpawner.spawn();
           } else if (random == 4) {
-            this.platformSlowSpawner.spawn();
+            var newPlatform = this.platformSlowSpawner.spawn();
+            this.fakePlatformSpawner.spawn(newPlatform.y);
           } else {
-            this.platformBoostSpawner.spawn();
+            var newPlatform = this.platformBoostSpawner.spawn();
+            this.fakePlatformSpawner.spawn(newPlatform.y);
           }
         }
       }
@@ -319,6 +330,8 @@ class GameScene extends Phaser.Scene {
     this.platformSpawner.group.setVelocityX(value);
     this.platformBoostSpawner.group.setVelocityX(value);
     this.platformSlowSpawner.group.setVelocityX(value);
+    this.fakePlatformSpawner.group.setVelocityX(value);
+    
   }
 
   tilePos(value) {
@@ -501,6 +514,7 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
       this.scene.start('game-scene', { perso: this.perso})
     });
+    
   }
 }
 
