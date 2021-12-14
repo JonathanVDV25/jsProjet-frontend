@@ -39,6 +39,11 @@ class GameScene extends Phaser.Scene {
     this.text = undefined;
     this.initDistance = 0;
     this.initTime = 50;
+
+    this.bombInterval = undefined;
+    this.stopwatchInterval = undefined;
+    this.timeInterval = undefined;
+
   }
 
   preload() {
@@ -174,11 +179,11 @@ class GameScene extends Phaser.Scene {
     ]);
 
     // stopwatches + bombs
-    setInterval(() => this.bombSpawner.spawn(), 10000);
-    setInterval(() => this.stopwatchSpawner.spawn(), 10000);
+    this.bombInterval = setInterval(() => this.bombSpawner.spawn(), 10000);
+    this.stopwatchInterval = setInterval(() => this.stopwatchSpawner.spawn(), 10000);
 
     // time
-    setInterval(() => this.timeLabel(), 1000);
+    this.timeInterval = setInterval(() => this.timeLabel(), 1000);
   }
 
   update() {
@@ -420,10 +425,17 @@ class GameScene extends Phaser.Scene {
     if (this.player.data.get("time") <= 0) {
       this.gameOver = true;
       this.player.active = false;
+      this.clearIntervals();
     } else {
       this.player.data.set("time", this.player.data.get("time") - 1);
       this.timeDistanceRender();
     }
+  }
+
+  clearIntervals() {
+    clearInterval(this.bombInterval);
+    clearInterval(this.stopwatchInterval);
+    clearInterval(this.timeInterval);
   }
 
   timeDistanceRender() {
