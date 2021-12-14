@@ -43,13 +43,12 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 5;
+    this.initTime = 50;
 
     // intervals
     this.bombInterval = undefined;
     this.stopwatchInterval = undefined;
     this.timeInterval = undefined;
-
   }
 
   init(data) {
@@ -66,7 +65,7 @@ class GameScene extends Phaser.Scene {
     this.load.image(BOMB_KEY, bombAsset);
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
 
-    this.load.spritesheet("personnage1", dudeAsset , {
+    this.load.spritesheet("personnage1", dudeAsset, {
       frameWidth: 184, // la hit box est surement horrible
       frameHeight: 129,
     });
@@ -94,10 +93,7 @@ class GameScene extends Phaser.Scene {
     const fakeGround = this.createFakeGround();
     this.platformSpawner = new PlatformSpawner(this, GROUND_KEY);
     const platformGroup = this.platformSpawner.group;
-    this.platformBoostSpawner = new PlatformBoostSpawner(
-      this,
-      "platformBoost"
-    );
+    this.platformBoostSpawner = new PlatformBoostSpawner(this, "platformBoost");
     const platformBoostGroup = this.platformBoostSpawner.group;
     this.platformSlowSpawner = new PlatformSlowSpawner(this, "platformSlow");
     const platformSlowGroup = this.platformSlowSpawner.group;
@@ -140,13 +136,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
 
-    this.physics.add.overlap(
-      this.player, 
-      bombsGroup, 
-      this.hitBomb, 
-      null, 
-      this
-    );
+    this.physics.add.overlap(this.player, bombsGroup, this.hitBomb, null, this);
 
     this.physics.add.overlap(
       this.player,
@@ -190,12 +180,12 @@ class GameScene extends Phaser.Scene {
 
   update() {
     if (this.gameOver) {
-      this.lauchGameOver();
+      this.launchGameOver();
       return;
     }
 
     // can't move when player stops
-    if ( this.cursors.down.isDown && (this.cursors.right.isDown || this.cursors.left.isDown)) {
+    if (this.cursors.down.isDown && (this.cursors.right.isDown || this.cursors.left.isDown)) {
       this.player.anims.play("turn");
       this.player.setVelocityY(400);
       this.platformVelocity(0);
@@ -277,10 +267,7 @@ class GameScene extends Phaser.Scene {
       this.data.set("distance", this.incDistance());
 
       // platforms spawn
-      if (
-        this.backgrounds.tilePositionX % 1000 >= 0 ||
-        this.backgrounds.tilePositionX % 1000 <= 5
-      ) {
+      if (this.backgrounds.tilePositionX % 1000 >= 0 || this.backgrounds.tilePositionX % 1000 <= 5) {
         var position = Math.round(this.backgrounds.tilePositionX / 1000);
 
         if (!this.ensembleCoPlatform.has(position)) {
@@ -369,13 +356,11 @@ class GameScene extends Phaser.Scene {
 
   createPlayer() {
     let personnage;
-    if(this.perso == 1) {
+    if (this.perso == 1) {
       personnage = "personnage1";
-    }
-    else if(this.perso == 2) {
+    } else if (this.perso == 2) {
       personnage = "personnage2";
-    }
-    else {
+    } else {
       personnage = "personnage3";
     }
     const player = this.physics.add.sprite(100, 400, personnage); // player spawning position
@@ -400,7 +385,10 @@ class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers(personnage, { start: 7, end: 12 }),
+      frames: this.anims.generateFrameNumbers(personnage, {
+        start: 7,
+        end: 12,
+      }),
       frameRate: 10,
       repeat: -1,
     });
@@ -426,7 +414,6 @@ class GameScene extends Phaser.Scene {
 
   // timer + distance
   timeLabel() {
-
     if (this.player.data.get("time") <= 0) {
       this.gameOver = true;
       this.player.active = false;
@@ -463,18 +450,15 @@ class GameScene extends Phaser.Scene {
     }, 4000);
   }
 
-  lauchGameOver() {
+  launchGameOver() {
     const carreGameOver = this.add.image(400, 300, "carreGameOver");
-    const textGameOver = this.add.text(200, 250, '', { fontSize: 32, color: "black" });
+    const textGameOver = this.add.text(200, 250, "", { fontSize: 32, color: "black" });
     textGameOver.setScrollFactor(0);
     carreGameOver.setScrollFactor(0);
     carreGameOver.setDataEnabled();
     carreGameOver.data.set("distance", this.player.data.get("distance"));
-    textGameOver.setText([
-      "Distance: " + carreGameOver.data.get("distance"),
-    ]);
+    textGameOver.setText(["Distance: " + carreGameOver.data.get("distance")]);
   }
-
 }
 
 export default GameScene;
