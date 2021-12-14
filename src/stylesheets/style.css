@@ -2,7 +2,7 @@
     color: white;
 }
 
-body:not(.HomePage.js){
+body{
     background-color: #363940;
     color: white;
     background: url(../assets/fond_acceuil2.jpg);
