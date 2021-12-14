@@ -491,6 +491,8 @@ class GameScene extends Phaser.Scene {
     home.setInteractive();
     home.on("pointerup", ()=> {
       this.gameOver = false;
+      this.ensembleCoPlatform.clear();
+      this.speed= 0;
       this.scene.start('HomeScene', { perso: this.perso})
     });
 
@@ -499,6 +501,8 @@ class GameScene extends Phaser.Scene {
     replay.setInteractive();
     replay.on("pointerup", ()=> {
       this.gameOver = false;
+      this.ensembleCoPlatform.clear();
+      this.speed= 0;
       this.scene.start('game-scene', { perso: this.perso})
     });
 
