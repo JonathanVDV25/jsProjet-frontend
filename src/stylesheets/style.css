@@ -1,10 +1,12 @@
 * {
     color: white;
 }
-body {
+
+body:not(.HomePage.js){
     background-color: #363940;
     color: white;
-  }
+    background: url(../assets/fond_acceuil2.jpg);
+}
 
 #navbar {
     background-image: url("../img/platform.png");
@@ -22,5 +24,32 @@ body {
 #logoHomePage{
     width: 12%;
     height: auto;
+}
+
+form {
+    background-color: #212529;
+    border-radius: 10px;
+    box-shadow: 6px 6px 6px black;
+    width: 30%;
+    margin: auto;
+    margin-top: 10%;
+    
+}
+input{
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+    margin-bottom: 2%;
+    margin-top: 2%;
+    width: 40%;
+}
+table {
+    border-collapse: collapse;
+    border-radius: 1em;
+    overflow: hidden;
+}
+
+footer {
+    text-align: right;
 }
 
