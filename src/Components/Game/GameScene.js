@@ -19,6 +19,7 @@ import dude2Asset from "../../assets/bike_run_v5.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
+import carreBackGroundAsset from "../../assets/carreBackGround.png";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -40,7 +41,7 @@ class GameScene extends Phaser.Scene {
 
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 50;
+    this.initTime = 5;
   }
 
   init(data) {
@@ -69,6 +70,9 @@ class GameScene extends Phaser.Scene {
     // sound preloading
     this.load.audio("bonusSound", bonusSoundAsset);
     this.load.audio("explosionSound", explosionSoundAsset);
+
+    // Game Over
+    this.load.image("carreGameOver", carreBackGroundAsset);
   }
 
   create() {
@@ -193,6 +197,7 @@ class GameScene extends Phaser.Scene {
 
   update() {
     if (this.gameOver) {
+      this.lauchGameOver();
       return;
     }
 
@@ -437,6 +442,7 @@ class GameScene extends Phaser.Scene {
 
   // timer + distance
   timeLabel() {
+
     if (this.player.data.get("time") <= 0) {
       this.gameOver = true;
       this.player.active = false;
@@ -465,6 +471,12 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
     }, 4000);
   }
+
+  lauchGameOver() {
+    const carreGameOver = this.add.image(400, 300, "carreGameOver");
+    carreGameOver.setScrollFactor(0);
+  }
+
 }
 
 export default GameScene;
