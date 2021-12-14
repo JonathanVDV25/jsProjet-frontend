@@ -78,7 +78,7 @@ class GameScene extends Phaser.Scene {
       frameHeight: 129,
     });
     this.load.spritesheet("personnage3", dude3Asset, {
-      frameWidth: 100,
+      frameWidth: 101,
       frameHeight: 120,
     });
 
