@@ -15,6 +15,7 @@ import plateformSlowAsset from "../../assets/plateform_slow.jpg";
 import bombAsset from "../../assets/bomb.png";
 import stopwatchAsset from "../../assets/chrono_game.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
+import dude2Asset from "../../assets/bike_run_v5.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
@@ -33,12 +34,17 @@ class GameScene extends Phaser.Scene {
     this.ground = undefined;
     this.speed = 0;
     this.ensembleCoPlateform = new Set([]);
+    this.perso = undefined;
 
     this.stopwatchSpawner = undefined;
 
     this.text = undefined;
     this.initDistance = 0;
     this.initTime = 50;
+  }
+
+  init(data) {
+    this.perso = data.perso;
   }
 
   preload() {
@@ -51,8 +57,12 @@ class GameScene extends Phaser.Scene {
     this.load.image(BOMB_KEY, bombAsset);
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
 
-    this.load.spritesheet(DUDE_KEY, dudeAsset, {
+    this.load.spritesheet("personnage1", dudeAsset , {
       frameWidth: 184, // la hit box est surement horrible
+      frameHeight: 129,
+    });
+    this.load.spritesheet("personnage2", dude2Asset, {
+      frameWidth: 132,
       frameHeight: 129,
     });
 
@@ -369,7 +379,17 @@ class GameScene extends Phaser.Scene {
   }
 
   createPlayer() {
-    const player = this.physics.add.sprite(100, 400, DUDE_KEY); // positon où le personnage apparait
+    let personnage;
+    if(this.perso == 1) {
+      personnage = "personnage1";
+    }
+    else if(this.perso == 2) {
+      personnage = "personnage2";
+    }
+    else {
+      personnage = "personnage3";
+    }
+    const player = this.physics.add.sprite(100, 400, personnage); // positon où le personnage apparait
     player.setBounce(0);
     player.setCollideWorldBounds(true);
     /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
@@ -378,20 +398,20 @@ class GameScene extends Phaser.Scene {
 
     this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 0, end: 5 }),
+      frames: this.anims.generateFrameNumbers(personnage, { start: 0, end: 5 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: "turn",
-      frames: [{ key: DUDE_KEY, frame: 6 }],
+      frames: [{ key: personnage, frame: 6 }],
       frameRate: 1,
     });
 
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 7, end: 12 }),
+      frames: this.anims.generateFrameNumbers(personnage, { start: 7, end: 12 }),
       frameRate: 10,
       repeat: -1,
     });
