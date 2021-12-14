@@ -10,8 +10,8 @@ import PlatformSlowSpawner from "./PlatformSlowSpawner.js";
 import StopwatchSpawner from "./StopwatchSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
-import platformBoostAsset from "../../assets/platform_boost.jpg";
-import platformSlowAsset from "../../assets/platform_slow.jpg";
+import platformBoostAsset from "../../assets/plateform_boost.jpg";
+import platformSlowAsset from "../../assets/plateform_slow.jpg";
 import bombAsset from "../../assets/bomb.png";
 import stopwatchAsset from "../../assets/chrono_game.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
@@ -19,6 +19,7 @@ import dude2Asset from "../../assets/bike_run_v5.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
+import carreBackGroundAsset from "../../assets/carreBackGround.png";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -42,7 +43,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 50;
+    this.initTime = 5;
 
     // intervals
     this.bombInterval = undefined;
@@ -77,6 +78,9 @@ class GameScene extends Phaser.Scene {
     // sound preloading
     this.load.audio("bonusSound", bonusSoundAsset);
     this.load.audio("explosionSound", explosionSoundAsset);
+
+    // Game Over
+    this.load.image("carreGameOver", carreBackGroundAsset);
   }
 
   create() {
@@ -186,6 +190,7 @@ class GameScene extends Phaser.Scene {
 
   update() {
     if (this.gameOver) {
+      this.lauchGameOver();
       return;
     }
 
@@ -421,6 +426,7 @@ class GameScene extends Phaser.Scene {
 
   // timer + distance
   timeLabel() {
+
     if (this.player.data.get("time") <= 0) {
       this.gameOver = true;
       this.player.active = false;
@@ -456,6 +462,19 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
     }, 4000);
   }
+
+  lauchGameOver() {
+    const carreGameOver = this.add.image(400, 300, "carreGameOver");
+    const textGameOver = this.add.text(200, 250, '', { fontSize: 32, color: "black" });
+    textGameOver.setScrollFactor(0);
+    carreGameOver.setScrollFactor(0);
+    carreGameOver.setDataEnabled();
+    carreGameOver.data.set("distance", this.player.data.get("distance"));
+    textGameOver.setText([
+      "Distance: " + carreGameOver.data.get("distance"),
+    ]);
+  }
+
 }
 
 export default GameScene;

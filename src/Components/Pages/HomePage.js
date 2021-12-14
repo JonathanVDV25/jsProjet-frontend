@@ -10,8 +10,8 @@ async function HomePage() {
   // reset #page div
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = `<div> <img id='logoHomePage' src='${LogoHomePage}' alt='imageLogo'> </div>`;
-  pageDiv.innerHTML += `<div> <h1>Bienvenue sur le scoreboard de ChronoRun</h1> </div>`;
-  pageDiv.innerHTML += "<div id='scoreboard'></div>";
+  pageDiv.innerHTML += `<div><h1>Bienvenue sur le scoreboard de ChronoRun</h1> </div>`;
+  pageDiv.innerHTML += "<div id='scoreboard'> </div>";
 
   try {
     // hide data to inform if the leaderboard is already printed
@@ -31,7 +31,7 @@ async function HomePage() {
   
     // create an HTMLTableElement dynamically, based on the scores data (Array of Objects)
     const table = document.createElement("table");
-    table.className = "table table-dark"
+    table.className = "table table-dark";
     tableWrapper.appendChild(table);
     // deal with header
     const thead = document.createElement("thead");
