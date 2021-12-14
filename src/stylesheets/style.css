@@ -16,7 +16,11 @@ body {
 }
 
 #scoreboard {
-    padding-top: 5%;
+    padding-top: 1%;
 }
 
+#logoHomePage{
+    width: 12%;
+    height: auto;
+}
 

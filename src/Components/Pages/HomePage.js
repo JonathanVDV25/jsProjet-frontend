@@ -4,11 +4,14 @@
 import { Redirect } from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import { setSessionObject } from "../../utils/session";
+import LogoHomePage from "../../img/chrono2.png";
 
 async function HomePage() {
   // reset #page div
   const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = "<div id='scoreboard'></div>";
+  pageDiv.innerHTML = `<div> <img id='logoHomePage' src='${LogoHomePage}' alt='imageLogo'> </div>`;
+  pageDiv.innerHTML += `<div> <h1>Bienvenue sur le scoreboard de ChronoRun</h1> </div>`;
+  pageDiv.innerHTML += "<div id='scoreboard'></div>";
 
   try {
     // hide data to inform if the leaderboard is already printed
