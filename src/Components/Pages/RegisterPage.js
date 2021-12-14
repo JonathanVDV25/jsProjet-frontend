@@ -78,6 +78,20 @@ function RegisterPage() {
       // Rerender the navbar for an authenticated user : temporary step prior to deal with token
       Navbar({ isAuthenticated: true });
 
+      //add a default score of 0
+
+      const defaultScore = {
+        method: "POST", 
+        body: JSON.stringify({
+          name: username.value,
+          distance:0,
+        }), // body data type must match "Content-Type" header
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const BaseScore = await fetch("/api/scores", defaultScore);
+
       // call the HomePage via the Router
       Redirect("/game");
     } catch (error) {
