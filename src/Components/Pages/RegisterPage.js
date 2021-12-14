@@ -20,6 +20,7 @@ function RegisterPage() {
   // </div>
   const form = document.createElement("form");
   form.className = "p-5";
+  form.innerHTML += `<h1> Register </h1>`;
   const username = document.createElement("input");
   username.type = "text";
   username.id = "username";

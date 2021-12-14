@@ -9,14 +9,17 @@ function LoginPage() {
   // reset #page div
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = "";
+  
 
   const errorAlert = document.createElement("div");
   errorAlert.innerHTML = "";
   pageDiv.appendChild(errorAlert);
 
   // create a login form
+  
   const form = document.createElement("form");
   form.className = "p-5";
+  form.innerHTML += `<h1> Login </h1>`;
   const username = document.createElement("input");
   username.type = "text";
   username.id = "username";
@@ -32,13 +35,14 @@ function LoginPage() {
   const submit = document.createElement("input");
   submit.value = "Login";
   submit.type = "submit";
-  submit.className = "btn btn-danger";
+  submit.className = "btn btn-primary";
   form.appendChild(username);
   form.appendChild(password);
   form.appendChild(submit);
 
   form.addEventListener("submit", onSubmit);
   pageDiv.appendChild(form);
+
 
   async function onSubmit(e) {
     e.preventDefault();
