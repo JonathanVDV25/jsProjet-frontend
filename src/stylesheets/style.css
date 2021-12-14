@@ -12,6 +12,9 @@ body{
     background-image: url("../img/platform.png");
     background-size: 750px;
 }
+#navbar li {
+    margin-left: 20%;
+}
 
 #gameDiv {
     vertical-align: 10000px;
