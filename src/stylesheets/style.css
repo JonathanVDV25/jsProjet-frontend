@@ -2,7 +2,7 @@
     color: white;
 }
 
-body:not(.HomePage.js){
+body{
     background-color: #363940;
     color: white;
     background: url(../assets/fond_acceuil2.jpg);
@@ -11,6 +11,9 @@ body:not(.HomePage.js){
 #navbar {
     background-image: url("../img/platform.png");
     background-size: 750px;
+}
+#navbar li {
+    margin-left: 20%;
 }
 
 #gameDiv {

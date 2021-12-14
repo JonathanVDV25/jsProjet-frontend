@@ -210,19 +210,19 @@ class GameScene extends Phaser.Scene {
     // player goes left
     else if (this.cursors.left.isDown) {
       if (this.player.x > 100) {
-        // platform boost
+        // speedboost platform
         if (this.speed == 1) {
           this.player.setVelocityX(-1000);
           this.tilePos(-20);
           this.platformVelocity(1000);
         }
-        //Platform Slow
+        // slow platform
         else if (this.speed == -1) {
           this.player.setVelocityX(-250);
           this.tilePos(-5);
           this.platformVelocity(250);
         }
-        //Platform Normal
+        // basic platfom
         else {
           this.player.setVelocityX(-500);
           this.tilePos(-10);
@@ -232,17 +232,17 @@ class GameScene extends Phaser.Scene {
         this.data.set("distance", this.decDistance());
       } else {
         if (this.backgrounds.tilePositionX > 0) {
-          //Platforme Boost
+          // speedboost platform
           if (this.speed == 1) {
             this.tilePos(-20);
             this.platformVelocity(1000);
           }
-          //Platform Slow
+          // slow platform
           else if (this.speed == -1) {
             this.tilePos(-5);
             this.platformVelocity(250);
           }
-          //Platform Normal
+          // basic platform
           else {
             this.tilePos(-10);
             this.platformVelocity(500);
@@ -254,22 +254,22 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("left", true);
     }
 
-    // Joueur va à droite
+    // player goes right
     else if (this.cursors.right.isDown) {
       if (this.player.x != 400) {
-        //Platforme Boost
+        // speedboost platform
         if (this.speed == 1) {
           this.player.setVelocityX(1000);
           this.tilePos(20);
           this.platformVelocity(-1000);
         }
-        //Platform Slow
+        // slow platform
         else if (this.speed == -1) {
           this.player.setVelocityX(250);
           this.tilePos(5);
           this.platformVelocity(-250);
         }
-        //Platform Normal
+        // basic platform
         else {
           this.player.setVelocityX(500);
           this.tilePos(10);
@@ -282,7 +282,7 @@ class GameScene extends Phaser.Scene {
       this.player.anims.play("right", true);
       this.data.set("distance", this.incDistance());
 
-      //Générer les platformes
+      // platforms spawn
       if (
         this.backgrounds.tilePositionX % 1000 >= 0 ||
         this.backgrounds.tilePositionX % 1000 <= 5
@@ -305,21 +305,21 @@ class GameScene extends Phaser.Scene {
       }
     }
 
-    //Joueur va en bas
+    // player goes down
     else if (this.cursors.down.isDown) {
       this.player.anims.play("turn");
       this.platformVelocity(0);
       this.player.setVelocityY(400);
     }
 
-    //Joueur à l'arret (Auncun bouton pressé)
+    // player not moving (no buttons pressed)
     else {
       this.player.anims.play("turn");
       this.platformVelocity(0);
       this.player.setVelocityX(0);
     }
 
-    //Joueur saute
+    // player jumps
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-600);
     }
@@ -356,9 +356,6 @@ class GameScene extends Phaser.Scene {
   createGround() {
     const ground = this.add.tileSprite(0, 600, 2000, 125, GROUND_KEY);
     ground.setScrollFactor(0);
-
-    //const ground = this.physics.add.staticGroup();
-    //ground.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
     return ground;
   }
 
@@ -372,9 +369,6 @@ class GameScene extends Phaser.Scene {
     const platforms = this.physics.add.staticGroup();
 
     platforms.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
-
-    // platforms.create(600, 400, GROUND_KEY);
-    // platforms.create(50, 250, GROUND_KEY);
     platforms.create(750, 220, GROUND_KEY);
     return platforms;
   }
@@ -390,7 +384,7 @@ class GameScene extends Phaser.Scene {
     else {
       personnage = "personnage3";
     }
-    const player = this.physics.add.sprite(100, 400, personnage); // positon où le personnage apparait
+    const player = this.physics.add.sprite(100, 400, personnage); // player spawning position
     player.setBounce(0);
     player.setCollideWorldBounds(true);
     /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
