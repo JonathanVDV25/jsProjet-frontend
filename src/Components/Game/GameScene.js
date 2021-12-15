@@ -24,6 +24,7 @@ import gameOverBackGroundAsset from "../../assets/carreBackGround.png";
 import timeOutTitleAsset from "../../assets/titreTimeOut.png";
 import homeButtonAsset from "../../assets/homeButton.png";
 import replayButtonAsset from "../../assets/replayButton.png";
+import { getSessionObject } from "../../utils/session";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -53,6 +54,8 @@ class GameScene extends Phaser.Scene {
     this.bombInterval = undefined;
     this.stopwatchInterval = undefined;
     this.timeInterval = undefined;
+
+    this.bestScore = undefined //ICII
   }
 
   init(data) {
@@ -94,6 +97,8 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
+
+    this.bestScore = this.getUserBestScore();
     //Empèche de générer deux platformes en même temps
     this.ensembleCoPlatform.add(0);
 
@@ -483,11 +488,8 @@ class GameScene extends Phaser.Scene {
 
     textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")]);
 
-    // gameOverRectangle.data.set("record", );
-    textGameOver.setText([
-      "Distance: " + gameOverRectangle.data.get("distance"),
-      "\nRecord: " + ""
-    ]);
+    //gameOverRectangle.data.set("record", this.bestScore);
+    textGameOver.setText(["Record: " + "NOT WORKING"]);
 
     let home = this.add.image(200, 425, "homeButton");
     home.setScrollFactor(0);
@@ -508,6 +510,26 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
       this.scene.start('game-scene', { perso: this.perso})
     });
+  }
+
+  async getUserBestScore(){
+    const user = getSessionObject("user");
+    console.log("ici " , user);
+
+    try {
+      const response = await fetch("/api/scores/admin"); // fetch return a promise => we wait for the response
+
+      if (!response.ok) {
+        throw new Error("fetch error : " + response.status + " : " + response.statusText);
+      }
+
+      const score = await response.json();
+      
+
+      return score.distance;
+    } catch (error) {
+      console.error("PutScore::error: ", error);
+    }
   }
 }
 
