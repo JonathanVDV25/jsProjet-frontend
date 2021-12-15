@@ -517,7 +517,7 @@ class GameScene extends Phaser.Scene {
     console.log("ici " , user);
 
     try {
-      const response = await fetch("/api/scores/admin"); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/scores/" + user); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
         throw new Error("fetch error : " + response.status + " : " + response.statusText);
@@ -531,6 +531,7 @@ class GameScene extends Phaser.Scene {
       console.error("PutScore::error: ", error);
     }
   }
+  
 }
 
 export default GameScene;
