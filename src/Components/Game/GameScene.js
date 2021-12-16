@@ -35,6 +35,7 @@ import replayButtonAsset from "../../assets/replayButton.png";
 import fakePlateformAsset from "../../assets/fakePlatform.png";
 import bordAsset from "../../assets/bord.png";
 import secretAsset from "../../assets/shrek_easter_egg.jpg";
+import Player from "./Player";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -66,7 +67,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 10;
+    this.initTime = 12;
 
     // intervals
     this.bombInterval = undefined;
@@ -151,7 +152,7 @@ class GameScene extends Phaser.Scene {
     this.gameSound.play();
 
     // joueur
-    this.player = this.createPlayer();
+    this.player = new Player(this, this.perso);
     this.player.setPushable(true);
 
     // spawners
@@ -204,7 +205,13 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(stopwatchesGroup, fakeGround);
     this.physics.add.collider(bombsGroup, platformGroup);
 
-    this.physics.add.overlap(this.player, bombsGroup, this.hitBomb, null, this);
+    this.physics.add.overlap(
+      this.player, 
+      bombsGroup, 
+      this.hitBomb, 
+      null, 
+      this
+    );
 
     this.physics.add.overlap(
       this.player,
@@ -267,6 +274,8 @@ class GameScene extends Phaser.Scene {
       this.tilePos(0);
       this.platformVelocity(0);
       this.gameSound.stop();
+      this.stopwatchesGroup.clear(true, true);
+      this.bombsGroup.clear(true, true);
 
       if (!this.updatedBestScore) {
         //await Méthode ASYNCHRONE DE PUT !
@@ -475,48 +484,6 @@ class GameScene extends Phaser.Scene {
     platforms.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
     platforms.create(750, 220, GROUND_KEY);
     return platforms;
-  }
-
-  createPlayer() {
-    let personnage;
-    if (this.perso == 1) {
-      personnage = "personnage1";
-    } else if (this.perso == 2) {
-      personnage = "personnage2";
-    } else {
-      personnage = "personnage3";
-    }
-    const player = this.physics.add.sprite(100, 400, personnage); // player spawning position
-    player.setBounce(0);
-    player.setCollideWorldBounds(true);
-    /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
-    The 'repeat -1' value tells the animation to loop.
-    */
-
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers(personnage, { start: 0, end: 5 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: personnage, frame: 6 }],
-      frameRate: 1,
-    });
-
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers(personnage, {
-        start: 7,
-        end: 12,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    return player;
   }
 
   hitBomb(player, bomb) {
