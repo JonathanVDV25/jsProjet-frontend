@@ -48,7 +48,7 @@ function RegisterPage() {
     e.preventDefault();
     const username = document.getElementById("username");
     const password = document.getElementById("password");
-    console.log("credentials", username.value, password.value);
+    console.log("credentials", username.value);
     try {
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
