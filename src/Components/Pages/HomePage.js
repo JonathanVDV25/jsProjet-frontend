@@ -72,6 +72,7 @@ async function HomePage() {
     // add the HTMLTableElement to the main, within the #page div
     tableWrapper.innerHTML += "<br/><br/><br/>";
     pageDiv.appendChild(tableWrapper);
+    
   } catch (error) {
     console.error("scoreView::error: ", error);
   }
