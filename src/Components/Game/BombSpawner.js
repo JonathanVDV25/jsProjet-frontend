@@ -25,7 +25,7 @@ export default class BombSpawner {
       var maxVelocityX = 350;
     }
     else {
-      console.log("OK");
+      
       var x = 1200;
       var y = Phaser.Math.Between(0, 400);
       var minVelocityX = -250;

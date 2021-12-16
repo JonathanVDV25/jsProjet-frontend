@@ -8,6 +8,8 @@ import PlatformSpawner from "./PlatformSpawner.js";
 import PlatformBoostSpawner from "./PlatformBoostSpawner.js";
 import PlatformSlowSpawner from "./PlatformSlowSpawner.js";
 import FakePlateformSpawner from "./FakePlaformSpawner.js";
+import VerifPlatformSpawner from "./VerifPlatformSpawner.js";
+import VerifPlatformDroitSpawner from "./VerifPlatformDroitSpawner.js";
 import StopwatchSpawner from "./StopwatchSpawner.js";
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
@@ -26,6 +28,8 @@ import timeOutTitleAsset from "../../assets/titreTimeOut.png";
 import homeButtonAsset from "../../assets/homeButton.png";
 import replayButtonAsset from "../../assets/replayButton.png";
 import fakePlateformAsset from "../../assets/fakePlatform.png";
+import { getSessionObject } from "../../utils/session";
+import bordAsset from "../../assets/bord.png";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -47,16 +51,23 @@ class GameScene extends Phaser.Scene {
     this.platformBoostSpawner = undefined;
     this.platformSlowSpawner = undefined;
     this.fakePlatformSpawner = undefined;
+    this.verifPlatformSpawner = undefined;
+    this.verifPlatformDroitSpawner = undefined;
 
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 20;
+    this.initTime = 60;
 
     // intervals
     this.bombInterval = undefined;
     this.stopwatchInterval = undefined;
     this.timeInterval = undefined;
+
+    this.bestScore = undefined //ICII
+    this.foundBestScore = false; //Faudra peut-etre mettre ça à CHAQUE chargement de jeu, pour avoir le bestScore à jour !
+    this.updatedBestScore = false; //ICIII
+    this.playerDistanceOnGame = -1;
   }
 
   init(data) {
@@ -70,6 +81,7 @@ class GameScene extends Phaser.Scene {
     this.load.image("platformBoost", platformBoostAsset);
     this.load.image("platformSlow", platformSlowAsset);
     this.load.image("fakePlatform", fakePlateformAsset);
+    this.load.image("verifPlatform", bordAsset);
 
     this.load.image(BOMB_KEY, bombAsset);
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
@@ -100,6 +112,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
+
     //Empèche de générer deux platformes en même temps
     this.ensembleCoPlatform.add(0);
 
@@ -116,6 +129,10 @@ class GameScene extends Phaser.Scene {
     const platformSlowGroup = this.platformSlowSpawner.group;
     this.fakePlatformSpawner = new FakePlateformSpawner(this, "fakePlatform");
     const fakePlatformGroup = this.fakePlatformSpawner.group;
+    this.verifPlatformSpawner = new VerifPlatformSpawner(this, "verifPlatform");
+    const verifPlatformGroup = this.verifPlatformSpawner.group;
+    this.verifPlatformDroitSpawner = new VerifPlatformDroitSpawner(this, "verifPlatform");
+    const verifPlatformDroitGroup = this.verifPlatformDroitSpawner.group;
     // sound
     this.bonusSound = this.sound.add("bonusSound");
     this.explosionSound = this.sound.add("explosionSound");
@@ -136,6 +153,22 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, platformGroup);
     this.physics.add.collider(this.player, fakePlatformGroup);
     
+    
+    this.physics.add.collider(
+      this.player, 
+      verifPlatformGroup,
+      this.verifPlatform,
+      null,
+      this
+    );
+      
+    this.physics.add.collider(
+      this.player, 
+      verifPlatformDroitGroup,
+      this.verifPlatformDroit,
+      null,
+      this
+    );
 
     this.physics.add.collider(
       this.player,
@@ -208,10 +241,26 @@ class GameScene extends Phaser.Scene {
     this.timeInterval = setInterval(() => this.timeLabel(), 1000);
   }
 
-  update() {
+  async update() {
+
+    if(!this.foundBestScore){
+      this.bestScore = await this.getUserBestScore(); //ICIIIII
+      this.foundBestScore = true;
+    }
+
     if (this.gameOver) {
       this.clearIntervals();
       this.launchGameOver();
+
+      if(!this.updatedBestScore && this.playerDistanceOnGame != -1){
+        //await Méthode ASYNCHRONE DE PUT !
+        let bestScore = await this.getUserBestScore();
+        if(this.playerDistanceOnGame > bestScore){ //ICI IL BEUG! JPENSE C REGlé MTN
+          await this.putUserBestScore(this.player.data.get("distance"));
+        }
+        this.updatedBestScore = true;
+      }
+
       return;
     }
 
@@ -313,13 +362,19 @@ class GameScene extends Phaser.Scene {
 
           var random = Phaser.Math.Between(1, 5);
           if (random == 1 || random == 2 || random == 3) {
-            this.platformSpawner.spawn();
+            var newPlatform = this.platformSpawner.spawn();
+            this.verifPlatformSpawner.spawn(newPlatform.y, 1);
+            this.verifPlatformDroitSpawner.spawn(newPlatform.y, 1);
           } else if (random == 4) {
             var newPlatform = this.platformSlowSpawner.spawn();
             this.fakePlatformSpawner.spawn(newPlatform.y);
+            this.verifPlatformSpawner.spawn(newPlatform.y, 2);
+            this.verifPlatformDroitSpawner.spawn(newPlatform.y, 2);
           } else {
             var newPlatform = this.platformBoostSpawner.spawn();
             this.fakePlatformSpawner.spawn(newPlatform.y);
+            this.verifPlatformSpawner.spawn(newPlatform.y, 2);
+            this.verifPlatformDroitSpawner.spawn(newPlatform.y, 2);
           }
         }
       }
@@ -345,11 +400,19 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  render() {
+    this.debug.body(verifPlatformGroup);
+
+  }
+
+
   platformVelocity(value) {
     this.platformSpawner.group.setVelocityX(value);
     this.platformBoostSpawner.group.setVelocityX(value);
     this.platformSlowSpawner.group.setVelocityX(value);
     this.fakePlatformSpawner.group.setVelocityX(value); 
+    this.verifPlatformSpawner.group.setVelocityX(value);
+    this.verifPlatformDroitSpawner.group.setVelocityX(value);
     
   }
 
@@ -489,8 +552,31 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
     }, 4000);
   }
+  verifPlatform() {
+    if(this.speed == 1) {
+      this.tilePos(-20);
+    }
+    else if(this.speed == -1) {
+      this.tilePos(-5);
+    }
+    else {
+      this.tilePos(-10);
+    }
+  }
 
-  launchGameOver() {
+  verifPlatformDroit() {
+    if(this.speed == 1) {
+      this.tilePos(20);
+    }
+    else if(this.speed == -1) {
+      this.tilePos(5);
+    }
+    else {
+      this.tilePos(10);
+    }
+  }
+
+  async launchGameOver() {
     // game over rectangle
     const gameOverRectangle = this.add.image(400, 300, "gameOverRectangle");
     gameOverRectangle.setScrollFactor(0);
@@ -505,14 +591,20 @@ class GameScene extends Phaser.Scene {
 
     gameOverRectangle.setDataEnabled();
     gameOverRectangle.data.set("distance", this.player.data.get("distance"));
+    this.playerDistanceOnGame = gameOverRectangle.data.get("distance");
 
-    textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")]);
+    if(this.bestScore < gameOverRectangle.data.get("distance")){
+      textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")
+                          + "\nBest Distance: " + gameOverRectangle.data.get("distance")]); //Si distance est plus grande que son bestscore d'avant !
+    } else {
+      textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")
+                          + "\nBest Distance: " + this.bestScore]);
+    }
 
-    // gameOverRectangle.data.set("record", );
-    textGameOver.setText([
-      "Distance: " + gameOverRectangle.data.get("distance"),
-      "\nRecord: " + ""
-    ]);
+    
+
+    //gameOverRectangle.data.set("record", this.bestScore);
+    // textGameOver.setText(["Record: " + "NOT WORKING"]);
 
     let home = this.add.image(200, 425, "homeButton");
     home.setScrollFactor(0);
@@ -535,6 +627,60 @@ class GameScene extends Phaser.Scene {
     });
     
   }
+
+  async getUserBestScore(){
+    const user = getSessionObject("user");
+    //console.log("ici " , user);
+
+    try {
+      const response = await fetch("/api/scores/" + user.username); // fetch return a promise => we wait for the response
+
+      if (!response.ok) {
+        throw new Error("fetch error : " + response.status + " : " + response.statusText);
+      }
+
+      const score = await response.json();
+      
+
+      return score.distance;
+    } catch (error) {
+      console.error("PutScore::error: ", error);
+    }
+  }
+
+  async putUserBestScore(bestScore){
+    const user = getSessionObject("user");
+
+    try {
+      const options = {
+        method: "PUT", // *GET, POST, PUT, DELETE, etc.
+        body: JSON.stringify({
+          name: user.username,
+          distance: bestScore, //pt etre pas mettre le .value
+        }), // body data type must match "Content-Type" header
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: user.token,
+        },
+      };
+
+      const response = await fetch("/api/scores/" + user.username, options); // fetch return a promise => we wait for the response
+
+      if (!response.ok) {
+        throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
+      
+      console.log("Score updated : ", bestScore);
+
+    } catch (error) {
+      console.error("PutBestScore::error: ", error);
+    }
+
+
+  }
+  
 }
 
 export default GameScene;

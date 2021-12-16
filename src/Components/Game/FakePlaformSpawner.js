@@ -21,6 +21,7 @@ export default class FakePlateformSpawner {
 
     const plateform = this.group.create(1500, y, this.key);
     
+    plateform.body.setSize(300, 22, 0, 22);
     plateform.body.setAllowGravity(false);
     plateform.setGravity(0);
     plateform.setImmovable(true);

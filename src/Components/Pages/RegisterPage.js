@@ -88,6 +88,7 @@ function RegisterPage() {
         }), // body data type must match "Content-Type" header
         headers: {
           "Content-Type": "application/json",
+          Authorization: user.token,
         },
       };
       const baseScore = await fetch("/api/scores", defaultScore);
