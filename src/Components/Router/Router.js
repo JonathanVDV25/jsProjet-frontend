@@ -3,11 +3,13 @@ import GamePage from "../Pages/GamePage";
 import LoginPage from "../Pages/loginPage";
 import RegisterPage from "../Pages/RegisterPage";
 import Logout from "../Logout/Logout";
+import AcceuilPage from "../Pages/AcceuilPage";
 
 // Configure your routes here
 const routes = {
-  "/": HomePage,
+  "/": AcceuilPage,
   "/game": GamePage,
+  "/score": HomePage,
   "/login": LoginPage,
   "/register": RegisterPage,
   "/logout": Logout,

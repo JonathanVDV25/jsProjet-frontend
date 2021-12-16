@@ -34,6 +34,7 @@ import homeButtonAsset from "../../assets/homeButton.png";
 import replayButtonAsset from "../../assets/replayButton.png";
 import fakePlateformAsset from "../../assets/fakePlatform.png";
 import bordAsset from "../../assets/bord.png";
+import secretAsset from "../../assets/shrek_easter_egg.jpg";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -116,6 +117,11 @@ class GameScene extends Phaser.Scene {
     this.load.image("timeOutTitle", timeOutTitleAsset);
     this.load.image("homeButton", homeButtonAsset);
     this.load.image("replayButton", replayButtonAsset);
+<<<<<<< HEAD
+
+    this.load.image("secret", secretAsset);
+=======
+>>>>>>> 36bba2445ed9a3c22648b508da4c0966179844d4
   }
 
   create() {
@@ -417,10 +423,10 @@ class GameScene extends Phaser.Scene {
     if (this.cursors.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-650);
     }
-  }
 
-  render() {
-    this.debug.body(verifPlatformGroup);
+    if(this.player.data.get("distance") == -50) {
+      this.add.image(400, 300, "secret");
+    }
   }
 
   platformVelocity(value) {
