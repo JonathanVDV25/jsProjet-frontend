@@ -13,7 +13,7 @@ import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
 import platformBoostAsset from "../../assets/plateform_boost.jpg";
 import platformSlowAsset from "../../assets/plateform_slow.jpg";
-import bombAsset from "../../assets/bomb.png";
+import bombAsset from "../../assets/bomb_projectile2.png";
 import stopwatchAsset from "../../assets/chrono_game.png";
 import dudeAsset from "../../assets/cyborg_v5.png";
 import dude2Asset from "../../assets/bike_run_v5.png";
@@ -51,7 +51,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 105;
+    this.initTime = 20;
 
     // intervals
     this.bombInterval = undefined;
@@ -135,6 +135,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, platformGroup);
     this.physics.add.collider(this.player, fakePlatformGroup);
+    
 
     this.physics.add.collider(
       this.player,
@@ -155,7 +156,9 @@ class GameScene extends Phaser.Scene {
 
     // physics for bombs and stopwatches
     this.physics.add.collider(bombsGroup, fakeGround);
+    this.physics.add.collider(bombsGroup, fakePlatformGroup);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
+    this.physics.add.collider(bombsGroup, platformGroup);
 
     this.physics.add.overlap(
       this.player, 
@@ -198,7 +201,7 @@ class GameScene extends Phaser.Scene {
     ]);
 
     // stopwatches + bombs
-    this.bombInterval = setInterval(() => this.bombSpawner.spawn(), 10000);
+    this.bombInterval = setInterval(() => this.bombSpawner.spawn(), Phaser.Math.Between(1000, 3000));
     this.stopwatchInterval = setInterval(() => this.stopwatchSpawner.spawn(), 10000);
 
     // time
@@ -227,18 +230,21 @@ class GameScene extends Phaser.Scene {
           this.player.setVelocityX(-1000);
           this.tilePos(-20);
           this.platformVelocity(1000);
+          this.bombSpawner.group.setVelocityX(1000);
         }
         // slow platform
         else if (this.speed == -1) {
           this.player.setVelocityX(-250);
           this.tilePos(-5);
           this.platformVelocity(250);
+          this.bombSpawner.group.setVelocityX(250);
         }
         // basic platfom
         else {
           this.player.setVelocityX(-500);
           this.tilePos(-10);
           this.platformVelocity(500);
+          this.bombSpawner.group.setVelocityX(500);
         }
         // decrease distance
         this.data.set("distance", this.decDistance());
@@ -248,16 +254,19 @@ class GameScene extends Phaser.Scene {
           if (this.speed == 1) {
             this.tilePos(-20);
             this.platformVelocity(1000);
+            this.bombSpawner.group.setVelocityX(1000);
           }
           // slow platform
           else if (this.speed == -1) {
             this.tilePos(-5);
             this.platformVelocity(250);
+            this.bombSpawner.group.setVelocityX(250);
           }
           // basic platform
           else {
             this.tilePos(-10);
             this.platformVelocity(500);
+            this.bombSpawner.group.setVelocityX(500);
           }
           // decrease distance
           this.data.set("distance", this.decDistance());
@@ -274,18 +283,21 @@ class GameScene extends Phaser.Scene {
           this.player.setVelocityX(1000);
           this.tilePos(20);
           this.platformVelocity(-1000);
+          this.bombSpawner.group.setVelocityX(-1000);
         }
         // slow platform
         else if (this.speed == -1) {
           this.player.setVelocityX(250);
           this.tilePos(5);
           this.platformVelocity(-250);
+          this.bombSpawner.group.setVelocityX(-250);
         }
         // basic platform
         else {
           this.player.setVelocityX(500);
           this.tilePos(10);
           this.platformVelocity(-500);
+          this.bombSpawner.group.setVelocityX(-500);
         }
       }
       this.player.anims.play("right", true);
@@ -294,7 +306,7 @@ class GameScene extends Phaser.Scene {
       // platforms spawn
       if (this.backgrounds.tilePositionX % 1000 >= 0 || this.backgrounds.tilePositionX % 1000 <= 5) {
         var position = Math.round(this.backgrounds.tilePositionX / 1000);
-
+        
         if (!this.ensembleCoPlatform.has(position)) {
           // console.log(position);
           this.ensembleCoPlatform.add(position);
@@ -329,7 +341,7 @@ class GameScene extends Phaser.Scene {
 
     // player jumps
     if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-600);
+      this.player.setVelocityY(-650);
     }
   }
 
@@ -337,7 +349,7 @@ class GameScene extends Phaser.Scene {
     this.platformSpawner.group.setVelocityX(value);
     this.platformBoostSpawner.group.setVelocityX(value);
     this.platformSlowSpawner.group.setVelocityX(value);
-    this.fakePlatformSpawner.group.setVelocityX(value);
+    this.fakePlatformSpawner.group.setVelocityX(value); 
     
   }
 
@@ -437,7 +449,7 @@ class GameScene extends Phaser.Scene {
 
   hitStopwatch(player, stopwatch) {
     this.player.data.set("time", this.player.data.get("time") + 10);
-    bomb.disableBody(true, true);
+    stopwatch.disableBody(true, true);
     this.timeDistanceRender();
   }
 

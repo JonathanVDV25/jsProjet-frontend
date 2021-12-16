@@ -20,8 +20,8 @@ export default class StopwatchSpawner {
 
     const stopwatch = this.group.create(1000, y, this.key);
     stopwatch.setBounce(1.1);
-    stopwatch.setCollideWorldBounds(false);
-    stopwatch.setVelocity(-100);
+    stopwatch.setCollideWorldBounds(true);
+    
 
     return stopwatch;
   }
