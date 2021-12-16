@@ -1,7 +1,6 @@
 import backgroundHomeAsset from "../../assets/fond_acceuil3.jpg";
 import titreAsset from "../../assets/titre.png";
 import playButtonAsset from "../../assets/play_button.png";
-import musicHomeAsset from "../../assets/music_home.mp3";
 import optionsButtonAsset from "../../assets/options_button.png";
 
 
@@ -25,7 +24,6 @@ class HomeScene extends Phaser.Scene {
         this.load.image("backgroundHome", backgroundHomeAsset);
         this.load.image("titre", titreAsset);
         this.load.image("playButton", playButtonAsset);
-        this.load.audio("musicHome", musicHomeAsset);
         this.load.image("optionsButton", optionsButtonAsset);
         
         // LoadBar
@@ -51,9 +49,7 @@ class HomeScene extends Phaser.Scene {
         let optionsButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 150, "optionsButton").setDepth(1);
         
     
-        this.sound.play("musicHome", {
-            loop: true
-        });
+        
         
 
 
