@@ -65,7 +65,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 5;
+    this.initTime = 10;
 
     // intervals
     this.bombInterval = undefined;
@@ -75,7 +75,6 @@ class GameScene extends Phaser.Scene {
     this.bestScore = undefined; //ICII
     this.foundBestScore = false; //Faudra peut-etre mettre ça à CHAQUE chargement de jeu, pour avoir le bestScore à jour !
     this.updatedBestScore = false; //ICIII
-    this.playerDistanceOnGame = -1;
   }
 
   init(data) {
@@ -251,8 +250,11 @@ class GameScene extends Phaser.Scene {
   }
 
   async update() {
+
+    // get player best score
     if (!this.foundBestScore) {
       this.bestScore = await this.getUserBestScore(); //ICIIIII
+      console.log("TEST");
       this.foundBestScore = true;
     }
 
@@ -263,10 +265,9 @@ class GameScene extends Phaser.Scene {
       this.platformVelocity(0);
       this.gameSound.stop();
 
-      if (!this.updatedBestScore && this.playerDistanceOnGame != -1) {
+      if (!this.updatedBestScore) {
         //await Méthode ASYNCHRONE DE PUT !
-        let bestScore = await this.getUserBestScore();
-        if (this.playerDistanceOnGame > bestScore) {
+        if (this.player.data.get("distance") > this.bestScore) {
           //ICI IL BEUG! JPENSE C REGlé MTN
           await this.putUserBestScore(this.player.data.get("distance"));
         }
@@ -607,7 +608,6 @@ class GameScene extends Phaser.Scene {
 
     gameOverRectangle.setDataEnabled();
     gameOverRectangle.data.set("distance", this.player.data.get("distance"));
-    this.playerDistanceOnGame = gameOverRectangle.data.get("distance");
 
     if (this.bestScore < gameOverRectangle.data.get("distance")) {
       textGameOver.setText([
