@@ -56,6 +56,9 @@ class GameScene extends Phaser.Scene {
     this.timeInterval = undefined;
 
     this.bestScore = undefined //ICII
+    this.foundBestScore = false; //Faudra peut-etre mettre ça à CHAQUE chargement de jeu, pour avoir le bestScore à jour !
+    this.updatedBestScore = false; //ICIII
+    this.playerDistanceOnGame = -1;
   }
 
   init(data) {
@@ -98,7 +101,6 @@ class GameScene extends Phaser.Scene {
 
   create() {
 
-    this.bestScore = this.getUserBestScore();
     //Empèche de générer deux platformes en même temps
     this.ensembleCoPlatform.add(0);
 
@@ -201,10 +203,26 @@ class GameScene extends Phaser.Scene {
     this.timeInterval = setInterval(() => this.timeLabel(), 1000);
   }
 
-  update() {
+  async update() {
+
+    if(!this.foundBestScore){
+      this.bestScore = await this.getUserBestScore(); //ICIIIII
+      this.foundBestScore = true;
+    }
+
     if (this.gameOver) {
       this.clearIntervals();
       this.launchGameOver();
+
+      if(!this.updatedBestScore && this.playerDistanceOnGame != -1){
+        //await Méthode ASYNCHRONE DE PUT !
+        let bestScore = await this.getUserBestScore();
+        if(this.playerDistanceOnGame > bestScore){ //ICI IL BEUG! JPENSE C REGlé MTN
+          await this.putUserBestScore(this.player.data.get("distance"));
+        }
+        this.updatedBestScore = true;
+      }
+
       return;
     }
 
@@ -470,7 +488,7 @@ class GameScene extends Phaser.Scene {
     }, 4000);
   }
 
-  launchGameOver() {
+  async launchGameOver() {
     // game over rectangle
     const gameOverRectangle = this.add.image(400, 300, "gameOverRectangle");
     gameOverRectangle.setScrollFactor(0);
@@ -485,11 +503,20 @@ class GameScene extends Phaser.Scene {
 
     gameOverRectangle.setDataEnabled();
     gameOverRectangle.data.set("distance", this.player.data.get("distance"));
+    this.playerDistanceOnGame = gameOverRectangle.data.get("distance");
 
-    textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")]);
+    if(this.bestScore < gameOverRectangle.data.get("distance")){
+      textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")
+                          + "\nBest Distance: " + gameOverRectangle.data.get("distance")]); //Si distance est plus grande que son bestscore d'avant !
+    } else {
+      textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")
+                          + "\nBest Distance: " + this.bestScore]);
+    }
+
+    
 
     //gameOverRectangle.data.set("record", this.bestScore);
-    textGameOver.setText(["Record: " + "NOT WORKING"]);
+    // textGameOver.setText(["Record: " + "NOT WORKING"]);
 
     let home = this.add.image(200, 425, "homeButton");
     home.setScrollFactor(0);
@@ -514,10 +541,10 @@ class GameScene extends Phaser.Scene {
 
   async getUserBestScore(){
     const user = getSessionObject("user");
-    console.log("ici " , user);
+    //console.log("ici " , user);
 
     try {
-      const response = await fetch("/api/scores/" + user); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/scores/" + user.username); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
         throw new Error("fetch error : " + response.status + " : " + response.statusText);
@@ -530,6 +557,39 @@ class GameScene extends Phaser.Scene {
     } catch (error) {
       console.error("PutScore::error: ", error);
     }
+  }
+
+  async putUserBestScore(bestScore){
+    const user = getSessionObject("user");
+
+    try {
+      const options = {
+        method: "PUT", // *GET, POST, PUT, DELETE, etc.
+        body: JSON.stringify({
+          name: user.username,
+          distance: bestScore, //pt etre pas mettre le .value
+        }), // body data type must match "Content-Type" header
+        headers: {
+          "Content-Type": "application/json"
+          //Authorization: user.token,
+        },
+      };
+
+      const response = await fetch("/api/scores/" + user.username, options); // fetch return a promise => we wait for the response
+
+      if (!response.ok) {
+        throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
+      
+      console.log("Score updated : ", bestScore);
+
+    } catch (error) {
+      console.error("PutBestScore::error: ", error);
+    }
+
+
   }
   
 }
