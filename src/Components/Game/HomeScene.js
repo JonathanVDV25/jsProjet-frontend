@@ -68,9 +68,7 @@ class HomeScene extends Phaser.Scene {
 
     }
 
-    update() {
-        console.log(this.perso);
-    }
+    update() {}
 
 }
 

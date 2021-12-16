@@ -1,8 +1,12 @@
 import Phaser from "phaser";
+import { Redirect } from "../Router/Router";
+import { getSessionObject } from "../../utils/session";
+
 const GROUND_KEY = "ground";
 const DUDE_KEY = "dude";
 const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
+
 import BombSpawner from "./BombSpawner.js";
 import PlatformSpawner from "./PlatformSpawner.js";
 import PlatformBoostSpawner from "./PlatformBoostSpawner.js";
@@ -28,7 +32,6 @@ import timeOutTitleAsset from "../../assets/titreTimeOut.png";
 import homeButtonAsset from "../../assets/homeButton.png";
 import replayButtonAsset from "../../assets/replayButton.png";
 import fakePlateformAsset from "../../assets/fakePlatform.png";
-import { getSessionObject } from "../../utils/session";
 import bordAsset from "../../assets/bord.png";
 
 class GameScene extends Phaser.Scene {
@@ -57,7 +60,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 60;
+    this.initTime = 5;
 
     // intervals
     this.bombInterval = undefined;
@@ -257,6 +260,7 @@ class GameScene extends Phaser.Scene {
         let bestScore = await this.getUserBestScore();
         if(this.playerDistanceOnGame > bestScore){ //ICI IL BEUG! JPENSE C REGlé MTN
           await this.putUserBestScore(this.player.data.get("distance"));
+          
         }
         this.updatedBestScore = true;
       }
@@ -595,7 +599,9 @@ class GameScene extends Phaser.Scene {
 
     if(this.bestScore < gameOverRectangle.data.get("distance")){
       textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")
-                          + "\nBest Distance: " + gameOverRectangle.data.get("distance")]); //Si distance est plus grande que son bestscore d'avant !
+                          + "\nBest Distance: " + gameOverRectangle.data.get("distance")
+                          + "\n\nYou have beaten your \nbest score !!!"]); //Si distance est plus grande que son bestscore d'avant !
+      
     } else {
       textGameOver.setText(["Distance: " + gameOverRectangle.data.get("distance")
                           + "\nBest Distance: " + this.bestScore]);
@@ -606,17 +612,17 @@ class GameScene extends Phaser.Scene {
     //gameOverRectangle.data.set("record", this.bestScore);
     // textGameOver.setText(["Record: " + "NOT WORKING"]);
 
-    let home = this.add.image(200, 425, "homeButton");
+    let home = this.add.image(160, 450, "homeButton");
     home.setScrollFactor(0);
     home.setInteractive();
     home.on("pointerup", ()=> {
       this.gameOver = false;
       this.ensembleCoPlatform.clear();
       this.speed = 0;
-      this.scene.start('HomeScene', { perso: this.perso})
+      Redirect("/");
     });
 
-    let replay = this.add.image(500, 423, "replayButton");
+    let replay = this.add.image(600, 450, "replayButton");
     replay.setScrollFactor(0);
     replay.setInteractive();
     replay.on("pointerup", ()=> {
