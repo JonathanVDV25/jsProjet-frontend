@@ -3,7 +3,6 @@ import { Redirect } from "../Router/Router";
 import { getSessionObject } from "../../utils/session";
 
 const GROUND_KEY = "ground";
-const DUDE_KEY = "dude";
 const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
 
@@ -274,8 +273,6 @@ class GameScene extends Phaser.Scene {
       this.tilePos(0);
       this.platformVelocity(0);
       this.gameSound.stop();
-      this.stopwatchesGroup.clear(true, true);
-      this.bombsGroup.clear(true, true);
 
       if (!this.updatedBestScore) {
         //await Méthode ASYNCHRONE DE PUT !
@@ -540,6 +537,7 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
     }, 4000);
   }
+
   verifPlatform() {
     if (this.speed == 1) {
       this.tilePos(-20);
