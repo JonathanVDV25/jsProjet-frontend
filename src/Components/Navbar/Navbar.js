@@ -21,25 +21,28 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-1">
         <li class="nav-item">
-          <a class="nav-link text-light" aria-current="page" href="#" data-uri="/">Home</a>
+          <a class="nav-link text-light" aria-current="page" href="#" data-uri="/">Acceuil</a>
         </li>`;
         if(!user){
           console.log("here1");
           navbar += 
           `<li class="nav-item">
-            <a class="nav-link" href="#" data-uri="/login">Login</a>
+            <a class="nav-link text-light" href="#" data-uri="/login">Login</a>
            </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-uri="/register">Register</a>
+            <a class="nav-link text-light" href="#" data-uri="/register">Register</a>
           </li>`;
         } else {
           console.log("here2");
           navbar +=
           `<li class="nav-item">
-              <a class="nav-link" href="#" data-uri="/game">Game</a>
+              <a class="nav-link text-light" href="#" data-uri="/game">Jeu</a>
            </li>
            <li class="nav-item">
-              <a class="nav-link" href="#" data-uri="/logout">Logout</a>
+              <a class="nav-link text-light" aria-current="page" href="#" data-uri="/score">Score</a>
+            </li>
+           <li class="nav-item">
+              <a class="nav-link text-light" href="#" data-uri="/logout">Logout</a>
            </li>`;
         }
         navbar+=
