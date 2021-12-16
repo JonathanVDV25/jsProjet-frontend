@@ -570,8 +570,8 @@ class GameScene extends Phaser.Scene {
           distance: bestScore, //pt etre pas mettre le .value
         }), // body data type must match "Content-Type" header
         headers: {
-          "Content-Type": "application/json"
-          //Authorization: user.token,
+          "Content-Type": "application/json",
+          Authorization: user.token,
         },
       };
 
