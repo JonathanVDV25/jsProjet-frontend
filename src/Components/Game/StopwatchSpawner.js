@@ -16,13 +16,12 @@ export default class StopwatchSpawner {
   }
 
   spawn() {
-    const y = Phaser.Math.Between(200, 500);
 
-    const stopwatch = this.group.create(1000, y, this.key);
-    stopwatch.setBounce(1.1);
-    stopwatch.setCollideWorldBounds(true);
-    
-
+    const stopwatch = this.group.create(1500, 510, this.key);
+    stopwatch.setBounce(0.5);
+    stopwatch.setCollideWorldBounds(false);
+    stopwatch.body.setAllowGravity(false);
+    stopwatch.setImmovable(true);
     return stopwatch;
   }
 }

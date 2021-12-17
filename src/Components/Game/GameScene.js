@@ -66,7 +66,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 50;
+    this.initTime = 60;
 
     // intervals
     this.bombInterval = undefined;
@@ -251,7 +251,7 @@ class GameScene extends Phaser.Scene {
     );
     this.stopwatchInterval = setInterval(
       () => this.stopwatchSpawner.spawn(),
-      10000
+      Phaser.Math.Between(85000, 12000)
     );
 
     // time
@@ -259,7 +259,12 @@ class GameScene extends Phaser.Scene {
   }
 
   async update() {
-
+    if(this.player.data.get("time") < 6) {
+      this.text.setColor("#ff0000");
+    }
+    else if(this.player.data.get("time") < 11) {
+      this.text.setColor("#ff7f00");
+    }
     // get player best score
     if (!this.foundBestScore) {
       this.bestScore = await this.getUserBestScore(); //ICIIIII
@@ -439,6 +444,7 @@ class GameScene extends Phaser.Scene {
     this.fakePlatformSpawner.group.setVelocityX(value);
     this.verifPlatformSpawner.group.setVelocityX(value);
     this.verifPlatformDroitSpawner.group.setVelocityX(value);
+    this.stopwatchSpawner.group.setVelocityX(value);
   }
 
   tilePos(value) {
