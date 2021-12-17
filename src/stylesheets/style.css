@@ -9,7 +9,7 @@ body {
     background: url(../assets/fond_acceuil2.jpg);
 }
 .log {
-    height: 1000px;
+    height: 100%;
 }
 
 .simple {
@@ -17,14 +17,6 @@ body {
     margin: 0, 0, 0, 0;
     height: 3300px;
     margin-top: 0;
-}
-
-#navbar {
-    background-image: url("../img/platform.png");
-    background-size: 750px;
-}
-#navbar li {
-    margin-left: 20%;
 }
 
 #gameDiv {
@@ -48,10 +40,8 @@ form {
     width: 45%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20%;
-    
-    
-    
+    margin-top: 25%;
+    margin-bottom: 40%;
 }
 input{
     border-radius: 10px;
@@ -70,14 +60,41 @@ table {
     border-collapse: collapse;
     border-radius: 1em;
     overflow: hidden;
+    box-shadow: 6px 6px 6px black;
+}
+
+footer, #navbar {
+    background-image: url("../img/platform.png");
+    background-size: 730px;
+    height: 60px;
+    padding-top: 15px;
+}
+
+.container {
+    padding-bottom: 20%;
 }
 
 footer {
     text-align: center;
-    padding-top: 15px;
-    background-image: url("../img/platform.png");
-    background-size: 750px;
-    height: 50px;
+    flex-shrink: 0;
+    width: 100%;
+    bottom: 0px;
+    margin-bottom: 0px;
+}
+
+li {
+    display: inline;
+    margin-right: 3%;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-size: large;
+}
+
+a:hover {
+    color: grey;
 }
 
 #textFooter {

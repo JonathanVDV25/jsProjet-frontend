@@ -10,32 +10,32 @@
   let navbar;
   let user = getSessionObject("user");
   navbar = `  
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar">
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-1">
-        <li class="nav-item">
-          <a class="nav-link text-light" aria-current="page" href="#" data-uri="/">Home</a>
+  <nav id="navbar">
+    <div id="navbarSupportedContent">
+      <ul>
+        <li>
+          <a aria-current="page" href="#" data-uri="/">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" aria-current="page" href="#" data-uri="/score">Scores</a>
+        <li>
+          <a aria-current="page" href="#" data-uri="/score">Scores</a>
         </li>`;
         if(!user){
           console.log("here1");
           navbar += 
-          `<li class="nav-item">
-            <a class="nav-link text-light" href="#" data-uri="/login">Login</a>
+          `<li>
+            <a href="#" data-uri="/login">Login</a>
            </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="#" data-uri="/register">Register</a>
+          <li>
+            <a href="#" data-uri="/register">Register</a>
           </li>`;
         } else {
           console.log("here2");
           navbar +=
-          `<li class="nav-item">
-              <a class="nav-link text-light" href="#" data-uri="/game">Game</a>
+          `<li>
+              <a href="#" data-uri="/game">Game</a>
            </li>
-           <li class="nav-item">
-              <a class="nav-link text-light" href="#" data-uri="/logout">Logout</a>
+           <li>
+              <a href="#" data-uri="/logout">Logout</a>
            </li>`;
         }
         navbar+=
