@@ -66,11 +66,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-<<<<<<< HEAD
     this.initTime = 50;
-=======
-    this.initTime = 60;
->>>>>>> c639b46834e8130afd1ec136996ebf4e69e88609
 
     // intervals
     this.bombInterval = undefined;
