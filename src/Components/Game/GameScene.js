@@ -66,7 +66,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 12;
+    this.initTime = 60;
 
     // intervals
     this.bombInterval = undefined;
@@ -428,7 +428,7 @@ class GameScene extends Phaser.Scene {
     }
 
     if(this.player.data.get("distance") == -50) {
-      this.add.image(400, 300, "secret");
+      this.add.image(400, 300, "secret").setScrollFactor(0);
     }
   }
 
@@ -484,11 +484,15 @@ class GameScene extends Phaser.Scene {
   }
 
   hitBomb(player, bomb) {
-    if (this.player.data.get("time") <= 10) {
+    if (this.player.data.get("time") <= 5) {
       this.player.data.set("time", 0);
     } else {
-      this.player.data.set("time", this.player.data.get("time") - 10);
+      this.player.data.set("time", this.player.data.get("time") - 5);
     }
+    player.setTint(0xff0000);
+    setTimeout(() => {
+      player.setTint(0xffffff);
+    }, 250);
     this.explosionSound.play();
     bomb.disableBody(true, true);
     this.timeDistanceRender();
