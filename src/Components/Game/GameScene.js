@@ -66,7 +66,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 12;
+    this.initTime = 50;
 
     // intervals
     this.bombInterval = undefined;
@@ -428,7 +428,7 @@ class GameScene extends Phaser.Scene {
     }
 
     if(this.player.data.get("distance") == -50) {
-      this.add.image(400, 300, "secret");
+      this.add.image(400, 300, "secret").setScrollFactor(0);
     }
   }
 
@@ -603,7 +603,6 @@ class GameScene extends Phaser.Scene {
     home.on("pointerup", () => {
       this.gameOver = false;
       this.ensembleCoPlatform.clear();
-      this.speed = 0;
       Redirect("/");
     });
 
@@ -613,8 +612,7 @@ class GameScene extends Phaser.Scene {
     replay.on("pointerup", () => {
       this.gameOver = false;
       this.ensembleCoPlatform.clear();
-      this.speed = 0;
-      this.scene.start("game-scene", { perso: this.perso });
+      Redirect("/game");
     });
   }
 

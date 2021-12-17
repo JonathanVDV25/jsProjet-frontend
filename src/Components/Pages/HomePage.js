@@ -34,46 +34,56 @@ function HomePage() {
   <iframe id="video" width="750" height="422" src="https://www.youtube.com/embed/ER0XfOSfTao" title="YouTube video player" frameborder="0" 
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-  <h2>Les personnages :</h2><br>
-  <p>Dans ChronoRun, vous pourrez choisir entre 3 personnages dans le menu d'options du jeu. Ces trois personnages habitent tous dans la ville de Nove. Les liens entre eux sont très forts, car ils se connaissent depuis la naissance. Ils ont grandi ensemble et une chose n'a jamais changé en eux, c'est leur curiosité et leur courage d'acier.
-  <br>Si vous désirez plus en connaître à propos de ces personnages, passer votre souris sur les cartes ci-dessous.</p>
+  <h2>The characters :</h2>
+  
+  <br>
+
+  <p>
+    In ChronoRun, you can choose between three characters in the game's options menu. These three characters all live in the city of Nove. 
+    The bond between them is very strong, as they have known each other since birth. They have grown up together and one thing has never changed in them: their curiosity and 
+    their courage of steel.<br>
+    If you want to know more about these characters, move your mouse over the cards below.
+  </p>
   <div class="card">
       <div class="circle"></div>
       <div class="content">
       <h2 class="title_card"><br>Andrew</h2>
-      <p class="text_card">Aussi connu sous le nom de CyBurger pour sa forte attirance envers les fastfoods de qualité douteuse. Andrew apparaît comme le leader de ce groupe.
-      Toujours motivé pour de nouvelles aventures. C'est lui qui a donné l'envie au reste du groupe de partir à l'exploration dans la zone industrielle de Nove.</p>
+      <p class="text_card">Also known as CyBurger for its strong attraction to fast food of questionable quality. Andrew appears to be the leader of this group.
+      Always motivated for new adventures. He is the one who inspired the rest of the group to explore the industrial area of Nove.</p>
       </div>
       <img src='${Perso1}'>
   </div>
   <div class="card">
       <div class="content">
       <h2 class="title_card"><br>Lewis</h2>
-      <p class="text_card">C'est lui le blagueur de la bande. Lewis n'en rate jamais une quand il s'agit de donner le sourire à ses camarades. Il veille à la bonne ambiance dans le groupe.
-      <br>C'est aussi un grand fan de moto. Parfois, il aimerait pouvoir voyager dans le temps pour rouler sur la route 66 vers Chicago.</p>
+      <p class="text_card">He's the joker of the bunch. Lewis never misses a beat when it comes to putting a smile on his friends' faces. He keeps the group happy.<br>
+      He's also a big motorbike fan. Sometimes he wishes he could go back in time and ride Route 66 to Chicago.</p>
       </div>
       <img src='${Perso2}'>
   </div>
   <div class="card">
       <div class="content">
       <h2 class="title_card"><br>Riley</h2>
-      <p class="text_card">Elle est la plus jeune du groupe avec ses 21 ans, mais elle ne se laisse pas faire pour autant. S'il le faut, elle n'hésite pas à donner son opinion.<br>
-      Grande fan de jeux vidéo et de séries. Elle attend avec impatience la 2953 ème saison de Plus Belle la Vie.</p>
+      <p class="text_card">She is the youngest of the group at 21 years old, but she doesn't let that stop her. If necessary, she does not hesitate to give her opinion.<br>
+      A big fan of video games and series. She is looking forward to the 2953rd season of Plus Belle la Vie.</p>
       </div>
       <img src='${Perso3}'>
   </div>
-  <h2>A propos de nous :</h2><br>
-  <p>Ce site a été réalisé par Loïc Hernaut, Nicolas Dedoyard, Jonathan Van de Vyver et Laurant Vandermeersch. Nous sommes 4 étudiants à l'Institut Paul Lambin en 2ème année d'informatique de gestion. Ce site contenant un jeu a été réalisé dans le cadre d'un projet du cours de développement Web. Nous avions 4 semaines pour réaliser ce projet de A à Z.
-  Nous espérons que vous allez apprécier notre travail. Voici nos adresses respectives si vous désirez nous contacter<br><br>
-  loic.hernaut@student.vinci.be<br>
-  <br>
-  nicolas.dedoyard@student.vinci.be<br>
-  <br>
-  jonathan.vandevyver@student.vinci.be<br>
-  <br>
-  laurant.vandermeersch@student.vinci.be<br>
-  <br>
-  <br>- La Team ChronoRun</p>
+  <h2>About us :</h2><br>
+  <p>
+    This website was created by Loïc Hernaut, Nicolas Dedoyard, Jonathan Van de Vyver and Laurent Vandermeersch. We are 4 students at the Institut Paul Lambin in our 2nd year 
+    in computer science management. This website containing a game was created as part of a project for the web development course. We had 4 weeks to realize this project from A to Z.
+    We hope you will enjoy our work. Here are our respective email addresses if you want to contact us<br><br>
+    loic.hernaut@student.vinci.be<br>
+    <br>
+    nicolas.dedoyard@student.vinci.be<br>
+    <br>
+    jonathan.vandevyver@student.vinci.be<br>
+    <br>
+    laurant.vandermeersch@student.vinci.be<br>
+    <br>
+    <br>- The ChronoRun team !!!
+  </p>
   `;
 
   pageDiv.innerHTML = acceuil;
