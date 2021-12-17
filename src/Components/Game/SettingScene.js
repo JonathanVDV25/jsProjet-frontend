@@ -3,6 +3,9 @@ import titleOptionsAsset from "../../assets/titre_options.png";
 import perso1Asset from "../../assets/perso_1_modif.png";
 import perso2Asset from "../../assets/perso_2_modif.png";
 import perso3Asset from "../../assets/perso_3_modif.png";
+import namePerso1Asset from "../../assets/name_perso1.png";
+import namePerso2Asset from "../../assets/name_perso2.png";
+import namePerso3Asset from "../../assets/name_perso3.png";
 
 class SettingScene extends Phaser.Scene {
 
@@ -16,6 +19,9 @@ class SettingScene extends Phaser.Scene {
         this.load.image("perso1", perso1Asset);
         this.load.image("perso2", perso2Asset);
         this.load.image("perso3", perso3Asset);
+        this.load.image("name_perso1", namePerso1Asset);
+        this.load.image("name_perso2", namePerso2Asset);
+        this.load.image("name_perso3", namePerso3Asset);
     }
 
     create() {
@@ -24,6 +30,9 @@ class SettingScene extends Phaser.Scene {
         let perso1 = this.add.image(this.game.renderer.width / 4, this.game.renderer.height / 2 + 50, "perso1");
         let perso2 = this.add.image(this.game.renderer.width / 4 * 2, this.game.renderer.height / 2 + 50, "perso2");
         let perso3 = this.add.image(this.game.renderer.width / 4 * 3, this.game.renderer.height / 2 + 50, "perso3");
+        this.add.image(this.game.renderer.width / 4 + 10, this.game.renderer.height / 2 + 225, "name_perso1");
+        this.add.image(this.game.renderer.width / 4 * 2 + 10, this.game.renderer.height / 2 + 225, "name_perso2");
+        this.add.image(this.game.renderer.width / 4 * 3 + 10, this.game.renderer.height / 2 + 225, "name_perso3");
         
         perso1.setInteractive();
         perso1.on("pointerup", ()=> {
