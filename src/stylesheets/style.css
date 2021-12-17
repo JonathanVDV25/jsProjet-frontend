@@ -19,6 +19,17 @@ body {
     margin-top: 0;
 }
 
+#title_score {
+    text-align: center;
+}
+
+.game {
+    background-color: #363940;
+    margin: 0, 0, 0, 0;
+    height: 1000px;
+    margin-top: 0;
+}
+
 #gameDiv {
     padding-top: 7.5%;
 }
@@ -84,7 +95,7 @@ footer {
 
 li {
     display: inline;
-    margin-right: 3%;
+    margin-right: 3.5%;
 }
 
 a {

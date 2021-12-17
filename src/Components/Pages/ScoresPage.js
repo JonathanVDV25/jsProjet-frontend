@@ -9,7 +9,7 @@ async function ScoresPage() {
   document.querySelector("main").className = 'log';
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = `<div> <img class="logo" src='${LogoHomePage}' alt='imageLogo'> </div>`;
-  pageDiv.innerHTML += `<div><h1 id='test'>Bienvenue sur le scoreboard de ChronoRun</h1> </div>`;
+  pageDiv.innerHTML += `<div><h1 id='title_score'>Welcome to ChronoRuns scoreboard</h1> </div>`;
   pageDiv.innerHTML += "<div id='scoreboard'> </div>";
 
   try {
