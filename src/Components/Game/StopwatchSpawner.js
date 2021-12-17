@@ -16,8 +16,18 @@ export default class StopwatchSpawner {
   }
 
   spawn() {
-
+    console.log("test");
     const stopwatch = this.group.create(1500, 510, this.key);
+    stopwatch.setBounce(0.5);
+    stopwatch.setCollideWorldBounds(false);
+    stopwatch.body.setAllowGravity(false);
+    stopwatch.setImmovable(true);
+    return stopwatch;
+  }
+
+  spawnOnPlatform(y) {
+
+    const stopwatch = this.group.create(1500, y-45, this.key);
     stopwatch.setBounce(0.5);
     stopwatch.setCollideWorldBounds(false);
     stopwatch.body.setAllowGravity(false);

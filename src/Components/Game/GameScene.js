@@ -251,7 +251,7 @@ class GameScene extends Phaser.Scene {
     );
     this.stopwatchInterval = setInterval(
       () => this.stopwatchSpawner.spawn(),
-      Phaser.Math.Between(85000, 12000)
+      Phaser.Math.Between(8000, 12500)
     );
 
     // time
@@ -264,6 +264,9 @@ class GameScene extends Phaser.Scene {
     }
     else if(this.player.data.get("time") < 11) {
       this.text.setColor("#ff7f00");
+    }
+    else {
+      this.text.setColor("#000000");
     }
     // get player best score
     if (!this.foundBestScore) {
@@ -398,6 +401,11 @@ class GameScene extends Phaser.Scene {
             var newPlatform = this.platformSpawner.spawn();
             this.verifPlatformSpawner.spawn(newPlatform.y, 1);
             this.verifPlatformDroitSpawner.spawn(newPlatform.y, 1);
+            if(random == 1) {
+              if (Phaser.Math.Between(1, 4) == 1) {
+                this.stopwatchSpawner.spawnOnPlatform(newPlatform.y);
+              }
+            }
           } else if (random == 4) {
             var newPlatform = this.platformSlowSpawner.spawn();
             this.fakePlatformSpawner.spawn(newPlatform.y);
