@@ -20,7 +20,6 @@
           <a aria-current="page" href="#" data-uri="/score">Scores</a>
         </li>`;
         if(!user){
-          console.log("here1");
           navbar += 
           `<li>
             <a href="#" data-uri="/login">Login</a>
@@ -29,7 +28,6 @@
             <a href="#" data-uri="/register">Register</a>
           </li>`;
         } else {
-          console.log("here2");
           navbar +=
           `<li>
               <a href="#" data-uri="/game">Game</a>
