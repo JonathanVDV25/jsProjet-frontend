@@ -3,7 +3,6 @@ import { Redirect } from "../Router/Router";
 import { getSessionObject } from "../../utils/session";
 
 const GROUND_KEY = "ground";
-const DUDE_KEY = "dude";
 const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
 
@@ -35,6 +34,7 @@ import replayButtonAsset from "../../assets/replayButton.png";
 import fakePlateformAsset from "../../assets/fakePlatform.png";
 import bordAsset from "../../assets/bord.png";
 import secretAsset from "../../assets/shrek_easter_egg.jpg";
+import Player from "./Player";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -66,7 +66,7 @@ class GameScene extends Phaser.Scene {
     // text label
     this.text = undefined;
     this.initDistance = 0;
-    this.initTime = 5;
+    this.initTime = 12;
 
     // intervals
     this.bombInterval = undefined;
@@ -76,7 +76,6 @@ class GameScene extends Phaser.Scene {
     this.bestScore = undefined; //ICII
     this.foundBestScore = false; //Faudra peut-etre mettre ça à CHAQUE chargement de jeu, pour avoir le bestScore à jour !
     this.updatedBestScore = false; //ICIII
-    this.playerDistanceOnGame = -1;
   }
 
   init(data) {
@@ -152,7 +151,7 @@ class GameScene extends Phaser.Scene {
     this.gameSound.play();
 
     // joueur
-    this.player = this.createPlayer();
+    this.player = new Player(this, this.perso);
     this.player.setPushable(true);
 
     // spawners
@@ -205,7 +204,13 @@ class GameScene extends Phaser.Scene {
     this.physics.add.collider(stopwatchesGroup, fakeGround);
     this.physics.add.collider(bombsGroup, platformGroup);
 
-    this.physics.add.overlap(this.player, bombsGroup, this.hitBomb, null, this);
+    this.physics.add.overlap(
+      this.player, 
+      bombsGroup, 
+      this.hitBomb, 
+      null, 
+      this
+    );
 
     this.physics.add.overlap(
       this.player,
@@ -254,8 +259,11 @@ class GameScene extends Phaser.Scene {
   }
 
   async update() {
+
+    // get player best score
     if (!this.foundBestScore) {
       this.bestScore = await this.getUserBestScore(); //ICIIIII
+      console.log("TEST");
       this.foundBestScore = true;
     }
 
@@ -266,10 +274,9 @@ class GameScene extends Phaser.Scene {
       this.platformVelocity(0);
       this.gameSound.stop();
 
-      if (!this.updatedBestScore && this.playerDistanceOnGame != -1) {
+      if (!this.updatedBestScore) {
         //await Méthode ASYNCHRONE DE PUT !
-        let bestScore = await this.getUserBestScore();
-        if (this.playerDistanceOnGame > bestScore) {
+        if (this.player.data.get("distance") > this.bestScore) {
           //ICI IL BEUG! JPENSE C REGlé MTN
           await this.putUserBestScore(this.player.data.get("distance"));
         }
@@ -476,48 +483,6 @@ class GameScene extends Phaser.Scene {
     return platforms;
   }
 
-  createPlayer() {
-    let personnage;
-    if (this.perso == 1) {
-      personnage = "personnage1";
-    } else if (this.perso == 2) {
-      personnage = "personnage2";
-    } else {
-      personnage = "personnage3";
-    }
-    const player = this.physics.add.sprite(100, 400, personnage); // player spawning position
-    player.setBounce(0);
-    player.setCollideWorldBounds(true);
-    /*The 'left' animation uses frames 0, 1, 2 and 3 and runs at 10 frames per second. 
-    The 'repeat -1' value tells the animation to loop.
-    */
-
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers(personnage, { start: 0, end: 5 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: personnage, frame: 6 }],
-      frameRate: 1,
-    });
-
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers(personnage, {
-        start: 7,
-        end: 12,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    return player;
-  }
-
   hitBomb(player, bomb) {
     if (this.player.data.get("time") <= 10) {
       this.player.data.set("time", 0);
@@ -572,6 +537,7 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
     }, 4000);
   }
+
   verifPlatform() {
     if (this.speed == 1) {
       this.tilePos(-20);
@@ -610,7 +576,6 @@ class GameScene extends Phaser.Scene {
 
     gameOverRectangle.setDataEnabled();
     gameOverRectangle.data.set("distance", this.player.data.get("distance"));
-    this.playerDistanceOnGame = gameOverRectangle.data.get("distance");
 
     if (this.bestScore < gameOverRectangle.data.get("distance")) {
       textGameOver.setText([
