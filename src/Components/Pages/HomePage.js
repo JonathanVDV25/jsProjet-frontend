@@ -1,131 +1,60 @@
-/**
- * Render the HomePage
- */
-import { Redirect } from "../Router/Router";
-import Navbar from "../Navbar/Navbar";
-import { getSessionObject } from "../../utils/session";
 import LogoHomePage from "../../img/chrono2.png";
 
-async function HomePage() {
-  // reset #page div
-  document.querySelector("main").className = 'log';
+function HomePage() {
+  document.querySelector("main").className = 'simple';
   const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = `<div> <img class="logo" src='${LogoHomePage}' alt='imageLogo'> </div>`;
-  pageDiv.innerHTML += `<div><h1 id='test'>Bienvenue sur le scoreboard de ChronoRun</h1> </div>`;
-  pageDiv.innerHTML += "<div id='scoreboard'> </div>";
+  let acceuil;
+  acceuil =
+  `<img class="logo" src='${LogoHomePage}' alt='imageLogo'>
 
-  try {
-    // hide data to inform if the leaderboard is already printed
-    const response = await fetch("/api/scores");
-    console.log("response:", response);
+  <h1 class="titre">[ ChronoRun ]</h1><br>
 
-    if (!response.ok) {
-      // status code was not 200, error status code
-      throw new Error(
-        "fetch error : " + response.status + " : " + response.statusText
-      );
-    }
-    const scores = await response.json(); // json() returns a promise => we wait for the data
-    scores.sort(function (a, b) {
-      return Number(b.distance) - Number(a.distance);
-    });
+  <p>
+    ChronoRun is a platform game set in a CyberPunk universe. We are in 2612 and technology has made enormous progress. But these new technologies, 
+    although they have become essential in this society, are also generating a lot of pollution. The number of factories continues to increase. 
+    This gives rise to increasingly large industrial zones. Even in the city center, the pollution is felt and the smoke from the factories is omnipresent.
 
-    const higscore = scores.slice(0, 10); //Shows only top 10 scores
-
-    // create a wrapper to provide a responsive table
-    const tableWrapper = document.createElement("div");
-    tableWrapper.className = "container";
-
-    // create an HTMLTableElement dynamically, based on the scores data (Array of Objects)
-    const table = document.createElement("table");
-    table.className = "table table-dark";
-    tableWrapper.appendChild(table);
-    // deal with header
-    const thead = document.createElement("thead");
-    const header = document.createElement("tr");
-    thead.appendChild(header);
-    const header1 = document.createElement("th");
-
-    header1.innerText = "Username";
-    const header2 = document.createElement("th");
-
-    header2.innerText = "Best distance";
-
-    header.appendChild(header1);
-    header.appendChild(header2);
-
-    table.appendChild(thead);
-    // deal with data rows for tbody
-    const tbody = document.createElement("tbody");
-    higscore.forEach((score) => {
-      const line = document.createElement("tr");
-      const nameCell = document.createElement("td");
-      nameCell.innerText = score.name;
-      line.appendChild(nameCell);
-      const scoreCell = document.createElement("td");
-      scoreCell.innerText = score.distance;
-      line.appendChild(scoreCell);
-      // hide info within each row, the pizza id
-      //line.dataset.pizzaId = pizza.id;
-      tbody.appendChild(line);
-    });
-    table.appendChild(tbody);
-    // add the HTMLTableElement to the main, within the #page div
-    tableWrapper.innerHTML += "<br/><br/><br/>";
-    pageDiv.appendChild(tableWrapper);
+    <br><br> 
     
-  } catch (error) {
-    console.error("scoreView::error: ", error);
-  }
+    In this game, you will have the opportunity to play as 3 characters living in the town of Nove. Their common goal is to travel as far as possible 
+    in the industrial area of Nove. Because a rumor goes that there would be inside this immense industrial zone a hangar containing an inestimable wealth. 
+    But be careful, the area is very guarded and to avoid getting caught, they only allow themselves a very limited time to explore the area. 
 
-  const user = getSessionObject("user");
-  if (user) {
-    try {
-      const response = await fetch("/api/scores/" + user.username); // fetch return a promise => we wait for the response
+    <br><br>
+    
+    You will therefore have to be very fast to cover the greatest possible distance. Certain elements on your route may help you save time or conversely 
+    slow you down in your mission.
+  </p>
 
-      if (!response.ok) {
-        throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
-        );
-      }
-      const score = await response.json();
-      console.log(score.distance);
+  <br>
+  
+  <iframe id="video" width="750" height="422" src="https://www.youtube.com/embed/ER0XfOSfTao" title="YouTube video player" frameborder="0" 
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-      // create a wrapper to provide a responsive table
-      const tableWrapper = document.createElement("div");
-      tableWrapper.className = "container";
+  </br></br>
 
-      // create an HTMLTableElement dynamically, based on the scores data (Array of Objects)
-      const table = document.createElement("table");
-      table.className = "table table-dark";
-      tableWrapper.appendChild(table);
-      // deal with header
-      const thead = document.createElement("thead");
-      const header = document.createElement("tr");
-      thead.appendChild(header);
-      const header1 = document.createElement("th");
+  <p>
+    If you have any questions, feel free to contact one of the developers :
 
-      header1.innerText = "Personal best distance";
+    </br></br>
 
-      header.appendChild(header1);
+    - laurent.vandermeersch@student.vinci.be
 
-      table.appendChild(thead);
-      // deal with data rows for tbody
-      const tbody = document.createElement("tbody");
+    </br>
 
-      const line = document.createElement("tr");
-      const nameCell = document.createElement("td");
-      nameCell.innerText = score.distance;
-      line.appendChild(nameCell);
-      tbody.appendChild(line);
+    - jonathan.vandevyver@student.vinci.be
 
-      table.appendChild(tbody);
-      // add the HTMLTableElement to the main, within the #page div
-      pageDiv.appendChild(tableWrapper);
-    } catch (error) {
-      console.log("raté");
-    }
-  }
+    </br>
+
+    - loic.hernaut@student.vinci.be
+
+    </br>
+
+    - nicolas.dedoyard@student.vinci.be
+  </p>
+  `;
+
+  pageDiv.innerHTML = acceuil;
 }
 
 export default HomePage;
