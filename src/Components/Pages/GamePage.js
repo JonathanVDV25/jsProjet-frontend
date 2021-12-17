@@ -10,7 +10,7 @@ var game;
 const GamePage = () => {
   let user = getSessionObject("user");
   if (!user) return Redirect("/login");
-
+  document.querySelector("main").className = 'simple';
   let phaserGame = `
 <div id="gameDiv" class="d-flex justify-content-center my-3">
 </div>`;

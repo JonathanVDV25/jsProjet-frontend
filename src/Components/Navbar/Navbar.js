@@ -22,6 +22,9 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
       <ul class="navbar-nav me-auto mb-2 mb-lg-1">
         <li class="nav-item">
           <a class="nav-link text-light" aria-current="page" href="#" data-uri="/">Acceuil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" aria-current="page" href="#" data-uri="/score">Score</a>
         </li>`;
         if(!user){
           console.log("here1");
@@ -38,9 +41,6 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
           `<li class="nav-item">
               <a class="nav-link text-light" href="#" data-uri="/game">Jeu</a>
            </li>
-           <li class="nav-item">
-              <a class="nav-link text-light" aria-current="page" href="#" data-uri="/score">Score</a>
-            </li>
            <li class="nav-item">
               <a class="nav-link text-light" href="#" data-uri="/logout">Logout</a>
            </li>`;

@@ -8,8 +8,9 @@ import LogoHomePage from "../../img/chrono2.png";
 
 async function HomePage() {
   // reset #page div
+  document.querySelector("main").className = 'log';
   const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = `<div> <img id='logoHomePage' src='${LogoHomePage}' alt='imageLogo'> </div>`;
+  pageDiv.innerHTML = `<div> <img class="logo" src='${LogoHomePage}' alt='imageLogo'> </div>`;
   pageDiv.innerHTML += `<div><h1 id='test'>Bienvenue sur le scoreboard de ChronoRun</h1> </div>`;
   pageDiv.innerHTML += "<div id='scoreboard'> </div>";
 

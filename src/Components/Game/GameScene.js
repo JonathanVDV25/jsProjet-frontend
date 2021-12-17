@@ -118,11 +118,8 @@ class GameScene extends Phaser.Scene {
     this.load.image("timeOutTitle", timeOutTitleAsset);
     this.load.image("homeButton", homeButtonAsset);
     this.load.image("replayButton", replayButtonAsset);
-<<<<<<< HEAD
 
     this.load.image("secret", secretAsset);
-=======
->>>>>>> 36bba2445ed9a3c22648b508da4c0966179844d4
   }
 
   create() {

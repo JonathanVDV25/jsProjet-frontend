@@ -7,6 +7,8 @@ import { setSessionObject } from "../../utils/session";
  */
 function LoginPage() {
   // reset #page div
+  document.querySelector("main").className = 'log';
+
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = "";
   
