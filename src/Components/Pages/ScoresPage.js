@@ -12,6 +12,8 @@ async function ScoresPage() {
   pageDiv.innerHTML += `<div><h1 id='title_score'>Welcome to ChronoRuns scoreboard</h1> </div>`;
   pageDiv.innerHTML += "<div id='scoreboard'> </div>";
 
+  const user = getSessionObject("user");
+
   try {
     // hide data to inform if the leaderboard is already printed
     const response = await fetch("/api/scores");
@@ -54,14 +56,29 @@ async function ScoresPage() {
 
     table.appendChild(thead);
     // deal with data rows for tbody
+
+    console.log(user);
     const tbody = document.createElement("tbody");
+    let you = false;
     higscore.forEach((score) => {
+      if(user && score.name === user.username){
+        you = true;
+      } else {
+        you = false;
+      }
+
       const line = document.createElement("tr");
       const nameCell = document.createElement("td");
-      nameCell.innerText = score.name;
-      line.appendChild(nameCell);
       const scoreCell = document.createElement("td");
-      scoreCell.innerText = score.distance;
+      if(you){
+        nameCell.innerHTML = `<b> ${score.name} <i>(you)</i> </b>`;
+        nameCell.className ="text-warning";
+        scoreCell.innerHTML = `<b> ${score.distance} </b>`;
+      } else {
+        nameCell.innerText = score.name;
+        scoreCell.innerText = score.distance;
+      }
+      line.appendChild(nameCell);
       line.appendChild(scoreCell);
       tbody.appendChild(line);
     });
@@ -74,7 +91,6 @@ async function ScoresPage() {
     console.error("scoreView::error: ", error);
   }
 
-  const user = getSessionObject("user");
   if (user) {
     try {
       const response = await fetch("/api/scores/" + user.username); // fetch return a promise => we wait for the response
