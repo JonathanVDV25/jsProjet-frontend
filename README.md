@@ -29,6 +29,6 @@ npm start
 ## Credits
 This game was made by Dedoyard Nicolas, Van de Vyver Jonathan, Hernaut Loïc and Vandermeersch Laurent for our second year web project at the Institut Paul Lambin
 - nicolas.dedoyard@student.vinci.be
-- vandevyver.jonathan@student.vinci.be
+- jonathan.vandevyver@student.vinci.be
 - hernaut.loic@student.vinci.be
 - vandermeersch.laurent@student.vinci.be
