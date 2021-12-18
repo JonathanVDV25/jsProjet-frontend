@@ -1,5 +1,5 @@
 # Chronorun
-## How to use ?
+## Description
 - Si vous ne l'avez pas fait, vous pouvez cloner le repo associé au boilerplate pour initier votre application : `git clone https://github.com/e-vinci/js-phaser-boilerplate.git` ou `git clone https://github.com/e-vinci/js-phaser-boilerplate.git nom-de-votre-projet` pour créer votre projet nommé `nom-de-votre-projet`.
 - Une fois le clone fait, Git vous a créé un repo local de votre projet ; n'hésitez pas à ajouter une `remote` pour pointer vers votre Web repository.
 - Si vous avez cloné votre projet au sein d'un repo existant, Git ne trackera pas ce nouveau projet ; pour vous assurer que Git traque votre projet, vous devez effacer le répertoire `.git` se trouvant dans votre nouveau projet. N'hésitez pas aussi à effacer `.gitignore` se trouvant dans votre nouveau projet.
