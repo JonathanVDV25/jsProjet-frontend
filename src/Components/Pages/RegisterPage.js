@@ -66,7 +66,7 @@ function RegisterPage() {
 
       if (!response.ok) {
         errorAlert.className = "alert alert-danger";
-        errorAlert.innerText = "Registration failed!";
+        errorAlert.innerText = "Registration failed! Maybe try another username.";
         throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
         );
