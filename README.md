@@ -1,4 +1,4 @@
-# Boilerplate pour vos applications modernes utilisant Webpack, Phaser (Jeux en 2D) et un routeur
+# Chronorun
 ## How to use ?
 - Si vous ne l'avez pas fait, vous pouvez cloner le repo associé au boilerplate pour initier votre application : `git clone https://github.com/e-vinci/js-phaser-boilerplate.git` ou `git clone https://github.com/e-vinci/js-phaser-boilerplate.git nom-de-votre-projet` pour créer votre projet nommé `nom-de-votre-projet`.
 - Une fois le clone fait, Git vous a créé un repo local de votre projet ; n'hésitez pas à ajouter une `remote` pour pointer vers votre Web repository.
