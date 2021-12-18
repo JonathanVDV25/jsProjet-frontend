@@ -4,6 +4,7 @@ import LoginPage from "../Pages/LoginPage";
 import RegisterPage from "../Pages/RegisterPage";
 import Logout from "../Logout/Logout";
 import HomePage from "../Pages/HomePage";
+import { removeSessionObject } from "../../utils/session";
 
 // Configure your routes here
 const routes = {
@@ -62,6 +63,11 @@ const Router = () => {
     const componentToRender = routes[window.location.pathname];
     componentToRender();
   });
+
+  // deconnects when closing window
+  window.onbeforeunload = () => {
+    removeSessionObject("user");
+  }
 };
 
 /**

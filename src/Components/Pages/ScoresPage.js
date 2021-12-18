@@ -6,7 +6,7 @@ import LogoHomePage from "../../img/chrono2.png";
 
 async function ScoresPage() {
   // reset #page div
-  document.querySelector("main").className = 'log';
+  document.querySelector("main").className = 'scores';
   const pageDiv = document.querySelector("#page");
   pageDiv.innerHTML = `<div> <img class="logo" src='${LogoHomePage}' alt='imageLogo'> </div>`;
   pageDiv.innerHTML += `<div><h1 id='title_score'>Welcome to ChronoRuns scoreboard</h1> </div>`;

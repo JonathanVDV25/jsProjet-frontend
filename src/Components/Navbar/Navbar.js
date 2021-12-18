@@ -33,7 +33,7 @@
               <a href="#" data-uri="/game">Game</a>
            </li>
            <li>
-              <a href="#" data-uri="/logout">Logout</a>
+              <a href="#" data-uri="/logout">Logout (${user.username})</a>
            </li>`;
         }
         navbar+=

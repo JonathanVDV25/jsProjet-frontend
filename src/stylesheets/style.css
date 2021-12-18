@@ -10,6 +10,10 @@ body {
 }
 .log {
     height: 100%;
+    margin-bottom: 1%;
+}
+.scores {
+    height: 1000px;
 }
 
 .simple {
@@ -82,7 +86,7 @@ footer, #navbar {
 }
 
 .container {
-    padding-bottom: 20%;
+    padding-bottom: 10%;
 }
 
 footer {
