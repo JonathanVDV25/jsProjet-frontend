@@ -65,8 +65,6 @@ function RegisterPage() {
       const response = await fetch("/api/users/register", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
-        errorAlert.className = "alert alert-danger";
-        errorAlert.innerText = "Registration failed! Maybe try another username.";
         throw new Error(
           "fetch error : " + response.status + " : " + response.statusText
         );
@@ -92,11 +90,10 @@ function RegisterPage() {
           Authorization: user.token,
         },
       };
+
       const baseScore = await fetch("/api/scores", defaultScore);
 
       if (!baseScore.ok) {
-        errorAlert.className = "alert alert-danger";
-        errorAlert.innerText = "Registration failed!";
         throw new Error(
           "fetch error : " + baseScore.status + " : " + baseScore.statusText
         );
@@ -105,6 +102,12 @@ function RegisterPage() {
       // call the HomePage via the Router
       Redirect("/game");
     } catch (error) {
+      errorAlert.className = "alert alert-danger";
+      if(error.message.includes("411")) {
+        errorAlert.innerText = "Password too weak.";
+      } else {
+        errorAlert.innerText = "Registration failed! Maybe try another username.";
+      }
       console.error("RegisterPage::error: ", error);
     }
   }
