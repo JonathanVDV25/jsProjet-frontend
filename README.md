@@ -10,7 +10,8 @@ To play this game, you'll have to register and log in with your account.
 Your best score will be retained in the system and associated to your account. When you beat this score, it will be updated.
 ## Technologies used
 - Javascript with Node.js
-- Phaser 3 for the game (https://phaser.io/)
+- Phaser 3 for the frontend (https://phaser.io/)
+- Webpack and check-password-strength for the backend
 - HTML 5, CSS 3 and Bootstrap 5
 ## Install and run project
 - create a project folder
