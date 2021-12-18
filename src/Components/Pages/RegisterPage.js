@@ -62,6 +62,10 @@ function RegisterPage() {
         },
       };
 
+      if(username.value.includes("(you)")){
+        throw new Error("error : username cannot includes (you) !");
+      }
+
       const response = await fetch("/api/users/register", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
@@ -105,6 +109,8 @@ function RegisterPage() {
       errorAlert.className = "alert alert-danger";
       if(error.message.includes("411")) {
         errorAlert.innerText = "Password too weak.";
+      } else if(error.message.includes("(you)")){
+        errorAlert.innerText = "Username cannot includes (you).";
       } else {
         errorAlert.innerText = "Registration failed! Maybe try another username.";
       }

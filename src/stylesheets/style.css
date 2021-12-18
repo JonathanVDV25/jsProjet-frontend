@@ -218,3 +218,7 @@ h2 {
     width:60%;
     font-weight: bold;
 }
+#yourScore {
+    display: inline;
+    font-family:'Times New Roman', Times, serif;
+}
