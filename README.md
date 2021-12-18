@@ -14,7 +14,21 @@ Your best score will be retained in the system and associated to your account. W
 - HTML 5, CSS 3 and Bootstrap 5
 ## Install and run project
 - create a project folder
-- clone the backend and frontend git repository
+- clone the backend and frontend git repository in this folder
 ```shell
 git clone [repo-name]
 ```
+- install node in both of these repos
+```shell
+npm i
+```
+- and the final step is to start the project in both repos
+```shell
+npm start
+```
+## Credits
+This game was made by Dedoyard Nicolas, Van de Vyver Jonathan, Hernaut Loïc and Vandermeersch Laurent for our second year web project at the Institut Paul Lambin
+- nicolas.dedoyard@student.vinci.be
+- vandevyver.jonathan@student.vinci.be
+- hernaut.loic@student.vinci.be
+- vandermeersch.laurent@student.vinci.be
