@@ -31,8 +31,8 @@ function HomePage() {
 
   <br>
 
-  <iframe id="video" width="750" height="422" src="https://youtu.be/V7am1K90dA0" title="YouTube video player" frameborder="0" 
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/V7am1K90dA0" title="YouTube video player" frameborder="0" allow="accelerometer; 
+  autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
   <h2>The characters :</h2>
   
