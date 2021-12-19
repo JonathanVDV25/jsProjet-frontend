@@ -22,7 +22,7 @@ import platformBoostAsset from "../../assets/plateform_boost.jpg";
 import platformSlowAsset from "../../assets/plateform_slow.jpg";
 import bombAsset from "../../assets/bomb_projectile2.png";
 import stopwatchAsset from "../../assets/chrono_game.png";
-import dudeAsset from "../../assets/cyborg_v5.png";
+import dudeAsset from "../../assets/pers1_final.png";
 import dude2Asset from "../../assets/bike_run_V5.png";
 import dude3Asset from "../../assets/punk_run_V6.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
@@ -101,7 +101,7 @@ class GameScene extends Phaser.Scene {
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
 
     this.load.spritesheet("personnage1", dudeAsset, {
-      frameWidth: 184, // la hit box est surement horrible
+      frameWidth: 135,
       frameHeight: 129,
     });
     this.load.spritesheet("personnage2", dude2Asset, {
@@ -447,7 +447,7 @@ class GameScene extends Phaser.Scene {
 
     // player jumps
     if (this.cursors.up.isDown && this.player.body.touching.down) {
-      this.player.setVelocityY(-650);
+      this.player.setVelocityY(-850);
     }
 
     if(this.player.data.get("distance") == -50) {

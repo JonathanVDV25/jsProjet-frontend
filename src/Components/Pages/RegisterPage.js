@@ -15,10 +15,8 @@ function RegisterPage() {
   errorAlert.innerHTML = "";
   pageDiv.appendChild(errorAlert);
   // create a login form
-
-  // <div class="alert alert-danger" role="alert">
-  //   alert en cas d'échec
-  // </div>
+  // inspiration of a part of the code of Raphael Baroni's login
+  // link :https://github.com/e-vinci/js-demos/spa/spa-essentials/step4/
   const form = document.createElement("form");
   form.className = "p-5";
   form.innerHTML += `<h1> Register </h1>`;
@@ -62,11 +60,15 @@ function RegisterPage() {
         },
       };
 
+      if(username.value.includes("(you)")){
+        throw new Error("error : username cannot includes (you) !");
+      }
+
       const response = await fetch("/api/users/register", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
         throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
+          "fetch error : " + response.status + " : " + response.statusText
         );
       }
       const user = await response.json(); // json() returns a promise => we wait for the data
@@ -105,6 +107,8 @@ function RegisterPage() {
       errorAlert.className = "alert alert-danger";
       if(error.message.includes("411")) {
         errorAlert.innerText = "Password too weak.";
+      } else if(error.message.includes("(you)")){
+        errorAlert.innerText = "Username cannot includes (you).";
       } else {
         errorAlert.innerText = "Registration failed! Maybe try another username.";
       }
