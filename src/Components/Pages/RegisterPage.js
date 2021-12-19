@@ -47,8 +47,15 @@ function RegisterPage() {
     e.preventDefault();
     const username = document.getElementById("username");
     const password = document.getElementById("password");
-    console.log("credentials", username.value);
+    console.log("credentials", username.value);  
+
     try {
+
+      var re = /^[a-z,A-Z]+$/i;
+    if (!re.test(username.value)) {
+      throw new Error("special characters not supported :Error pinapple ");
+    }
+
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         body: JSON.stringify({
@@ -109,6 +116,8 @@ function RegisterPage() {
         errorAlert.innerText = "Password too weak.";
       } else if(error.message.includes("(you)")){
         errorAlert.innerText = "Username cannot includes (you).";
+      } else if(error.message.includes("pinapple")){
+        errorAlert.innerText = "Username cannot includes special characters.";
       } else {
         errorAlert.innerText = "Registration failed! Maybe try another username.";
       }
