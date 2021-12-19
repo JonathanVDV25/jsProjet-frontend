@@ -37,6 +37,8 @@ import secretAsset from "../../assets/shrek_easter_egg.jpg";
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
 import gameSoundAsset from "../../assets/music_home.mp3";
+import slowSoundAsset from "../../assets/slowmotion.mp3";
+import speedSoundAsset from "../../assets/speed.mp3";
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -54,6 +56,8 @@ class GameScene extends Phaser.Scene {
     this.bonusSound = undefined;
     this.explosionSound = undefined;
     this.gameSound = undefined;
+    this.slowSound = undefined;
+    this.speedSound = undefined;
 
     // spawners
     this.stopwatchSpawner = undefined;
@@ -113,6 +117,8 @@ class GameScene extends Phaser.Scene {
     this.load.audio("bonusSound", bonusSoundAsset);
     this.load.audio("explosionSound", explosionSoundAsset);
     this.load.audio("gameSound", gameSoundAsset);
+    this.load.audio("slowSound", slowSoundAsset);
+    this.load.audio("speedSound", speedSoundAsset);
 
     // Game Over
     this.load.image("gameOverRectangle", gameOverBackGroundAsset);
@@ -151,6 +157,8 @@ class GameScene extends Phaser.Scene {
     this.gameSound = this.sound.add("gameSound");
     this.gameSound.loop = true;
     this.gameSound.play();
+    this.slowSound = this.sound.add("slowSound");
+    this.speedSound = this.sound.add("speedSound");
 
     // joueur
     this.player = new Player(this, this.perso);
@@ -545,12 +553,14 @@ class GameScene extends Phaser.Scene {
   }
 
   increaseSpeedPlayer() {
+    this.speedSound.play();
     this.speed = 1;
     setTimeout(() => {
       this.speed = 0;
     }, 5000);
   }
   decreaseSpeedPlayer() {
+    this.slowSound.play();
     this.speed = -1;
     setTimeout(() => {
       this.speed = 0;

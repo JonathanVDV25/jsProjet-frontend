@@ -15,10 +15,8 @@ function RegisterPage() {
   errorAlert.innerHTML = "";
   pageDiv.appendChild(errorAlert);
   // create a login form
-
-  // <div class="alert alert-danger" role="alert">
-  //   alert en cas d'échec
-  // </div>
+  // inspiration of a part of the code of Raphael Baroni's login
+  // link :https://github.com/e-vinci/js-demos/spa/spa-essentials/step4/
   const form = document.createElement("form");
   form.className = "p-5";
   form.innerHTML += `<h1> Register </h1>`;
@@ -70,7 +68,7 @@ function RegisterPage() {
 
       if (!response.ok) {
         throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
+          "fetch error : " + response.status + " : " + response.statusText
         );
       }
       const user = await response.json(); // json() returns a promise => we wait for the data
