@@ -24,9 +24,9 @@ export default class VerifPlateformSpawner {
             plateform = this.group.create(1300, y, this.key);
         }   
         else {
-            plateform = this.group.create(1350, y, this.key);
+            plateform = this.group.create(1350, y+5, this.key);
         }
-
+        plateform.setSize(1, 22, 0, 0);
         plateform.body.setAllowGravity(false);
         plateform.setGravity(0);
         plateform.setImmovable(true);
