@@ -1,4 +1,4 @@
-# Chronorun
+# Chronorun Group 09
 ## Description
 Chronorun is a platform game in a cyberpunk universe. In this game, you'll have the opportunity to play as 3 characters : Cyburger, Lewis and Riley.
 The goal of this game is to get as far as possible within the given time.
@@ -11,11 +11,11 @@ Your best score will be retained in the system and associated to your account. W
 ## Technologies used
 - Javascript with Node.js
 - Phaser 3 for the frontend (https://phaser.io/)
-- Webpack and check-password-strength for the backend
+- Webpack and check-password-strength for the registration
 - HTML 5, CSS 3 and Bootstrap 5
 ## Install and run project
 - create a project folder
-- clone the backend and frontend git repository in this folder
+- clone the frontend git repository in this folder
 ```shell
 git clone [repo-name]
 ```
