@@ -143,8 +143,8 @@ class GameScene extends Phaser.Scene {
     this.verifPlatformSpawner = new VerifPlatformSpawner(this, "verifPlatform");
     const verifPlatformGroup = this.verifPlatformSpawner.group;
     this.verifPlatformDroitSpawner = new VerifPlatformDroitSpawner(this, "verifPlatform");
-
     const verifPlatformDroitGroup = this.verifPlatformDroitSpawner.group;
+
     // sound
     this.bonusSound = this.sound.add("bonusSound");
     this.explosionSound = this.sound.add("explosionSound");
@@ -273,7 +273,6 @@ class GameScene extends Phaser.Scene {
     // get player best score
     if (!this.foundBestScore) {
       this.bestScore = await this.getUserBestScore(); //ICIIIII
-      console.log("TEST");
       this.foundBestScore = true;
     }
 

@@ -80,9 +80,9 @@ function HomePage() {
     <br>
     jonathan.vandevyver@student.vinci.be<br>
     <br>
-    laurant.vandermeersch@student.vinci.be<br>
+    laurent.vandermeersch@student.vinci.be<br>
     <br>
-    <br>- The ChronoRun team !!!
+    <br>- The ChronoRun team !
   </p>
   `;
 
