@@ -6,10 +6,10 @@ import { setSessionObject } from "../../utils/session";
  * render a login page into the #page div (formerly login function)
  */
 function LoginPage() {
-  // reset #page div
+  
   document.querySelector("main").className = 'log';
-
   const pageDiv = document.querySelector("#page");
+  // reset #page div
   pageDiv.innerHTML = "";
   
 
@@ -18,7 +18,8 @@ function LoginPage() {
   pageDiv.appendChild(errorAlert);
 
   // create a login form
-  
+  // inspiration of a part of the code of Raphael Baroni's login
+  // link :https://github.com/e-vinci/js-demos/spa/spa-essentials/step4/
   const form = document.createElement("form");
   form.className = "p-5";
   form.innerHTML += `<h1> Login </h1>`;
@@ -53,32 +54,30 @@ function LoginPage() {
     console.log("credentials", username.value, password.value);
     try {
       const options = {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        method: "POST",
         body: JSON.stringify({
           username: username.value,
           password: password.value,
-        }), // body data type must match "Content-Type" header
+        }),
         headers: {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch("/api/users/login", options); // fetch return a promise => we wait for the response
+      const response = await fetch("/api/users/login", options); // we wait for the response
       if (!response.ok) {
         errorAlert.className = "alert alert-danger";
         errorAlert.innerText = "Login failed !";
         throw new Error(
-          "fetch error : " + response.status + " : " + response.statusText
+          "fetch error : " + response.status + " : " + response.statusText
         );
       }
-      const user = await response.json(); // json() returns a promise => we wait for the data
-      console.log("user authenticated", user);
-      // save the user into the localStorage
+      const user = await response.json(); // we wait for the user
+      console.log("user authenticated", user);  
+
       setSessionObject("user", user);
 
-      // Rerender the navbar for an authenticated user : temporary step prior to deal with token
       Navbar({ isAuthenticated: true });
 
-      // call the HomePage via the Router
       Redirect("/game");
     } catch (error) {
       console.error("LoginPage::error: ", error);
