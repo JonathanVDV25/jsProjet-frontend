@@ -1,4 +1,10 @@
-import { beforeMain } from "@popperjs/core";
+/***************************************************************************************
+*	Title: js-phaser-boilerplate (Bombspawner.js)
+*	Author: Baroni Raphaël
+*	Date: 18/11/2021
+*	Availability: https://github.com/e-vinci/js-phaser-boilerplate
+*
+***************************************************************************************/
 import Phaser from "phaser";
 
 export default class BombSpawner {
