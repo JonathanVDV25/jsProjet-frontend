@@ -6,6 +6,7 @@ const GROUND_KEY = "ground";
 const BOMB_KEY = "bomb";
 const STOPWATCH_KEY = "stopwatch";
 
+// classes
 import BombSpawner from "./BombSpawner.js";
 import PlatformSpawner from "./PlatformSpawner.js";
 import PlatformBoostSpawner from "./PlatformBoostSpawner.js";
@@ -16,24 +17,32 @@ import VerifPlatformDroitSpawner from "./VerifPlatformDroitSpawner.js";
 import StopwatchSpawner from "./StopwatchSpawner.js";
 import Player from "./Player";
 
+// decor
 import backgroundAsset from "../../assets/background.png";
 import platformAsset from "../../assets/platform.png";
 import platformBoostAsset from "../../assets/plateform_boost.jpg";
 import platformSlowAsset from "../../assets/plateform_slow.jpg";
-import bombAsset from "../../assets/bomb_projectile2.png";
-import stopwatchAsset from "../../assets/chrono_game.png";
-import dudeAsset from "../../assets/pers1_final.png";
-import dude2Asset from "../../assets/bike_run_V5.png";
-import dude3Asset from "../../assets/punk_run_V6.png";
 import invisibleGroundAsset from "../../assets/invisible_ground.png";
-import gameOverBackGroundAsset from "../../assets/carreBackGround.png";
-import timeOutTitleAsset from "../../assets/titreTimeOut.png";
-import homeButtonAsset from "../../assets/homeButton.png";
-import replayButtonAsset from "../../assets/replayButton.png";
 import fakePlateformAsset from "../../assets/fakePlatform.png";
 import bordAsset from "../../assets/bord.png";
 import secretAsset from "../../assets/shrek_easter_egg.jpg";
 
+// projectiles
+import bombAsset from "../../assets/bomb_projectile2.png";
+import stopwatchAsset from "../../assets/chrono_game.png";
+
+// game over
+import gameOverBackGroundAsset from "../../assets/carreBackGround.png";
+import timeOutTitleAsset from "../../assets/titreTimeOut.png";
+import homeButtonAsset from "../../assets/homeButton.png";
+import replayButtonAsset from "../../assets/replayButton.png";
+
+// characters
+import dudeAsset from "../../assets/pers1_final.png";
+import dude2Asset from "../../assets/bike_run_V5.png";
+import dude3Asset from "../../assets/punk_run_V6.png";
+
+// sounds
 import bonusSoundAsset from "../../assets/bonus.mp3";
 import explosionSoundAsset from "../../assets/explosion.mp3";
 import gameSoundAsset from "../../assets/music_home.mp3";
@@ -79,9 +88,10 @@ class GameScene extends Phaser.Scene {
     this.stopwatchInterval = undefined;
     this.timeInterval = undefined;
 
-    this.bestScore = undefined; //ICII
-    this.foundBestScore = false; //Faudra peut-etre mettre ça à CHAQUE chargement de jeu, pour avoir le bestScore à jour !
-    this.updatedBestScore = false; //ICIII
+    // best score
+    this.bestScore = undefined;
+    this.foundBestScore = false;
+    this.updatedBestScore = false;
   }
 
   init(data) {
@@ -89,6 +99,7 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
+    // load images
     this.load.image("background", backgroundAsset);
     this.load.image(GROUND_KEY, platformAsset);
     this.load.image("invisible_ground", invisibleGroundAsset);
@@ -100,6 +111,7 @@ class GameScene extends Phaser.Scene {
     this.load.image(BOMB_KEY, bombAsset);
     this.load.image(STOPWATCH_KEY, stopwatchAsset);
 
+    // load characters sprites
     this.load.spritesheet("personnage1", dudeAsset, {
       frameWidth: 135,
       frameHeight: 129,
@@ -120,7 +132,7 @@ class GameScene extends Phaser.Scene {
     this.load.audio("slowSound", slowSoundAsset);
     this.load.audio("speedSound", speedSoundAsset);
 
-    // Game Over
+    // game Over
     this.load.image("gameOverRectangle", gameOverBackGroundAsset);
     this.load.image("timeOutTitle", timeOutTitleAsset);
     this.load.image("homeButton", homeButtonAsset);
@@ -130,7 +142,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    //Empèche de générer deux platformes en même temps
+    // prevents platforms from spawning at the same time
     this.ensembleCoPlatform.add(0);
 
     // decor
@@ -149,8 +161,8 @@ class GameScene extends Phaser.Scene {
     this.verifPlatformSpawner = new VerifPlatformSpawner(this, "verifPlatform");
     const verifPlatformGroup = this.verifPlatformSpawner.group;
     this.verifPlatformDroitSpawner = new VerifPlatformDroitSpawner(this, "verifPlatform");
-
     const verifPlatformDroitGroup = this.verifPlatformDroitSpawner.group;
+
     // sound
     this.bonusSound = this.sound.add("bonusSound");
     this.explosionSound = this.sound.add("explosionSound");
@@ -160,17 +172,18 @@ class GameScene extends Phaser.Scene {
     this.slowSound = this.sound.add("slowSound");
     this.speedSound = this.sound.add("speedSound");
 
-    // joueur
+    // player
     this.player = new Player(this, this.perso);
     this.player.setPushable(true);
 
-    // spawners
+    // projectiles
     this.bombSpawner = new BombSpawner(this, BOMB_KEY);
     const bombsGroup = this.bombSpawner.group;
 
     this.stopwatchSpawner = new StopwatchSpawner(this, STOPWATCH_KEY);
     const stopwatchesGroup = this.stopwatchSpawner.group;
 
+    // PHYSICS //
     // physics for players
     this.physics.add.collider(this.player, fakeGround);
     this.physics.add.collider(this.player, platformGroup);
@@ -208,7 +221,7 @@ class GameScene extends Phaser.Scene {
       this
     );
 
-    // physics for bombs and stopwatches
+    // physics for projectiles
     this.physics.add.collider(bombsGroup, fakeGround);
     this.physics.add.collider(bombsGroup, fakePlatformGroup);
     this.physics.add.collider(stopwatchesGroup, fakeGround);
@@ -269,22 +282,26 @@ class GameScene extends Phaser.Scene {
   }
 
   async update() {
+    // timer red
     if(this.player.data.get("time") < 6) {
       this.text.setColor("#ff0000");
     }
+    // timer orange
     else if(this.player.data.get("time") < 11) {
       this.text.setColor("#ff7f00");
     }
+    // timer default color
     else {
       this.text.setColor("#000000");
     }
     // get player best score
     if (!this.foundBestScore) {
-      this.bestScore = await this.getUserBestScore(); //ICIIIII
+      this.bestScore = await this.getUserBestScore();
       console.log("TEST");
       this.foundBestScore = true;
     }
 
+    // launch game over
     if (this.gameOver) {
       this.clearIntervals();
       this.launchGameOver();
@@ -293,9 +310,7 @@ class GameScene extends Phaser.Scene {
       this.gameSound.stop();
 
       if (!this.updatedBestScore) {
-        //await Méthode ASYNCHRONE DE PUT !
         if (this.player.data.get("distance") > this.bestScore) {
-          //ICI IL BEUG! JPENSE C REGlé MTN
           await this.putUserBestScore(this.player.data.get("distance"));
         }
         this.updatedBestScore = true;
@@ -407,6 +422,7 @@ class GameScene extends Phaser.Scene {
           this.ensembleCoPlatform.add(position);
 
           var random = Phaser.Math.Between(1, 5);
+          // default platform spawns 3/5
           if (random == 1 || random == 2 || random == 3) {
             var newPlatform = this.platformSpawner.spawn();
             this.verifPlatformSpawner.spawn(newPlatform.y, 1);
@@ -416,11 +432,13 @@ class GameScene extends Phaser.Scene {
                 this.stopwatchSpawner.spawnOnPlatform(newPlatform.y);
               }
             }
+            // slow platform spawns 1/5
           } else if (random == 4) {
             var newPlatform = this.platformSlowSpawner.spawn();
             this.fakePlatformSpawner.spawn(newPlatform.y);
             this.verifPlatformSpawner.spawn(newPlatform.y, 2);
             this.verifPlatformDroitSpawner.spawn(newPlatform.y, 2);
+            // speedboost platform spawns 1/5
           } else {
             var newPlatform = this.platformBoostSpawner.spawn();
             this.fakePlatformSpawner.spawn(newPlatform.y);
@@ -455,6 +473,7 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  // platform + stopwatch velocity
   platformVelocity(value) {
     this.platformSpawner.group.setVelocityX(value);
     this.platformBoostSpawner.group.setVelocityX(value);
@@ -465,11 +484,13 @@ class GameScene extends Phaser.Scene {
     this.stopwatchSpawner.group.setVelocityX(value);
   }
 
+  // tile position
   tilePos(value) {
     this.backgrounds.tilePositionX += value;
     this.ground.tilePositionX += value;
   }
 
+  // increment distance
   incDistance() {
     if (!this.gameOver) {
       this.player.data.set(
@@ -480,6 +501,7 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  // decrease distance
   decDistance() {
     if (!this.gameOver) {
       this.player.data.set("distance", this.backgrounds.tilePositionX / 10);
@@ -487,6 +509,7 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  // create ground
   createGround() {
     const ground = this.add.tileSprite(0, 600, 2000, 125, GROUND_KEY);
     ground.setScrollFactor(0);
@@ -499,14 +522,7 @@ class GameScene extends Phaser.Scene {
     return fakeGround;
   }
 
-  createPlatforms() {
-    const platforms = this.physics.add.staticGroup();
-
-    platforms.create(400, 568, GROUND_KEY).setScale(2).refreshBody();
-    platforms.create(750, 220, GROUND_KEY);
-    return platforms;
-  }
-
+  // player hits a bomb
   hitBomb(player, bomb) {
     if (this.player.data.get("time") <= 5) {
       this.player.data.set("time", 0);
@@ -522,6 +538,7 @@ class GameScene extends Phaser.Scene {
     this.timeDistanceRender();
   }
 
+  // player hits a stopwatch
   hitStopwatch(player, stopwatch) {
     this.player.data.set("time", this.player.data.get("time") + 10);
     this.bonusSound.play();
@@ -540,12 +557,14 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  // clears time intervals
   clearIntervals() {
     clearInterval(this.bombInterval);
     clearInterval(this.stopwatchInterval);
     clearInterval(this.timeInterval);
   }
 
+  // renders time and distance
   timeDistanceRender() {
     this.text.setText([
       "Time: " + this.player.data.get("time"),
@@ -553,6 +572,7 @@ class GameScene extends Phaser.Scene {
     ]);
   }
 
+  // increase player speed
   increaseSpeedPlayer() {
     this.speedSound.play();
     this.speed = 1;
@@ -560,6 +580,8 @@ class GameScene extends Phaser.Scene {
       this.speed = 0;
     }, 5000);
   }
+
+  // decrease player speed
   decreaseSpeedPlayer() {
     this.slowSound.play();
     this.speed = -1;
@@ -568,6 +590,7 @@ class GameScene extends Phaser.Scene {
     }, 4000);
   }
 
+  // player unable to push platforms
   verifPlatform() {
     if (this.speed == 1) {
       this.tilePos(-20);
@@ -588,6 +611,7 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  // launch game over + menu
   async launchGameOver() {
     // game over rectangle
     const gameOverRectangle = this.add.image(400, 300, "gameOverRectangle");
@@ -607,6 +631,7 @@ class GameScene extends Phaser.Scene {
     gameOverRectangle.setDataEnabled();
     gameOverRectangle.data.set("distance", this.player.data.get("distance"));
 
+    // distance > previous best score
     if (this.bestScore < gameOverRectangle.data.get("distance")) {
       textGameOver.setText([
         "Distance: " +
@@ -614,7 +639,8 @@ class GameScene extends Phaser.Scene {
           "\nBest Distance: " +
           gameOverRectangle.data.get("distance") +
           "\n\nYou have beaten your \nbest score !!!",
-      ]); //Si distance est plus grande que son bestscore d'avant !
+      ]);
+      // distance < previous best score
     } else {
       textGameOver.setText([
         "Distance: " +
@@ -624,9 +650,7 @@ class GameScene extends Phaser.Scene {
       ]);
     }
 
-    //gameOverRectangle.data.set("record", this.bestScore);
-    // textGameOver.setText(["Record: " + "NOT WORKING"]);
-
+    // home button
     let home = this.add.image(160, 450, "homeButton");
     home.setScrollFactor(0);
     home.setInteractive();
@@ -636,6 +660,7 @@ class GameScene extends Phaser.Scene {
       Redirect("/");
     });
 
+    // replay button
     let replay = this.add.image(600, 450, "replayButton");
     replay.setScrollFactor(0);
     replay.setInteractive();
@@ -646,9 +671,9 @@ class GameScene extends Phaser.Scene {
     });
   }
 
+  // get user best score
   async getUserBestScore() {
     const user = getSessionObject("user");
-    //console.log("ici " , user);
 
     try {
       const response = await fetch("/api/scores/" + user.username); // fetch return a promise => we wait for the response
@@ -667,16 +692,17 @@ class GameScene extends Phaser.Scene {
     }
   }
 
+  // change user best score when beaten
   async putUserBestScore(bestScore) {
     const user = getSessionObject("user");
 
     try {
       const options = {
-        method: "PUT", // *GET, POST, PUT, DELETE, etc.
+        method: "PUT",
         body: JSON.stringify({
           name: user.username,
-          distance: bestScore, //pt etre pas mettre le .value
-        }), // body data type must match "Content-Type" header
+          distance: bestScore,
+        }),
         headers: {
           "Content-Type": "application/json",
           Authorization: user.token,
