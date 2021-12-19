@@ -65,7 +65,7 @@ async function ScoresPage() {
       const nameCell = document.createElement("td");
       const scoreCell = document.createElement("td");
       if(you){
-        nameCell.innerHTML = `<b> ${score.name} <i>(you)</i> </b>`;
+        nameCell.innerHTML = `<b> ${score.name} <i>(you)</i></b>`;
         nameCell.className ="text-warning";
         scoreCell.innerHTML = `<b> ${score.distance} </b>`;
       } else {

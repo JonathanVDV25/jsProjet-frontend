@@ -296,8 +296,7 @@ class GameScene extends Phaser.Scene {
     }
     // get player best score
     if (!this.foundBestScore) {
-      this.bestScore = await this.getUserBestScore();
-      console.log("TEST");
+      this.bestScore = await this.getUserBestScore(); //ICIIIII
       this.foundBestScore = true;
     }
 
